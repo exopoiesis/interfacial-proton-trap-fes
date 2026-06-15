@@ -1,0 +1,56 @@
+STRUCTURE VERIFICATION -- mackinawite (001) Delta-G_H* inputs
+======================================================================
+bulk source     : relaxed Paper#1 lattice (a=3.6740, c=5.0330, z_S=0.2304) rebuilt as ideal P4/nmm Fe2S2
+conventional    : Fe2S2  Fe=2 S=2
+conv cell a,b,c : 3.6740, 3.6740, 5.0330 A
+conv min dist   : 2.1723 A
+
+### slab_clean.xyz
+  formula        : Fe32S32
+  counts         : Fe=32 S=32 H=0
+  N_electrons    : 704  (Fe*16 + S*6 + H*1)
+  cell a,b,c     : 7.3480, 7.3480, 35.4180 A
+  min dist (MIC) : 2.1723 A  (OK >1.4)
+  slab thickness : 17.4180 A
+  vacuum gap     : 18.0000 A  (OK >=15)
+  Fe layers      : 4  z-centers=['10.16', '15.19', '20.23', '25.26']
+  termination    : bottom-plane=S  top-plane=S
+
+### slab_H_Stop.xyz
+  formula        : HFe32S32
+  counts         : Fe=32 S=32 H=1
+  N_electrons    : 705  (Fe*16 + S*6 + H*1)
+  cell a,b,c     : 7.3480, 7.3480, 35.4180 A
+  min dist (lat) : 2.1723 A  (OK >1.4)  [lattice only]
+  min dist (all) : 1.3500 A  [incl. intended H bond]
+  slab thickness : 18.7680 A
+  vacuum gap     : 16.6500 A  (OK >=15)
+  Fe layers      : 4  z-centers=['10.16', '15.19', '20.23', '25.26']
+  termination    : bottom-plane=S  top-plane=S
+  H->nearest S   : 1.3500 A
+  H->nearest Fe  : 3.1100 A
+  H->nearest any : 1.3500 A
+
+### slab_H_Fetop.xyz
+  formula        : HFe32S32
+  counts         : Fe=32 S=32 H=1
+  N_electrons    : 705  (Fe*16 + S*6 + H*1)
+  cell a,b,c     : 7.3480, 7.3480, 35.4180 A
+  min dist (lat) : 2.1723 A  (OK >1.4)  [lattice only]
+  min dist (all) : 1.5500 A  [incl. intended H bond]
+  slab thickness : 17.8085 A
+  vacuum gap     : 17.6095 A  (OK >=15)
+  Fe layers      : 4  z-centers=['10.16', '15.19', '20.23', '25.26']
+  termination    : bottom-plane=S  top-plane=S
+  H->nearest S   : 1.8780 A
+  H->nearest Fe  : 1.5500 A
+  H->nearest any : 1.5500 A
+
+### h2_box.xyz
+  formula        : H2
+  counts         : H=2
+  N_electrons    : 2
+  cell (cube)    : 13.0 A
+  d(H-H)         : 0.7400 A  (OK ~0.74)
+  min dist       : 0.7400 A
+

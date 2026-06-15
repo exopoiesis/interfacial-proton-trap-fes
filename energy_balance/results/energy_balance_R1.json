@@ -1,0 +1,233 @@
+{
+  "description": "Energy balance R1: CO2 + H2O + 2e- -> HCOO- + OH- on mackinawite/greigite",
+  "parameters": {
+    "T_K": 298.15,
+    "DG0_R1_kJ_mol": 33.0,
+    "eta_mackinawite_mV": 23.0,
+    "eta_greigite_mV": 400.0,
+    "IR_solution_mV": 20.0,
+    "IR_membrane_mV": 6.0,
+    "nernst_factor_V": 0.05917
+  },
+  "mackinawite_scan": [
+    {
+      "dpH": 2,
+      "dE_pH_V": 0.1183,
+      "dG_available_kJ": 22.83,
+      "losses_V": 0.049,
+      "dE_net_V": 0.0693,
+      "dG_net_kJ": 13.38,
+      "margin_pct": -59.5,
+      "feasible": false
+    },
+    {
+      "dpH": 3,
+      "dE_pH_V": 0.1775,
+      "dG_available_kJ": 34.25,
+      "losses_V": 0.049,
+      "dE_net_V": 0.1285,
+      "dG_net_kJ": 24.8,
+      "margin_pct": -24.9,
+      "feasible": false
+    },
+    {
+      "dpH": 4,
+      "dE_pH_V": 0.2367,
+      "dG_available_kJ": 45.67,
+      "losses_V": 0.049,
+      "dE_net_V": 0.1877,
+      "dG_net_kJ": 36.21,
+      "margin_pct": 9.7,
+      "feasible": true
+    },
+    {
+      "dpH": 5,
+      "dE_pH_V": 0.2958,
+      "dG_available_kJ": 57.09,
+      "losses_V": 0.049,
+      "dE_net_V": 0.2468,
+      "dG_net_kJ": 47.63,
+      "margin_pct": 44.3,
+      "feasible": true
+    },
+    {
+      "dpH": 6,
+      "dE_pH_V": 0.355,
+      "dG_available_kJ": 68.5,
+      "losses_V": 0.049,
+      "dE_net_V": 0.306,
+      "dG_net_kJ": 59.05,
+      "margin_pct": 78.9,
+      "feasible": true
+    },
+    {
+      "dpH": 7,
+      "dE_pH_V": 0.4142,
+      "dG_available_kJ": 79.92,
+      "losses_V": 0.049,
+      "dE_net_V": 0.3652,
+      "dG_net_kJ": 70.47,
+      "margin_pct": 113.5,
+      "feasible": true
+    },
+    {
+      "dpH": 8,
+      "dE_pH_V": 0.4733,
+      "dG_available_kJ": 91.34,
+      "losses_V": 0.049,
+      "dE_net_V": 0.4243,
+      "dG_net_kJ": 81.88,
+      "margin_pct": 148.1,
+      "feasible": true
+    },
+    {
+      "dpH": 9,
+      "dE_pH_V": 0.5325,
+      "dG_available_kJ": 102.76,
+      "losses_V": 0.049,
+      "dE_net_V": 0.4835,
+      "dG_net_kJ": 93.3,
+      "margin_pct": 182.7,
+      "feasible": true
+    },
+    {
+      "dpH": 10,
+      "dE_pH_V": 0.5917,
+      "dG_available_kJ": 114.17,
+      "losses_V": 0.049,
+      "dE_net_V": 0.5427,
+      "dG_net_kJ": 104.72,
+      "margin_pct": 217.3,
+      "feasible": true
+    }
+  ],
+  "greigite_scan": [
+    {
+      "dpH": 2,
+      "dE_pH_V": 0.1183,
+      "dG_available_kJ": 22.83,
+      "losses_V": 0.426,
+      "dE_net_V": -0.3077,
+      "dG_net_kJ": -59.37,
+      "margin_pct": -279.9,
+      "feasible": false
+    },
+    {
+      "dpH": 3,
+      "dE_pH_V": 0.1775,
+      "dG_available_kJ": 34.25,
+      "losses_V": 0.426,
+      "dE_net_V": -0.2485,
+      "dG_net_kJ": -47.95,
+      "margin_pct": -245.3,
+      "feasible": false
+    },
+    {
+      "dpH": 4,
+      "dE_pH_V": 0.2367,
+      "dG_available_kJ": 45.67,
+      "losses_V": 0.426,
+      "dE_net_V": -0.1893,
+      "dG_net_kJ": -36.54,
+      "margin_pct": -210.7,
+      "feasible": false
+    },
+    {
+      "dpH": 5,
+      "dE_pH_V": 0.2958,
+      "dG_available_kJ": 57.09,
+      "losses_V": 0.426,
+      "dE_net_V": -0.1302,
+      "dG_net_kJ": -25.12,
+      "margin_pct": -176.1,
+      "feasible": false
+    },
+    {
+      "dpH": 6,
+      "dE_pH_V": 0.355,
+      "dG_available_kJ": 68.5,
+      "losses_V": 0.426,
+      "dE_net_V": -0.071,
+      "dG_net_kJ": -13.7,
+      "margin_pct": -141.5,
+      "feasible": false
+    },
+    {
+      "dpH": 7,
+      "dE_pH_V": 0.4142,
+      "dG_available_kJ": 79.92,
+      "losses_V": 0.426,
+      "dE_net_V": -0.0118,
+      "dG_net_kJ": -2.28,
+      "margin_pct": -106.9,
+      "feasible": false
+    },
+    {
+      "dpH": 8,
+      "dE_pH_V": 0.4733,
+      "dG_available_kJ": 91.34,
+      "losses_V": 0.426,
+      "dE_net_V": 0.0473,
+      "dG_net_kJ": 9.13,
+      "margin_pct": -72.3,
+      "feasible": false
+    },
+    {
+      "dpH": 9,
+      "dE_pH_V": 0.5325,
+      "dG_available_kJ": 102.76,
+      "losses_V": 0.426,
+      "dE_net_V": 0.1065,
+      "dG_net_kJ": 20.55,
+      "margin_pct": -37.7,
+      "feasible": false
+    },
+    {
+      "dpH": 10,
+      "dE_pH_V": 0.5917,
+      "dG_available_kJ": 114.17,
+      "losses_V": 0.426,
+      "dE_net_V": 0.1657,
+      "dG_net_kJ": 31.97,
+      "margin_pct": -3.1,
+      "feasible": false
+    }
+  ],
+  "minimum_dpH": {
+    "mackinawite": 3.72,
+    "greigite": 10.09
+  },
+  "formate_rates": {
+    "FE_8%": {
+      "I_5uA_mol_s": "2.073e-12",
+      "I_5uA_umol_h": 0.00746,
+      "I_1200uA_mol_s": "4.975e-10",
+      "I_1200uA_umol_h": 1.791
+    },
+    "FE_10%": {
+      "I_5uA_mol_s": "2.591e-12",
+      "I_5uA_umol_h": 0.00933,
+      "I_1200uA_mol_s": "6.219e-10",
+      "I_1200uA_umol_h": 2.239
+    },
+    "FE_20%": {
+      "I_5uA_mol_s": "5.182e-12",
+      "I_5uA_umol_h": 0.01866,
+      "I_1200uA_mol_s": "1.244e-09",
+      "I_1200uA_umol_h": 4.477
+    }
+  },
+  "key_scenario": {
+    "dpH": 6,
+    "FE": 0.1,
+    "I_mA": 1.2,
+    "dE_net_V": 0.306,
+    "dG_net_kJ": 59.05,
+    "margin_pct": 78.9,
+    "rate_mol_s": "6.219e-10",
+    "rate_umol_h": 2.239,
+    "conc_rate_mM_h_10uL": 223.87,
+    "time_to_1mM_h": 0.0,
+    "time_to_50mM_h": 0.2
+  }
+}

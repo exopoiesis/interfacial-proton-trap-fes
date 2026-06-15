@@ -1,0 +1,78 @@
+{
+  "diagnostic_1_tiwary_parrinello_reweighted_PDF": {
+    "N_eff": 3001.0000000000005,
+    "N_eff_fraction": 1.0000000000000002,
+    "max_bias_seen_meV": 0.0,
+    "RMSE_F_rew_vs_F_hill_meV": 100.1376301066843,
+    "convergence_threshold_3kT_meV": 77.555999359305,
+    "passed_3kT_RMSE": false
+  },
+  "diagnostic_2_hill_placement": {
+    "cv_hills_range": [
+      1.07818,
+      2.27581
+    ],
+    "cv_trajectory_range": [
+      0.99935,
+      2.29247
+    ],
+    "coverage_fraction_of_cv_grid": 0.41935483870967744,
+    "n_bins_with_hills": 13,
+    "n_bins_total": 31,
+    "n_empty_bins_below_explored": 10
+  },
+  "diagnostic_3_block_averaged_basin_depth": {
+    "n_blocks_5_depths_eV": [
+      0.15696849803247231,
+      0.04655504826681084,
+      -0.030284212204946585,
+      0.035088918794142,
+      0.030707975761000594
+    ],
+    "mean_eV": 0.04780724572989583,
+    "stderr_eV": 0.0303892774499958,
+    "range_eV": [
+      -0.030284212204946585,
+      0.15696849803247231
+    ],
+    "drift_max_min_meV": 187.2527102374189
+  },
+  "diagnostic_4_F_drift_at_fixed_CV": {
+    "CV_1.2": {
+      "final_F_meV": 276.3633071202191,
+      "drift_last25_meV": 7.389443598704137
+    },
+    "CV_1.5": {
+      "final_F_meV": 112.5591413480358,
+      "drift_last25_meV": 0.8383525631659311
+    },
+    "CV_1.74": {
+      "final_F_meV": 0.0,
+      "drift_last25_meV": 4.433922369408655
+    },
+    "CV_2.0": {
+      "final_F_meV": 93.08803210904365,
+      "drift_last25_meV": 2.3957101706485044
+    },
+    "CV_2.3": {
+      "final_F_meV": 415.46073459423025,
+      "drift_last25_meV": 56.36724078058458
+    }
+  },
+  "diagnostic_5_bias_integral": {
+    "initial_eV_A": 0.10272249821508457,
+    "final_eV_A": 0.40157948754403067,
+    "growth_rate_meV_A_per_fs": 0.02165430687316643,
+    "early_slope_meV_A_per_fs": 0.03650640723389134,
+    "late_slope_meV_A_per_fs": 0.010058903586285372,
+    "late_over_early_slope_ratio": 0.27553803149785216,
+    "saturation_interpretation": "ratio \u2192 0 = fully saturated; ratio \u2248 1 = still linearly growing"
+  },
+  "overall_verdict": {
+    "tiwary_parrinello_PASS": false,
+    "hill_placement_coverage_FAIL_below_basin": true,
+    "block_drift_meV": 187.2527102374189,
+    "bias_integral_still_growing": false,
+    "formally_converged": false
+  }
+}

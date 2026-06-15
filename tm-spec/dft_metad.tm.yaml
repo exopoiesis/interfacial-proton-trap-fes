@@ -1,0 +1,259 @@
+# TM-Spec: CP2K WT-MetaD, confined system (mack 3×3×1 + 12 H2O + H+), §3.2.
+# Status: RESULTS reconciled to the final manuscript (v2: gamma=5, wall=3.0, 15 ps, basin LB
+# 0.383 eV; manuscript canonical >=0.32 eV). Sections 8 (metadyn_protocol) and 11 (sanity) below
+# retain the v1 AUDIT RECORD (gamma=10, wall=1.2 bug) as honest provenance — SUPERSEDED by v2;
+# the manuscript is authoritative (see `reconciliation` / `results.superseded`).
+#
+# *** NEW kind: MetaDynCalculation ***
+# A separate kind for well-tempered metadynamics
+# (hill deposition + bias factor + wall — do not fit USCalculation).
+
+spec: tm-spec/0.2
+kind: MetaDynCalculation                     # NEW kind, introduced via this pilot
+id: tm.mack_3x3x1.h_proton.metad_v1.2026-04-30
+# NOTE (Paper #2 mapping): this computation is reported in Paper #2 "KineticTrap" §3.2 (confined-system direct-DFT WT-metadynamics trap lower bound).
+# Any 'paper #1' references in the notes below are pre-split provenance (the kinetic-trap work was moved from the MLIPvsDFT paper into this one).
+schema_url: https://exopoiesis.space/tm-spec/0.2.json
+
+reconciliation: "Dated v1 provenance snapshot; values reconciled to the final manuscript on repo assembly. Where v1 differs (composition, DFT metad gamma/wall/LB, magnetic/U labels), the manuscript (KineticTrap) is authoritative."
+
+# ── 1. STRUCTURE (same hybrid system as w2_us_pmf) ───────
+structure:
+  composition:
+    solid:    Fe18S18                         # 3×3×1 mack supercell
+    aqueous:  "12 H2O + 1 H+"                 # explicit waters + 1 excess proton
+  prototype: AB_tP4_129_a_c
+  space_group: { number: 129, symbol: P4/nmm }
+  cell:
+    a: 11.022  Å
+    b: 11.022  Å
+    c: 6.500   Å
+    pbc: [true, true, true]
+  supercell: [3, 3, 1]
+  total_atoms: 73                              # 18 Fe + 18 S + 12 H2O + 1 H+ = 73
+  ref: structures/mack_3x3x1_h2o12_h1.extxyz
+
+# ── 2. DEFECTS (Kröger-Vink) ─────────────────────────────
+defects:
+  reactions:
+    - "nil → H_aq^+(in_water_layer) + e'(in_solid)"
+  charge_balance: |
+    +1 H_aq^+  +  -1 e' (delocalized in mack)  →  neutral cell
+  population:
+    H_excess: { count: 1, conc: 1, location: aqueous_layer, tracked_atom_id: H_37 }
+
+# ── 3. MAGNETIC STATE ────────────────────────────────────
+magnetic:
+  state: NM                                    # closed-shell RKS (nspin=1), non-magnetic (manuscript §2.2)
+  collinear: false
+  propagation_vector: [0, 0, 0]
+  magmoms_uB: {}
+  surrogate_warning: |
+    Closed-shell RKS (non-magnetic) per manuscript §2.2: tetragonal mackinawite shows
+    no long-range magnetic order down to 1.7 K (itinerant paramagnet at 298 K); the
+    non-magnetic treatment is the established surface-DFT approach for FeS surfaces.
+
+# ── 4. ENVIRONMENT ───────────────────────────────────────
+environment:
+  phase: aqueous_at_solid_interface
+  T: 300 K                                     # NVT-Nose
+  P: explicit_water_at_density_1.0
+  pH: implied_~0
+  redox: { Eh: not_applicable, note: "MD forward dynamics, no electrochemistry" }
+  composition_molal: {}
+  database: null
+
+# ── 5. REACTION NETWORK (target process) ─────────────────
+reactions:
+  - id: R_chemi_desorption
+    label: "Fe-chemisorption ↔ aqueous H+ (forward direction biased)"
+    rule:  "(H–Fe)_Fe^× + H2O → H_aq^+ + Fe_Fe^× + ..."
+    rate:  "k_off ~ ν · exp(−ΔF#/kT)"
+    Ea_eV_basin_LB: 0.383                     # final v2 basin-depth LB (γ=5, wall=3.0, 15 ps; v2 JSON)
+    canonical_manuscript_value: ">=0.32 eV (§3.2, conservative)"
+    superseded_v1: "v1 reported 0.40 eV LB (γ=10, wall=1.2 bug) and 0.61 eV 2σ — both superseded by v2 (§3.2)"
+
+# ── 6. CALCULATION (DFT, CP2K) ───────────────────────────
+calculation:
+  method: DFT
+  level:
+    xc: PBE+D3(BJ)
+    xc_libxc: [GGA_X_PBE, GGA_C_PBE]
+    vdw: D3-BJ
+    basis:
+      kind: gaussians                         # CP2K Gaussian-and-PW (mixed in practice)
+      family: GTH_MOLOPT
+      cutoff_Ry: 600                          # PW auxiliary cutoff
+      rel_cutoff_Ry: 60
+    pseudopotential: GTH-PBE
+    smearing:
+      kind: fermi
+      width_eV: 0.02
+    spin: none                                # closed-shell RKS, nspin=1 (manuscript §2.2; no Hubbard U)
+  ensemble: NVT
+  thermostat:
+    kind: Nose-Hoover
+    T_K: 300
+    tau_fs: 50                                 # production τ
+  timestep_fs: 0.5
+  code:
+    name: CP2K
+    version: 2024.2
+    image: cp2k:desktop-cu128
+    framework: "CP2K + libDBCSR + libxc"
+    container: cp2k-cuda
+
+# ── 7. CV DEFINITION ─────────────────────────────────────
+cv_definition:
+  name: H37_to_Fe_coordination
+  type: coordination_number
+  formula: |
+    n = Σ_{j ∈ Fe} (1 - (d_j/R_0)^NN) / (1 - (d_j/R_0)^ND)
+  parameters:
+    R_0_A: 2.0
+    NN: 6
+    ND: 12
+  variables: "d(H_37, Fe_i) for i in 1..18 (all Fe in supercell)"
+  atoms_from: H_37                             # specific tracked H atom id
+  atoms_to: "18 Fe in 3×3×1 mack supercell"
+  units: dimensionless (count)
+  initial_value: 1.72                           # H_37 bound to Fe (~1.6Å) + 4 nearest Fe contributions
+  python_impl: null                              # CP2K native COLVAR
+  validated_by: |
+    Mathematical sanity check: f(1.6) + 4×f(2.7) ≈ 0.79 + 4×0.27 ≈ 1.87
+    matches observed initial CV=1.72 ✓
+
+# ── 8. METADYN PROTOCOL ──────────────────────────────────
+# >>> v1 AUDIT RECORD (gamma=10, wall=1.2 BUG) — SUPERSEDED by final v2 (gamma=5, wall=3.0,
+# >>> WW=5 kJ/mol, 15 ps; manuscript §3.2). Retained as honest provenance; not the final protocol.
+metadyn_protocol:
+  variant: well_tempered                       # WT-MetaD per Barducci 2008
+  hill:
+    height_kJ_per_mol: 1.0                     # WW [kjmol] 1.0
+    width_sigma: 0.05                           # CP2K SCALE
+    deposition_freq_steps: 100                 # NT_HILLS
+    deposition_freq_fs: 50                      # 100 × 0.5 fs
+  bias_factor:
+    gamma: 10
+    effective_dT_K: 2700                        # (γ-1) × T_target = 9 × 300
+    kBdT_kJ_per_mol: 22.5                       # for hill decay rate
+  wall:
+    type: quartic                               # &WALL TYPE QUARTIC
+    position: 1.2                                # POSITION 1.2 (BUG #2: below initial CV)
+    k_kJ_per_mol: 500
+    note: |
+      BUG #2 caught in review: wall position 1.2 below initial CV=1.72 →
+      wall potential V_wall(1.7) ≈ 31 kJ/mol comparable to V_bias_max →
+      F profile artificially distorted. Math-correctable post-hoc.
+      v2 fixed: wall=3.0 (above initial), but v2 is still running.
+  monitoring:
+    phase_1_first_10_steps:    { T_max_K: 320, E_pot_drift_Ha_max: 0.05, scf_iter_max: 30 }
+    phase_2_equilibration:     { T_slope_K_per_ps_max: 5, T_mean_K_window: [290, 310] }
+    phase_3_production:        { CV_oscillation_max: 0.3, hill_clustering_max_pct: 30 }
+    equilibration_exclusion_ps: 1.0              # exclude hills t<1ps from FES analysis
+
+# ── 9. FES ANALYSIS (NEW SECTION, analog pmf_analysis) ───
+fes_analysis:
+  method: WT_reweighting
+  formula: "F(s) = -γ/(γ-1) · V_bias(s, t→∞) + const  (Barducci 2008)"
+  grid:
+    extended_post_hoc: true
+    bounds_CV: [-0.5, 1.85]                     # original grid was [-0.3, 1.5] (BUG #1)
+    coverage: "CV_max=1.72 + 3σ tail"
+    bug_1_note: |
+      Original FES_1D.dat used grid [-0.3, 1.5], missing 20% hills
+      deposited at CV>1.5 (max observed 1.72). Re-reconstruction on
+      extended grid recovered +0.07 eV (0.29 → 0.36 eV apparent).
+  wall_correction:
+    applied: true
+    formula: "F_real(s) = F_apparent(s) - V_wall(s)"
+    impact_at_CV_max_kJ_per_mol: 31              # V_wall(1.72) = 500×(1.72-1.2)^4 ≈ 36.5; in observed plateau 31
+  convergence:
+    target: "max|F_w_i − F_w_{i+1}| < 2 kJ/mol over last 2 cumulative windows (4 windows total)"
+    achieved: false
+    reason: |
+      γ=10 too gentle for deep well >50 kJ/mol — needs ~5-10 ns effective MD,
+      v1 ran 11.5 ps. Result is lower bound only, not converged barrier.
+
+# ── 10. RESULTS ──────────────────────────────────────────
+results:
+  delta_F_dagger_eV:
+    v1_apparent_no_correction: 0.29             # v1 original estimate (rejected)
+    v1_extended_grid_no_wall:  0.36             # v1 +20% from grid expansion (BUG #1 fix)
+    v1_wall_corrected_LB:      0.40             # v1 LB (γ=10, wall=1.2 bug) — SUPERSEDED
+    wall_corrected_LB:         0.383            # *** final v2 basin-depth LB (γ=5, wall=3.0, 15 ps) ***
+    delta_F:                   0.383            # final v2 basin depth LB (eV), forward edge
+    canonical_manuscript_value: ">=0.32 eV (§3.2, conservative)"
+  superseded: "v1 (γ=10, wall=1.2 bug, 0.40 eV) -> final v2 (γ=5, wall=3.0, basin LB 0.383, manuscript >=0.32)"
+  cross_validation_eV:                            # vs other methods (US)
+    MACE_MP_0_US_saddle:    0.80
+    CHGNet_v030_US_saddle:  0.32
+    bracket_consistency: |
+      DFT WT-MetaD basin LB 0.383 eV (manuscript canonical >=0.32 eV) lies at the bottom
+      of the MLIP US bracket [0.32, 0.80] ✓. All methods confirm a kinetic trap
+      >> 5 kT_room (0.13 eV at 300 K). NOTE per consilium s144: the DFT CV
+      (COORDINATION) differs from the MLIP smooth-min(d_FeH) CV — placement is a
+      qualitative consistency check, not a strict bracket member (§3.3).
+  status: PARTIALLY_CONVERGED_LOWER_BOUND        # formal convergence not reached in 15 ps; honest LB (§3.2)
+  paper_quotable: false                           # the v1 0.40 eV point value is NOT quotable; cite the v2/manuscript >=0.32 eV LB
+  quote_constraint: "manuscript canonical: ΔF_basin >= 0.32 eV (§3.2), basin LB 0.383 eV (v2)"
+  validated_by: [chemist@opus, physicist@opus]
+  notes: |
+    Final v2 (γ=5, wall=3.0, WW=5 kJ/mol, 15 ps) supersedes v1 (γ=10, wall=1.2 bug, 0.40 eV).
+    The manuscript (§3.2, this paper / KineticTrap §3.2) reports a basin-depth lower bound
+    ΔF_basin >= 0.32 eV (≈ 12.4 kT at 300 K; basin LB 0.383 eV in v2 JSON), reported honestly
+    as a partially converged lower bound, not a converged saddle.
+    For this paper (KineticTrap §3.2): cite "ΔF_basin >= 0.32 eV (direct DFT WT-MetaD, γ=5, 15 ps)".
+
+# ── 11. SANITY GATES (including bugs caught in review) ──────────
+sanity:
+  - { id: G01_FeS_bond,            rule: "min(Fe–S) > 2.00 Å",                        observed: ">2.0 (CP2K AFM)",            pass: true }
+  - { id: G02_AFM_not_collapsed,   rule: "[N/A — closed-shell RKS / NM per §2.2; no magnetic sheet to preserve]", pass: skip, note: "v1 audit ran a collinear test; final treatment is non-magnetic RKS" }
+  - { id: G06_ascii_safe,          rule: "no em-dash in script (ASCII-only container)", pass: true }
+  - { id: G17_grid_coverage,       rule: "FES grid covers CV_max + 3σ",                 observed: "BUG #1 fixed: extended [-0.5, 1.85]", pass: true, note: "Original cropped at 1.5" }
+  - { id: G18_wall_position,       rule: "wall.position > max(initial_CV) (no artifact)", observed: "1.2 < 1.72 INITIAL — VIOLATION",   pass: false, note: "BUG #2 — math-corrected post-hoc; v2 fix wall=3.0" }
+  - { id: G19_wt_convergence,      rule: "max|F_w_i - F_w_{i+1}| < 2 kJ/mol over last 2 windows", observed: "not converged at 11.5 ps", pass: warn, note: "γ=10 too gentle for deep well; LB only" }
+  - { id: G20_no_grotthuss_exchange, rule: "CV(H_37) stays > 0.5 (no exchange of tracked H)",     observed: "[0.955, 1.720] over 11.5 ps", pass: true }
+  - { id: G21_phase1_no_hot_start,  rule: "T_mean steps 1-10 < 320 K",                  observed: "OK, no hot start",            pass: true }
+  - { id: G22_phase2_no_T_drift,    rule: "|T_slope| < 5 K/ps over 1 ps",               observed: "OK, no drift",                 pass: true }
+  - { id: G23_hill_units_explicit, rule: "WW unit specifier present in CP2K input",      observed: "[kjmol] explicit",            pass: true }
+  - { id: G24_wall_correction_applied, rule: "if wall sampled, F_real = F_apparent - V_wall", observed: "applied math-correctable", pass: true }
+
+# ── 12. PROVENANCE ───────────────────────────────────────
+provenance:
+  date: 2026-04-30                              # v1 launch date
+  author: igor@exopoiesis.space
+  parents:
+    - "run.chemist_physicist_review.2026-04-22"   # CV choice + cell choice review
+    - "run.cp2k_metadyn_initial.2026-04-13"       # earlier metadyn template
+  literature:
+    - Barducci2008                                # WT-MetaD canonical
+    - Hatchikian1989                              # Fe-H binding ballpark
+  compute:
+    host: cloud-gpu
+    gpu: A100 PCIe 40G
+    cost_usd: 181                                  # estimated v1 total
+    walltime_h: 270                                # ~11.25 days continuous (v1)
+    note: "v2 (gamma=5, wall=3.0, 15 ps) completed; basin LB 0.383 eV is the final result (see results)."
+  hash:
+    inputs:  sha256:placeholder_to_be_computed
+    outputs: sha256:placeholder_to_be_computed
+
+# ── CROSS-REFERENCES (Third Matter paper family) ──────────────────────────
+# Added on assembly of the Paper #2 data repository (interfacial-proton-trap-fes).
+cross_ref:
+  paper:
+    name: KineticTrap
+    title: "Confinement-Stabilized Interfacial Hydrogen Trap and Proton Retention in a Pentlandite-Mackinawite Bilayer Membrane"
+    section: "§3.2"
+    repo: https://github.com/exopoiesis/interfacial-proton-trap-fes
+    doi: "Zenodo DOI on acceptance"
+  related:
+    - name: MLIPvsDFT
+      relation: companion
+      repo: https://github.com/exopoiesis/mlip-vs-dft-iron-sulfides
+      note: "foundation-MLIP failure-mode taxonomy for iron-sulfide defect kinetics"
+    - name: tm-spec
+      relation: schema
+      url: https://exopoiesis.space/tm-spec
+      note: "the machine-readable specification standard this file conforms to"

@@ -1,0 +1,48 @@
+{
+  "mineral": "pentlandite",
+  "cell": "conventional",
+  "mechanism": "vacancy_hop_S-S",
+  "code": "ABACUS",
+  "mode": "PW GPU",
+  "kpts": [
+    2,
+    2,
+    2
+  ],
+  "ecutwfc_ry": 60,
+  "n_atoms": 67,
+  "n_images": 5,
+  "climb": true,
+  "optimizer": "LBFGS",
+  "k_spring": 0.05,
+  "barrier_eV": 0.4132827630965039,
+  "E_a_forward_eV": 0.5455682440951932,
+  "E_a_reverse_eV": 0.4132827630965039,
+  "fmax_final": 0.029237874697648134,
+  "converged": true,
+  "steps": 0,
+  "time_s": 10905.209424257278,
+  "energies_eV": [
+    -139910.2000091848,
+    -139910.1575185707,
+    -139910.0018853241,
+    -139909.7867264217,
+    -139909.9762327648,
+    -139910.2300644069,
+    -139910.3322946658
+  ],
+  "relative_energies_eV": [
+    0.0,
+    0.042490614112466574,
+    0.19812386069679633,
+    0.4132827630965039,
+    0.22377641999628395,
+    -0.03005522210150957,
+    -0.1322854809986893
+  ],
+  "cross_verify": {
+    "gamma_only_abacus": 0.442,
+    "prim_gpaw": 1.115,
+    "prim_abacus_lcao": 0.9
+  }
+}

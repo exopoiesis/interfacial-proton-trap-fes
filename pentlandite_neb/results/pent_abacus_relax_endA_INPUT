@@ -1,0 +1,17 @@
+INPUT_PARAMETERS
+basis_type pw
+calculation scf
+nspin 1
+ecutwfc 60
+smearing_method gaussian
+smearing_sigma 0.05
+scf_thr 1e-06
+scf_nmax 500
+mixing_type broyden
+mixing_beta 0.2
+mixing_ndim 12
+cal_force 1
+cal_stress 0
+symmetry 0
+pseudo_dir /opt/sg15_pp
+

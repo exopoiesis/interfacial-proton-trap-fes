@@ -1,0 +1,203 @@
+# TM-Spec: CP2K AIMD, thick interfacial-water film (3×3×2 mack + 24 H2O + H+), §3.1.
+# NOTE on the id/filename "grotthuss": this run was launched as a bulk-Grotthuss reference, but the
+# §3.1 finding is that the excess proton is LOCALIZED (79.5% in one donor-acceptor pair,
+# fluctuating-Eigen, no extended Grotthuss relay; NO diffusion coefficient extractable). The
+# "grotthuss" label is historical; the reconciled content below reflects the localization result.
+# Status: regime characterization (single 11.6 ps trajectory; §3.1).
+#
+# kind: MDCalculation — plain MD (NVT-Nose), not enhanced sampling.
+
+spec: tm-spec/0.2
+kind: MDCalculation
+id: tm.mack_3x3x2.h_proton.aimd_grotthuss_v1.2026-04-13
+# NOTE (Paper #2 mapping): this computation is reported in Paper #2 "KineticTrap" §3.1 (thick-film interfacial-water proton localization (AIMD)).
+# Any 'paper #1' references in the notes below are pre-split provenance (the kinetic-trap work was moved from the MLIPvsDFT paper into this one).
+schema_url: https://exopoiesis.space/tm-spec/0.2.json
+
+reconciliation: "Dated v1 provenance snapshot; values reconciled to the final manuscript on repo assembly. Where v1 differs (composition, DFT metad gamma/wall/LB, magnetic/U labels), the manuscript (KineticTrap) is authoritative."
+
+# ── 1. STRUCTURE (3×3×2 mack — thick interfacial-water film) ──
+structure:
+  composition:
+    solid:    Fe36S36                         # 3×3×2 mack supercell (72 Fe-S atoms)
+    aqueous:  "24 H2O + 1 H+"                 # explicit waters + 1 excess proton (manuscript §2.1/§3.1)
+  prototype: AB_tP4_129_a_c
+  space_group: { number: 129, symbol: P4/nmm }
+  cell:
+    a: 11.022  Å                              # 3 × 3.674
+    b: 11.022  Å
+    c: 13.000  Å                              # 2 × 5.033 + interlayer water
+    pbc: [true, true, true]
+  supercell: [3, 3, 2]
+  total_atoms: 145                             # 36 Fe + 36 S + 24 H2O (72 atoms) + 1 H+ = 145 (manuscript §2.1)
+  ref: structures/mack_3x3x2_h2o24_h1.extxyz
+
+# ── 2. DEFECTS ───────────────────────────────────────────
+defects:
+  reactions:
+    - "nil → H_aq^+(in_water_layer) + e'(in_solid)"
+  charge_balance: "+1 H_aq^+ + -1 e' (delocalized) → neutral cell"
+  population:
+    H_excess: { count: 1, conc: 1, location: aqueous_layer }
+
+# ── 3. MAGNETIC STATE ────────────────────────────────────
+magnetic:
+  state: NM                                    # nspin=1 PM/itinerant surrogate
+  collinear: true
+  propagation_vector: [0, 0, 0]
+  magmoms_uB: {}
+  surrogate_warning: |
+    PBE nspin=1 as PM/itinerant proxy at 300 K.
+    Community-validated.
+
+# ── 4. ENVIRONMENT ───────────────────────────────────────
+environment:
+  phase: aqueous_at_solid_interface             # 24 H2O explicit thick interfacial film
+  T: 300 K
+  P: explicit_water_at_density_1.0
+  pH: implied_~0
+  redox: null
+  composition_molal: {}
+  database: null
+
+# ── 5. REACTIONS (target process — confined proton residence, NOT Grotthuss relay) ──
+reactions:
+  - id: R_confined_residence
+    label: "excess proton localized within a single donor-acceptor water pair (NOT a Grotthuss relay)"
+    rule:  "H2O···H+ ⇌ H+···H2O within the closest O-O pair (ping-pong, non-Markovian)"
+    rate:  "not a diffusive relay; confined shuttling within r_c"
+    note: |
+      Manuscript §3.1: the excess proton is LOCALIZED in one donor-acceptor pair
+      (79.5 % residence on the closest O-O pair, O-O = 2.39 Å), in a fluctuating-Eigen
+      regime — NOT an extended hydrogen-bond relay across the film. No diffusion
+      coefficient is extractable on this trajectory and none is reported (§3.1).
+
+# ── 6. CALCULATION (DFT, CP2K) ───────────────────────────
+calculation:
+  method: DFT
+  level:
+    xc: PBE+D3(BJ)
+    xc_libxc: [GGA_X_PBE, GGA_C_PBE]
+    vdw: D3-BJ
+    basis:
+      kind: gaussians
+      family: GTH_MOLOPT
+      cutoff_Ry: 600
+      rel_cutoff_Ry: 60
+    pseudopotential: GTH-PBE
+    smearing: { kind: fermi, width_eV: 0.02 }
+    spin: none
+  code:
+    name: CP2K
+    version: 2024.2
+    image: cp2k:desktop-cu128
+    framework: "CP2K + libDBCSR + libxc"
+
+# ── 7. MD PROTOCOL (NEW SECTION) ─────────────────────────
+md_protocol:
+  ensemble: NVT-nose
+  thermostat:
+    kind: Nose-Hoover
+    T_K: 300
+    tau_fs: 50
+    chain_length: 3
+  integrator: velocity-verlet
+  timestep_fs: 0.5
+  n_steps: 20000
+  duration_ps: 10.0
+  equilibration_ps: 1.0                          # exclude from analysis
+  trajectory_freq: 10                             # write coords every 5 fs
+  constraints:
+    rattle: false
+    fixed_atoms: []                               # all free
+
+# ── 8. TRAJECTORY ANALYSIS (post-hoc, manuscript §3.1) ──
+trajectory_analysis:
+  msd:
+    confined_fit: "MSD(τ) = r_c²(1 − e^{−τ/τ_c})"   # confined-diffusion plateau, NOT free Einstein
+    basin_gyration_radius_r_c_A: 1.95               # r_c = 1.95 ± 0.02 Å (manuscript §3.1)
+    equilibration_time_tau_c_ps: "<=0.5"
+    plateau_note: "MSD plateaus at ~3.5-4 Å² for τ >= 0.5 ps; late-τ slope negative — incompatible with free diffusion"
+  diffusion_coefficient_cm2_per_s:
+    H_proton: null                                  # NOT extractable / NOT reported (manuscript §3.1)
+    note: "No diffusion coefficient is extractable on this trajectory and none is reported (§3.1)."
+  proton_localization:
+    visited_oxygens_of_24: 4                        # 4 of 24 (17 %)
+    residence_closest_pair_pct: 79.5                # 79.5 % on closest O-O pair (O-O = 2.39 Å)
+    residence_most_distant_site_pct: 1.9
+    character: "confined ping-pong within the close pair, non-Markovian (NOT an extended Grotthuss relay)"
+  speciation_fractions:
+    fluctuating_Eigen_TS_like_pct: 80.3             # Marx criterion |Δ| ∈ [0.05, 0.50] Å (manuscript §3.1)
+    deep_Eigen_pct: 0.8
+    note: "fluctuating-Eigen regime (80.3 % TS-like, 0.8 % deep-Eigen); H3O+ core resolvable in 100 % of frames"
+
+# ── 9. RESULTS ──────────────────────────────────────────
+results:
+  completed_ps: 11.6                              # 11.64 ps production (manuscript §2.1/§3.1)
+  T_mean_K: 300.8                                  # 300.8 ± 20.8 K (manuscript §3.1)
+  energy_drift_meV_per_atom_per_ps: 0.0013         # conserved-quantity drift (manuscript §3.1)
+  metrics:
+    proton_localization_residence_closest_pair_pct: 79.5   # localized in one donor-acceptor pair (§3.1)
+    basin_gyration_radius_r_c_A: 1.95
+    avg_OH_OH_distance_A: 2.6
+  interpretation: |
+    Manuscript §3.1: the excess proton remains LOCALIZED within a single donor-acceptor
+    water pair (79.5 % residence; confined MSD plateau, r_c ≈ 1.95 Å) in a
+    fluctuating-Eigen regime — this is NOT a Grotthuss relay and no diffusion
+    coefficient is extractable (§3.1). The proton never contacts the Fe surface
+    (min H-Fe avg 3.48 Å), the clean opposite of the 3×3×1 trap (§3.2).
+  status: REGIME_CHARACTERIZATION                  # single-trajectory regime characterization (§3.1), to be confirmed by replicas
+  paper_quotable:
+    localization_conclusion: true                  # the localization / fluctuating-Eigen result IS the §3.1 finding
+    diffusion_or_grotthuss: false                  # NO D_H+ / Grotthuss-relay claim is paper-quotable (overclaim against §3.1)
+  validated_by: [chemist@opus, physicist@opus]
+  notes: |
+    This is the thick-film (3×3×2) regime of the two-regime contrast (manuscript §3.1).
+    The excess proton is confined to one donor-acceptor pair (fluctuating-Eigen,
+    NOT a Grotthuss relay); no diffusion coefficient is extractable or reported.
+    The contrasting 3×3×1 confined system (§3.2) pins a dissociatively Fe-chemisorbed
+    hydrogen at the surface (d_FeH ≈ 1.6 Å) — the kinetic trap.
+
+# ── 10. SANITY GATES ─────────────────────────────────────
+sanity:
+  - { id: G01_FeS_bond,            rule: "min(Fe–S) > 2.00 Å",                                pass: true }
+  - { id: G06_ascii_safe,          rule: "no em-dash in script",                              pass: true }
+  - { id: G21_phase1_no_hot_start, rule: "T_mean steps 1-10 < 320 K",                          pass: true }
+  - { id: G22_phase2_no_T_drift,   rule: "|T_slope| < 5 K/ps over 1 ps",                       pass: true }
+  - { id: G23_hill_units_explicit, rule: "no hills (plain MD); WW skip",                       pass: skip }
+  - { id: G25_energy_drift,        rule: "Cons.Qty drift < 1 meV/ps",                          observed: 0.6, pass: true }
+  - { id: G26_T_window,            rule: "T_mean within ±10% of T_target=300",                 observed: 302.5, pass: true }
+
+# ── 11. PROVENANCE ───────────────────────────────────────
+provenance:
+  date: 2026-04-13
+  author: igor@exopoiesis.space
+  parents: ["run.cp2k_aimd_initial.2026-04-13"]
+  literature: [Marx2006_GrotthussSurvey, Tuckerman2010_CompactBookCH4]
+  compute:
+    host: cloud-gpu
+    gpu: A100 PCIe 40G
+    cost_usd: 60.0
+    walltime_h: 240                                  # ~10 days continuous
+  hash:
+    inputs:  sha256:placeholder_to_be_computed
+    outputs: sha256:placeholder_to_be_computed
+
+# ── CROSS-REFERENCES (Third Matter paper family) ──────────────────────────
+# Added on assembly of the Paper #2 data repository (interfacial-proton-trap-fes).
+cross_ref:
+  paper:
+    name: KineticTrap
+    title: "Confinement-Stabilized Interfacial Hydrogen Trap and Proton Retention in a Pentlandite-Mackinawite Bilayer Membrane"
+    section: "§3.1"
+    repo: https://github.com/exopoiesis/interfacial-proton-trap-fes
+    doi: "Zenodo DOI on acceptance"
+  related:
+    - name: MLIPvsDFT
+      relation: companion
+      repo: https://github.com/exopoiesis/mlip-vs-dft-iron-sulfides
+      note: "foundation-MLIP failure-mode taxonomy for iron-sulfide defect kinetics"
+    - name: tm-spec
+      relation: schema
+      url: https://exopoiesis.space/tm-spec
+      note: "the machine-readable specification standard this file conforms to"

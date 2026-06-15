@@ -1,0 +1,1419 @@
+                                                                                     
+                              ABACUS v3.9.0.26
+
+               Atomic-orbital Based Ab-initio Computation at UStc                    
+
+                     Website: http://abacus.ustc.edu.cn/                             
+               Documentation: https://abacus.deepmodeling.com/                       
+                  Repository: https://github.com/abacusmodeling/abacus-develop       
+                              https://github.com/deepmodeling/abacus-develop         
+                      Commit: unknown
+
+    Start Time is Mon Apr  6 06:26:24 2026
+                                                                                     
+ ------------------------------------------------------------------------------------
+
+ READING GENERAL INFORMATION
+                           global_out_dir = OUT.ABACUS/
+                           global_in_card = INPUT
+                               pseudo_dir = /opt/sg15_pp/
+                              orbital_dir = 
+                                    DRANK = 1
+                                    DSIZE = 1
+                                   DCOLOR = 1
+                                    GRANK = 1
+                                    GSIZE = 1
+
+
+ >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+ |                                                                    |
+ |                        #Setup Unitcell#                            |
+ | From the input file and the structure file we know the number of   |
+ | different elments in this unitcell, then we list the detail        |
+ | information for each element, especially the zeta and polar atomic |
+ | orbital number for each element. The total atom number is counted. |
+ | We calculate the nearest atom distance for each atom and show the  |
+ | Cartesian and Direct coordinates for each atom. We list the file   |
+ | address for atomic orbitals. The volume and the lattice vectors    |
+ | in real and reciprocal space is also shown.                        |
+ |                                                                    |
+ <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+ READING UNITCELL INFORMATION
+                       Number of elements = 4
+                  Lattice constant (Bohr) = 1.88973
+              Lattice constant (Angstrom) = 1
+
+ READING ATOM TYPE 1
+                               Atom label = Fe
+                      L=0, number of zeta = 1
+                      L=1, number of zeta = 1
+                      L=2, number of zeta = 1
+            Number of atoms for this type = 20
+
+ READING ATOM TYPE 2
+                               Atom label = H
+                      L=0, number of zeta = 1
+                      L=1, number of zeta = 1
+                      L=2, number of zeta = 1
+            Number of atoms for this type = 1
+
+ READING ATOM TYPE 3
+                               Atom label = Ni
+                      L=0, number of zeta = 1
+                      L=1, number of zeta = 1
+                      L=2, number of zeta = 1
+            Number of atoms for this type = 16
+
+ READING ATOM TYPE 4
+                               Atom label = S
+                      L=0, number of zeta = 1
+                      L=1, number of zeta = 1
+                      L=2, number of zeta = 1
+            Number of atoms for this type = 30
+
+                        TOTAL ATOM NUMBER = 67
+
+ CARTESIAN COORDINATES ( UNIT =      1.88972613 Bohr )
+ atom                  x                  y                  z     mag
+   Fe     5.022000000000     5.022000000000     5.022000000000  0.0000
+   Fe     8.788500000000     6.277500000000     6.277500000000  0.0000
+   Fe     1.255500000000     3.766500000000     6.277500000000  0.0000
+   Fe     8.788500000000     3.766500000000     3.766500000000  0.0000
+   Fe     1.255500000000     6.277500000000     3.766500000000  0.0000
+   Fe     1.255500000000     3.766500000000     3.766500000000  0.0000
+   Fe     8.788500000000     6.277500000000     3.766500000000  0.0000
+   Fe     1.255500000000     6.277500000000     6.277500000000  0.0000
+   Fe     8.788500000000     1.255500000000     1.255500000000  0.0000
+   Fe     1.255500000000     8.788500000000     1.255500000000  0.0000
+   Fe     8.788500000000     3.766500000000     6.277500000000  0.0000
+   Fe     1.255500000000     1.255500000000     8.788500000000  0.0000
+   Fe     8.788500000000     8.788500000000     8.788500000000  0.0000
+   Fe     0.000000000000     5.022000000000     0.000000000000  0.0000
+   Fe     0.000000000000     0.000000000000     5.022000000000  0.0000
+   Fe     1.255500000000     1.255500000000     1.255500000000  0.0000
+   Fe     5.022000000000     0.000000000000     0.000000000000  0.0000
+   Fe     8.788500000000     1.255500000000     8.788500000000  0.0000
+   Fe     1.255500000000     8.788500000000     8.788500000000  0.0000
+   Fe     8.788500000000     8.788500000000     1.255500000000  0.0000
+    H     2.317617618059     2.505136032688     2.505022760751  0.0000
+   Ni     3.766500000000     3.766500000000     1.255500000000  0.0000
+   Ni     3.766500000000     6.277500000000     1.255500000000  0.0000
+   Ni     6.277500000000     3.766500000000     1.255500000000  0.0000
+   Ni     3.766500000000     3.766500000000     8.788500000000  0.0000
+   Ni     6.277500000000     3.766500000000     8.788500000000  0.0000
+   Ni     3.766500000000     6.277500000000     8.788500000000  0.0000
+   Ni     6.277500000000     6.277500000000     1.255500000000  0.0000
+   Ni     6.277500000000     6.277500000000     8.788500000000  0.0000
+   Ni     6.277500000000     8.788500000000     6.277500000000  0.0000
+   Ni     3.766500000000     8.788500000000     3.766500000000  0.0000
+   Ni     6.277500000000     1.255500000000     3.766500000000  0.0000
+   Ni     6.277500000000     8.788500000000     3.766500000000  0.0000
+   Ni     3.766500000000     1.255500000000     3.766500000000  0.0000
+   Ni     3.766500000000     8.788500000000     6.277500000000  0.0000
+   Ni     6.277500000000     1.255500000000     6.277500000000  0.0000
+   Ni     3.766500000000     1.255500000000     6.277500000000  0.0000
+    S     0.000000000000     5.022000000000     7.533000000000  0.0000
+    S     0.000000000000     5.022000000000     2.511000000000  0.0000
+    S     7.533000000000     0.000000000000     5.022000000000  0.0000
+    S     2.511000000000     0.000000000000     5.022000000000  0.0000
+    S     5.022000000000     2.511000000000     5.022000000000  0.0000
+    S     7.533000000000     5.022000000000     0.000000000000  0.0000
+    S     5.022000000000     0.000000000000     7.533000000000  0.0000
+    S     5.022000000000     0.000000000000     2.511000000000  0.0000
+    S     0.000000000000     2.511000000000     5.022000000000  0.0000
+    S     2.511000000000     5.022000000000     0.000000000000  0.0000
+    S     5.022000000000     7.533000000000     0.000000000000  0.0000
+    S     5.022000000000     2.511000000000     0.000000000000  0.0000
+    S     5.022000000000     7.533000000000     5.022000000000  0.0000
+    S     0.000000000000     7.533000000000     5.022000000000  0.0000
+    S     0.000000000000     0.000000000000     2.511000000000  0.0000
+    S     2.511000000000     5.022000000000     5.022000000000  0.0000
+    S     0.000000000000     0.000000000000     7.533000000000  0.0000
+    S     0.000000000000     7.533000000000     0.000000000000  0.0000
+    S     0.000000000000     2.511000000000     0.000000000000  0.0000
+    S     7.533000000000     0.000000000000     0.000000000000  0.0000
+    S     7.533000000000     2.511000000000     2.511000000000  0.0000
+    S     2.511000000000     7.533000000000     2.511000000000  0.0000
+    S     7.533000000000     7.533000000000     7.533000000000  0.0000
+    S     2.511000000000     2.511000000000     7.533000000000  0.0000
+    S     2.511000000000     7.533000000000     7.533000000000  0.0000
+    S     7.533000000000     2.511000000000     7.533000000000  0.0000
+    S     7.533000000000     7.533000000000     2.511000000000  0.0000
+    S     5.022000000000     5.022000000000     2.511000000000  0.0000
+    S     7.533000000000     5.022000000000     5.022000000000  0.0000
+    S     5.022000000000     5.022000000000     7.533000000000  0.0000
+
+ ATOMIC VELOCITIES
+ atom                 vx                 vy                 vz
+   Fe                  0                  0                  0
+   Fe                  0                  0                  0
+   Fe                  0                  0                  0
+   Fe                  0                  0                  0
+   Fe                  0                  0                  0
+   Fe                  0                  0                  0
+   Fe                  0                  0                  0
+   Fe                  0                  0                  0
+   Fe                  0                  0                  0
+   Fe                  0                  0                  0
+   Fe                  0                  0                  0
+   Fe                  0                  0                  0
+   Fe                  0                  0                  0
+   Fe                  0                  0                  0
+   Fe                  0                  0                  0
+   Fe                  0                  0                  0
+   Fe                  0                  0                  0
+   Fe                  0                  0                  0
+   Fe                  0                  0                  0
+   Fe                  0                  0                  0
+    H                  0                  0                  0
+   Ni                  0                  0                  0
+   Ni                  0                  0                  0
+   Ni                  0                  0                  0
+   Ni                  0                  0                  0
+   Ni                  0                  0                  0
+   Ni                  0                  0                  0
+   Ni                  0                  0                  0
+   Ni                  0                  0                  0
+   Ni                  0                  0                  0
+   Ni                  0                  0                  0
+   Ni                  0                  0                  0
+   Ni                  0                  0                  0
+   Ni                  0                  0                  0
+   Ni                  0                  0                  0
+   Ni                  0                  0                  0
+   Ni                  0                  0                  0
+    S                  0                  0                  0
+    S                  0                  0                  0
+    S                  0                  0                  0
+    S                  0                  0                  0
+    S                  0                  0                  0
+    S                  0                  0                  0
+    S                  0                  0                  0
+    S                  0                  0                  0
+    S                  0                  0                  0
+    S                  0                  0                  0
+    S                  0                  0                  0
+    S                  0                  0                  0
+    S                  0                  0                  0
+    S                  0                  0                  0
+    S                  0                  0                  0
+    S                  0                  0                  0
+    S                  0                  0                  0
+    S                  0                  0                  0
+    S                  0                  0                  0
+    S                  0                  0                  0
+    S                  0                  0                  0
+    S                  0                  0                  0
+    S                  0                  0                  0
+    S                  0                  0                  0
+    S                  0                  0                  0
+    S                  0                  0                  0
+    S                  0                  0                  0
+    S                  0                  0                  0
+    S                  0                  0                  0
+    S                  0                  0                  0
+
+                     Cell volume (Bohr^3) = 6837.81
+                        Cell volume (A^3) = 1013.26
+
+ Lattice vectors: (Cartesian coordinate: in unit of a_0)
+              +10.044                  +0                  +0
+                   +0             +10.044                  +0
+                   +0                  +0             +10.044
+ Reciprocal vectors: (Cartesian coordinate: in unit of 2 pi/a_0)
+           +0.0995619                  -0                  +0
+                   -0          +0.0995619                  -0
+                   +0                  -0          +0.0995619
+
+ #ENERGY SOLVER# ksdft_pw
+ RUNNING WITH DEVICE  : CPU / Intel(R) Xeon(R) CPU E5-2673 v4 @ 2.30GHz (x2)
+                        GPU / NVIDIA GeForce RTX 4070 Ti (x1)
+
+
+ >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+ |                                                                    |
+ |                 #Read Pseudopotentials Files#                      |
+ | ABACUS supports norm-conserving (NC) pseudopotentials for both     |
+ | plane wave basis and numerical atomic orbital basis sets.          |
+ | In addition, ABACUS supports ultrasoft pseudopotentials (USPP)     |
+ | for plane wave basis set.                                          |
+ |                                                                    |
+ <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+                PAO radial cut off (Bohr) = 15
+                     Pseudopotential file = Fe_ONCV_PBE-1.2.upf
+                     Pseudopotential type = NC
+          Exchange-correlation functional = PBE
+                 Nonlocal core correction = 0
+                        Valence electrons = 16
+                                     Lmax = 2
+                           Number of zeta = 0
+                     Number of projectors = 6
+                           L of projector = 0
+                           L of projector = 0
+                           L of projector = 1
+                           L of projector = 1
+                           L of projector = 2
+                           L of projector = 2
+                PAO radial cut off (Bohr) = 15
+                     Pseudopotential file = H_ONCV_PBE-1.2.upf
+                     Pseudopotential type = NC
+          Exchange-correlation functional = PBE
+                 Nonlocal core correction = 0
+                        Valence electrons = 1
+                                     Lmax = 0
+                           Number of zeta = 0
+                     Number of projectors = 2
+                           L of projector = 0
+                           L of projector = 0
+                PAO radial cut off (Bohr) = 15
+                     Pseudopotential file = Ni_ONCV_PBE-1.2.upf
+                     Pseudopotential type = NC
+          Exchange-correlation functional = PBE
+                 Nonlocal core correction = 0
+                        Valence electrons = 18
+                                     Lmax = 2
+                           Number of zeta = 0
+                     Number of projectors = 6
+                           L of projector = 0
+                           L of projector = 0
+                           L of projector = 1
+                           L of projector = 1
+                           L of projector = 2
+                           L of projector = 2
+                PAO radial cut off (Bohr) = 15
+                     Pseudopotential file = S_ONCV_PBE-1.2.upf
+                     Pseudopotential type = NC
+          Exchange-correlation functional = PBE
+                 Nonlocal core correction = 0
+                        Valence electrons = 6
+                                     Lmax = 1
+                           Number of zeta = 0
+                     Number of projectors = 4
+                           L of projector = 0
+                           L of projector = 0
+                           L of projector = 1
+                           L of projector = 1
+         Number of pseudo atomic orbitals = 0
+            Electron number of element Fe = 16
+      Total electron number of element Fe = 320
+             Electron number of element H = 1
+       Total electron number of element H = 1
+            Electron number of element Ni = 18
+      Total electron number of element Ni = 288
+             Electron number of element S = 6
+       Total electron number of element S = 180
+          Autoset the number of electrons = 789
+               Occupied electronic states = 395
+     Number of electronic states (NBANDS) = 475
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+ Warning: the number of valence electrons in pseudopotential > 8 for Fe: [Ar] 3d6 4s2
+ Warning: the number of valence electrons in pseudopotential > 10 for Ni: [Ar] 3d8 4s2
+ Pseudopotentials with additional electrons can yield (more) accurate outcomes, but may be less efficient.
+ If you're confident that your chosen pseudopotential is appropriate, you can safely ignore this warning.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+                  
+
+
+ >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+ |                                                                    |
+ |           #Setup Plane Waves of Charge/Potential#                  |
+ | Use the kinetic energy cutoff and the lattice vectors to generate  |
+ | the dimensions of FFT grid, which is used to represent the charge  |
+ | density or potential. If USPP is used, a double grid technique     |
+ | is applied.                                                        |
+ |                                                                    |
+ <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+ SETUP PLANE WAVES FOR CHARGE/POTENTIAL
+  Energy cutoff for charge/potential (Ry) = 240
+            FFT grid for charge/potential = [ 96, 96, 96 ]
+           Number of FFT grids this proc. = 884736
+                Division for big FFT grid = [ 1, 1, 1 ]
+      FFT (big) grid for charge/potential = [ 96, 96, 96 ]
+     Number of FFT (big) grids this proc. = 884736
+                    Number of plane waves = 429697
+        Number of sticks on FFT x-y plane = 6869
+
+ PARALLEL PW FOR CHARGE/POTENTIAL
+     PROC   COLUMNS(POT)             PW
+        1           6869         429697
+ --------------- SUM -------------------
+        1           6869         429697
+
+                            Number of |g| = 1828
+                                  Max |g| = 21.7085
+                                  Min |g| = 0
+ DONE : SETUP UNITCELL Time : 0.975409 (SEC)
+
+
+ >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+ |                                                                    |
+ |                       #Setup K-points#                             |
+ | We setup the k-points according to input parameters.               |
+ | The reduced k-points are set according to symmetry operations.     |
+ | We treat the spin as another set of k-points.                      |
+ |                                                                    |
+ <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+ SETUP K-POINTS
+                                    nspin = 1
+                   Input type of k points = Monkhorst-Pack(Gamma)
+                                   nkstot = 8
+           Number of irreducible k-points = 8
+
+ K-POINTS REDUCTION ACCORDING TO SYMMETRY
+     IBZ    DIRECT_X    DIRECT_Y    DIRECT_Z  WEIGHT  ibz2bz
+       1  0.00000000  0.00000000  0.00000000  0.1250       0
+       2  0.50000000  0.00000000  0.00000000  0.1250       1
+       3  0.00000000  0.50000000  0.00000000  0.1250       2
+       4  0.50000000  0.50000000  0.00000000  0.1250       3
+       5  0.00000000  0.00000000  0.50000000  0.1250       4
+       6  0.50000000  0.00000000  0.50000000  0.1250       5
+       7  0.00000000  0.50000000  0.50000000  0.1250       6
+       8  0.50000000  0.50000000  0.50000000  0.1250       7
+
+                               nkstot now = 8
+ K-POINTS DIRECT COORDINATES
+ KPOINTS    DIRECT_X    DIRECT_Y    DIRECT_Z  WEIGHT
+       1  0.00000000  0.00000000  0.00000000  0.1250
+       2  0.50000000  0.00000000  0.00000000  0.1250
+       3  0.00000000  0.50000000  0.00000000  0.1250
+       4  0.50000000  0.50000000  0.00000000  0.1250
+       5  0.00000000  0.00000000  0.50000000  0.1250
+       6  0.50000000  0.00000000  0.50000000  0.1250
+       7  0.00000000  0.50000000  0.50000000  0.1250
+       8  0.50000000  0.50000000  0.50000000  0.1250
+
+
+       Number of k-points in this process = 8
+       Minimum distributed k-point number = 8
+
+ K-POINTS CARTESIAN COORDINATES
+ KPOINTS CARTESIAN_X CARTESIAN_Y CARTESIAN_Z  WEIGHT
+       1  0.00000000  0.00000000  0.00000000  0.2500
+       2  0.04978096  0.00000000  0.00000000  0.2500
+       3  0.00000000  0.04978096  0.00000000  0.2500
+       4  0.04978096  0.04978096  0.00000000  0.2500
+       5  0.00000000  0.00000000  0.04978096  0.2500
+       6  0.04978096  0.00000000  0.04978096  0.2500
+       7  0.00000000  0.04978096  0.04978096  0.2500
+       8  0.04978096  0.04978096  0.04978096  0.2500
+
+
+ K-POINTS DIRECT COORDINATES
+ KPOINTS    DIRECT_X    DIRECT_Y    DIRECT_Z  WEIGHT
+       1  0.00000000  0.00000000  0.00000000  0.2500
+       2  0.50000000  0.00000000  0.00000000  0.2500
+       3  0.00000000  0.50000000  0.00000000  0.2500
+       4  0.50000000  0.50000000  0.00000000  0.2500
+       5  0.00000000  0.00000000  0.50000000  0.2500
+       6  0.50000000  0.00000000  0.50000000  0.2500
+       7  0.00000000  0.50000000  0.50000000  0.2500
+       8  0.50000000  0.50000000  0.50000000  0.2500
+
+ DONE : INIT K-POINTS Time : 0.976782 (SEC)
+
+
+ Warning_Memory_Consuming allocated:  SF::strucFac 26.2266 MB
+ XC:	101	130	
+
+ Warning_Memory_Consuming allocated:  Chg::rho 6.75 MB
+
+ Warning_Memory_Consuming allocated:  Chg::rho_save 6.75 MB
+
+ Warning_Memory_Consuming allocated:  Chg::rho_core 6.75 MB
+
+ >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+ |                                                                    |
+ | Setup charge mixing parameters                                     |
+ |                                                                    |
+ <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+                              mixing_type = broyden
+                              mixing_beta = 0.2
+                               mixing_gg0 = 1
+                           mixing_gg0_min = 0.1
+                              mixing_ndim = 12
+
+ Warning_Memory_Consuming allocated:  PW_B_K::gcar 9.83899 MB
+
+
+ >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+ |                                                                    |
+ |              #Setup Plane Waves of Wave Functions#                 |
+ | Use the kinetic energy cutoff and the lattice vectors to generate  |
+ | the dimensions of FFT grid, which is used to represent the wave    |
+ | functions of electrons.                                            |
+ |                                                                    |
+ <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+ SETUP PLANE WAVES FOR WAVE FUNCTIONS
+     Energy cutoff for wavefunc (unit:Ry) = 60
+              FFT grid for wave functions = [ 96, 96, 96 ]
+              Number of total plane waves = 59813
+        Number of sticks on FFT x-y plane = 1861
+
+ PARALLEL PW FOR WAVE FUNCTIONS
+     PROC   COLUMNS(POT)             PW
+        1           1861          59813
+ --------------- sum -------------------
+        1           1861          59813
+ DONE : INIT PLANEWAVE Time : 1.45689 (SEC)
+
+                                 init_chg = atomic
+
+ Warning_Memory_Consuming allocated:  Pot::veff_fix 6.75 MB
+
+ Warning_Memory_Consuming allocated:  Pot::veff 6.75 MB
+
+ Warning_Memory_Consuming allocated:  Pot::veff_smooth 6.75 MB
+ DONE : LOCAL POTENTIAL Time : 1.68218 (SEC)
+
+
+ SETUP NONLOCAL PSEUDOPOTENTIALS IN PLANE WAVE BASIS
+ Fe non-local projectors:
+ projector 1 L=0
+ projector 2 L=0
+ projector 3 L=1
+ projector 4 L=1
+ projector 5 L=2
+ projector 6 L=2
+ H non-local projectors:
+ projector 1 L=0
+ projector 2 L=0
+ Ni non-local projectors:
+ projector 1 L=0
+ projector 2 L=0
+ projector 3 L=1
+ projector 4 L=1
+ projector 5 L=2
+ projector 6 L=2
+ S non-local projectors:
+ projector 1 L=0
+ projector 2 L=0
+ projector 3 L=1
+ projector 4 L=1
+      TOTAL NUMBER OF NONLOCAL PROJECTORS = 890
+
+ Warning_Memory_Consuming allocated:  VNL::vkb 729.725 MB
+
+ Init Non-Local PseudoPotential table : 
+ Init Non-Local-Pseudopotential done.
+ DONE : NON-LOCAL POTENTIAL Time : 3.04781 (SEC)
+
+                                     npwx = 53734
+
+ Warning_Memory_Consuming allocated:  Psi_PW 3115.68 MB
+
+ Using RANDOM starting wave functions for all 475 bands
+
+ WARNING:
+ init_wfc = atomic requires atomic pseudo wavefunctions(PP_PSWFC), but none available. 
+ Automatically switch to random initialization.
+ Note: Random starting wavefunctions may slow down convergence.
+      For faster convergence, consider using:
+      1) A pseudopotential file that includes atomic wavefunctions (with PP_PSWFC), or
+      2) Numerical atomic orbitals with 'init_wfc = nao' or 'nao+random' if available.
+
+ DONE : INIT BASIS Time : 8.76706 (SEC)
+
+ ================================================================
+ SELF-CONSISTENT
+ ================================================================
+
+ Warning_Memory_Consuming allocated:  SF::strucFac 26.2266 MB
+
+ Warning_Memory_Consuming allocated:  SF::eigts123 0.588913 MB
+
+ Warning_Memory_Consuming allocated:  Chg::rho 6.75 MB
+
+ Warning_Memory_Consuming allocated:  Chg::rhog 3.27833 MB
+
+ Warning_Memory_Consuming allocated:  PW_B_K::gk2 3.27966 MB
+
+ Warning_Memory_Consuming allocated:  PW_B_K::gcar 9.83899 MB
+
+ Warning_Memory_Consuming allocated:  Pot::veff_fix 6.75 MB
+
+ Warning_Memory_Consuming allocated:  Chg::rhog 3.27833 MB
+ DONE : INIT SCF Time : 63.6411 (SEC)
+
+
+ ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ --> #ION MOVE#         1  #ELEC ITER#         1
+ ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ Average iterative diagonalization steps for k-points is 15.5
+ current threshold of diagonalizaiton is 0.01
+
+ Warning_Memory_Consuming allocated:  Pot::veff 6.75 MB
+
+ Warning_Memory_Consuming allocated:  Pot::veff_smooth 6.75 MB
+ Electron density deviation 55.3907
+                          Diago Threshold = 0.01
+ ----------------------------------------------------------
+      Energy           Rydberg                 eV          
+ ----------------------------------------------------------
+  E_KohnSham     -10222.6499776151    -139086.2883551381   
+  E_Harris       -10908.0170546323    -148411.1858241767   
+  E_Fermi        0.9832683159         13.3780517597        
+  E_gap(k)       0.0028571255         0.0388731872         
+ ----------------------------------------------------------
+
+
+ ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ --> #ION MOVE#         1  #ELEC ITER#         2
+ ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ Average iterative diagonalization steps for k-points is 2.375
+ current threshold of diagonalizaiton is 0.00702036
+ Electron density deviation 7.35315
+                          Diago Threshold = 0.00702036
+ ----------------------------------------------------------
+      Energy           Rydberg                 eV          
+ ----------------------------------------------------------
+  E_KohnSham     -10253.5271835607    -139506.3942943173   
+  E_Harris       -10317.0207629306    -140370.2687601637   
+  E_Fermi        0.7936497101         10.7981582735        
+  E_gap(k)       0.0002144846         0.0029182129         
+ ----------------------------------------------------------
+
+
+ ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ --> #ION MOVE#         1  #ELEC ITER#         3
+ ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ Average iterative diagonalization steps for k-points is 10.75
+ current threshold of diagonalizaiton is 0.000931958
+ Electron density deviation 46.1182
+                          Diago Threshold = 0.000931958
+ ----------------------------------------------------------
+      Energy           Rydberg                 eV          
+ ----------------------------------------------------------
+  E_KohnSham     -10285.0849668572    -139935.7599633987   
+  E_Harris       -9624.6751352209     -130950.4232379241   
+  E_Fermi        0.6679097226         9.0873779764         
+  E_gap(k)       0.0006154004         0.0083729525         
+ ----------------------------------------------------------
+
+
+ ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ --> #ION MOVE#         1  #ELEC ITER#         4
+ ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ Average iterative diagonalization steps for k-points is 2
+ current threshold of diagonalizaiton is 0.000931958
+ Electron density deviation 51.5613
+                          Diago Threshold = 0.000931958
+ ----------------------------------------------------------
+      Energy           Rydberg                 eV          
+ ----------------------------------------------------------
+  E_KohnSham     -10287.4073239771    -139967.3572530207   
+  E_Harris       -9624.7926063530     -130952.0215146720   
+  E_Fermi        0.7317077647         9.9553948705         
+  E_gap(k)       0.0004919278         0.0066930214         
+ ----------------------------------------------------------
+
+
+ ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ --> #ION MOVE#         1  #ELEC ITER#         5
+ ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ Average iterative diagonalization steps for k-points is 2
+ current threshold of diagonalizaiton is 0.000931958
+ Electron density deviation 38.6521
+                          Diago Threshold = 0.000931958
+ ----------------------------------------------------------
+      Energy           Rydberg                 eV          
+ ----------------------------------------------------------
+  E_KohnSham     -10285.8484309479    -139946.1474252511   
+  E_Harris       -9688.8993099397     -131824.2379634478   
+  E_Fermi        0.7478946718         10.1756290404        
+  E_gap(k)       0.0021434061         0.0291625359         
+ ----------------------------------------------------------
+
+
+ ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ --> #ION MOVE#         1  #ELEC ITER#         6
+ ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ Average iterative diagonalization steps for k-points is 2
+ current threshold of diagonalizaiton is 0.000931958
+ Electron density deviation 31.6149
+                          Diago Threshold = 0.000931958
+ ----------------------------------------------------------
+      Energy           Rydberg                 eV          
+ ----------------------------------------------------------
+  E_KohnSham     -10283.9639971118    -139920.5083875763   
+  E_Harris       -9745.2390522428     -132590.7794826218   
+  E_Fermi        0.7629687100         10.3807218511        
+  E_gap(k)       0.0001213278         0.0016507490         
+ ----------------------------------------------------------
+
+
+ ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ --> #ION MOVE#         1  #ELEC ITER#         7
+ ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ Average iterative diagonalization steps for k-points is 2
+ current threshold of diagonalizaiton is 0.000931958
+ Electron density deviation 21.4745
+                          Diago Threshold = 0.000931958
+ ----------------------------------------------------------
+      Energy           Rydberg                 eV          
+ ----------------------------------------------------------
+  E_KohnSham     -10283.8141070031    -139918.4690280239   
+  E_Harris       -9824.3330506036     -133666.9085379310   
+  E_Fermi        0.7812505390         10.6294588962        
+  E_gap(k)       0.0011829134         0.0160943622         
+ ----------------------------------------------------------
+
+
+ ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ --> #ION MOVE#         1  #ELEC ITER#         8
+ ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ Average iterative diagonalization steps for k-points is 2
+ current threshold of diagonalizaiton is 0.000931958
+ Electron density deviation 18.9709
+                          Diago Threshold = 0.000931958
+ ----------------------------------------------------------
+      Energy           Rydberg                 eV          
+ ----------------------------------------------------------
+  E_KohnSham     -10282.8937252263    -139905.9465915234   
+  E_Harris       -9849.6608481320     -134011.5109021074   
+  E_Fermi        0.7868420107         10.7055347716        
+  E_gap(k)       0.0002210446         0.0030074655         
+ ----------------------------------------------------------
+
+
+ ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ --> #ION MOVE#         1  #ELEC ITER#         9
+ ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ Average iterative diagonalization steps for k-points is 2
+ current threshold of diagonalizaiton is 0.000931958
+ Electron density deviation 13.694
+                          Diago Threshold = 0.000931958
+ ----------------------------------------------------------
+      Energy           Rydberg                 eV          
+ ----------------------------------------------------------
+  E_KohnSham     -10281.8048123239    -139891.1311714263   
+  E_Harris       -9909.6171308937     -134827.2579785663   
+  E_Fermi        0.8015782061         10.9060309962        
+  E_gap(k)       0.0008483448         0.0115423233         
+ ----------------------------------------------------------
+
+
+ ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ --> #ION MOVE#         1  #ELEC ITER#        10
+ ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ Average iterative diagonalization steps for k-points is 2
+ current threshold of diagonalizaiton is 0.000931958
+ Electron density deviation 11.6736
+                          Diago Threshold = 0.000931958
+ ----------------------------------------------------------
+      Energy           Rydberg                 eV          
+ ----------------------------------------------------------
+  E_KohnSham     -10280.6117128795    -139874.8982207013   
+  E_Harris       -9983.4652960422     -135832.0138114314   
+  E_Fermi        0.8295766447         11.2869692959        
+  E_gap(k)       0.0005318330         0.0072359589         
+ ----------------------------------------------------------
+
+
+ ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ --> #ION MOVE#         1  #ELEC ITER#        11
+ ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ Average iterative diagonalization steps for k-points is 2
+ current threshold of diagonalizaiton is 0.000931958
+ Electron density deviation 6.92412
+                          Diago Threshold = 0.000931958
+ ----------------------------------------------------------
+      Energy           Rydberg                 eV          
+ ----------------------------------------------------------
+  E_KohnSham     -10280.4726581299    -139873.0062837726   
+  E_Harris       -10126.3656973876    -137776.2735162146   
+  E_Fermi        0.8774537884         11.9383712534        
+  E_gap(k)       0.0002924575         0.0039790878         
+ ----------------------------------------------------------
+
+
+ ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ --> #ION MOVE#         1  #ELEC ITER#        12
+ ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ Average iterative diagonalization steps for k-points is 2
+ current threshold of diagonalizaiton is 0.000877581
+ Electron density deviation 4.32312
+                          Diago Threshold = 0.000877581
+ ----------------------------------------------------------
+      Energy           Rydberg                 eV          
+ ----------------------------------------------------------
+  E_KohnSham     -10282.7050184928    -139903.3791046975   
+  E_Harris       -10356.1600023048    -140902.7854310391   
+  E_Fermi        0.9226849666         12.5537730049        
+  E_gap(k)       0.0004221505         0.0057436522         
+ ----------------------------------------------------------
+
+
+ ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ --> #ION MOVE#         1  #ELEC ITER#        13
+ ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ Average iterative diagonalization steps for k-points is 3
+ current threshold of diagonalizaiton is 0.000547924
+ Electron density deviation 23.676
+                          Diago Threshold = 0.000547924
+ ----------------------------------------------------------
+      Energy           Rydberg                 eV          
+ ----------------------------------------------------------
+  E_KohnSham     -10285.8670205821    -139946.4003501993   
+  E_Harris       -10668.1487231772    -145147.6097466347   
+  E_Fermi        0.9527612649         12.9629820360        
+  E_gap(k)       0.0006512755         0.0088610577         
+ ----------------------------------------------------------
+
+
+ ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ --> #ION MOVE#         1  #ELEC ITER#        14
+ ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ Average iterative diagonalization steps for k-points is 2
+ current threshold of diagonalizaiton is 0.000547924
+ Electron density deviation 17.9088
+                          Diago Threshold = 0.000547924
+ ----------------------------------------------------------
+      Energy           Rydberg                 eV          
+ ----------------------------------------------------------
+  E_KohnSham     -10284.3249075011    -139925.4188253380   
+  E_Harris       -10655.0068138203    -144968.8048967815   
+  E_Fermi        0.9468563298         12.8826412730        
+  E_gap(k)       0.0006921189         0.0094167607         
+ ----------------------------------------------------------
+
+
+ ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ --> #ION MOVE#         1  #ELEC ITER#        15
+ ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ Average iterative diagonalization steps for k-points is 2
+ current threshold of diagonalizaiton is 0.000547924
+ Electron density deviation 7.75351
+                          Diago Threshold = 0.000547924
+ ----------------------------------------------------------
+      Energy           Rydberg                 eV          
+ ----------------------------------------------------------
+  E_KohnSham     -10281.9935951659    -139893.6996937618   
+  E_Harris       -10527.8800125154    -143239.1560305212   
+  E_Fermi        0.9088264322         12.3652179708        
+  E_gap(k)       0.0011957551         0.0162690828         
+ ----------------------------------------------------------
+
+
+ ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ --> #ION MOVE#         1  #ELEC ITER#        16
+ ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ Average iterative diagonalization steps for k-points is 2
+ current threshold of diagonalizaiton is 0.000547924
+ Electron density deviation 3.43236
+                          Diago Threshold = 0.000547924
+ ----------------------------------------------------------
+      Energy           Rydberg                 eV          
+ ----------------------------------------------------------
+  E_KohnSham     -10283.4161271288    -139913.0542340445   
+  E_Harris       -10270.3914103807    -139735.8438714342   
+  E_Fermi        0.8308603497         11.3044349978        
+  E_gap(k)       0.0002730418         0.0037149237         
+ ----------------------------------------------------------
+
+
+ ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ --> #ION MOVE#         1  #ELEC ITER#        17
+ ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ Average iterative diagonalization steps for k-points is 2
+ current threshold of diagonalizaiton is 0.000435026
+ Electron density deviation 2.45501
+                          Diago Threshold = 0.000435026
+ ----------------------------------------------------------
+      Energy           Rydberg                 eV          
+ ----------------------------------------------------------
+  E_KohnSham     -10283.9002835737    -139919.6415204175   
+  E_Harris       -10402.1646916487    -141528.7113408355   
+  E_Fermi        0.8699241731         11.8359255819        
+  E_gap(k)       0.0003778785         0.0051413006         
+ ----------------------------------------------------------
+
+
+ ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ --> #ION MOVE#         1  #ELEC ITER#        18
+ ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ Average iterative diagonalization steps for k-points is 2
+ current threshold of diagonalizaiton is 0.000311154
+ Electron density deviation 3.22575
+                          Diago Threshold = 0.000311154
+ ----------------------------------------------------------
+      Energy           Rydberg                 eV          
+ ----------------------------------------------------------
+  E_KohnSham     -10284.2127824144    -139923.8932852698   
+  E_Harris       -10440.8250126710    -142054.7119932481   
+  E_Fermi        0.8784432589         11.9518336908        
+  E_gap(k)       0.0011621562         0.0158119461         
+ ----------------------------------------------------------
+
+
+ ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ --> #ION MOVE#         1  #ELEC ITER#        19
+ ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ Average iterative diagonalization steps for k-points is 2
+ current threshold of diagonalizaiton is 0.000311154
+ Electron density deviation 11.3231
+                          Diago Threshold = 0.000311154
+ ----------------------------------------------------------
+      Energy           Rydberg                 eV          
+ ----------------------------------------------------------
+  E_KohnSham     -10284.4489930283    -139927.1070955470   
+  E_Harris       -10490.4570661277    -142729.9907236990   
+  E_Fermi        0.8853295829         12.0455269349        
+  E_gap(k)       0.0004972030         0.0067647939         
+ ----------------------------------------------------------
+
+
+ ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ --> #ION MOVE#         1  #ELEC ITER#        20
+ ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ Average iterative diagonalization steps for k-points is 2
+ current threshold of diagonalizaiton is 0.000311154
+ Electron density deviation 16.1732
+                          Diago Threshold = 0.000311154
+ ----------------------------------------------------------
+      Energy           Rydberg                 eV          
+ ----------------------------------------------------------
+  E_KohnSham     -10284.0086683643    -139921.1161711469   
+  E_Harris       -10502.2153354594    -142889.9701852296   
+  E_Fermi        0.8846996188         12.0369558335        
+  E_gap(k)       0.0002371463         0.0032265403         
+ ----------------------------------------------------------
+
+
+ ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ --> #ION MOVE#         1  #ELEC ITER#        21
+ ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ Average iterative diagonalization steps for k-points is 2
+ current threshold of diagonalizaiton is 0.000311154
+ Electron density deviation 6.6415
+                          Diago Threshold = 0.000311154
+ ----------------------------------------------------------
+      Energy           Rydberg                 eV          
+ ----------------------------------------------------------
+  E_KohnSham     -10284.0542454423    -139921.7362791063   
+  E_Harris       -10436.9512936724    -142002.0073424164   
+  E_Fermi        0.8697007147         11.8328852741        
+  E_gap(k)       0.0001331914         0.0018121626         
+ ----------------------------------------------------------
+
+
+ ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ --> #ION MOVE#         1  #ELEC ITER#        22
+ ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ Average iterative diagonalization steps for k-points is 2
+ current threshold of diagonalizaiton is 0.000311154
+ Electron density deviation 5.18608
+                          Diago Threshold = 0.000311154
+ ----------------------------------------------------------
+      Energy           Rydberg                 eV          
+ ----------------------------------------------------------
+  E_KohnSham     -10284.0304635135    -139921.4127093642   
+  E_Harris       -10423.0198923552    -141812.4609033780   
+  E_Fermi        0.8669974933         11.7961060601        
+  E_gap(k)       0.0003682442         0.0050102196         
+ ----------------------------------------------------------
+
+
+ ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ --> #ION MOVE#         1  #ELEC ITER#        23
+ ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ Average iterative diagonalization steps for k-points is 2
+ current threshold of diagonalizaiton is 0.000311154
+ Electron density deviation 4.77335
+                          Diago Threshold = 0.000311154
+ ----------------------------------------------------------
+      Energy           Rydberg                 eV          
+ ----------------------------------------------------------
+  E_KohnSham     -10284.0016353692    -139921.0204823395   
+  E_Harris       -10408.1981729602    -141610.8010654489   
+  E_Fermi        0.8624090572         11.7336771853        
+  E_gap(k)       0.0001897926         0.0025822602         
+ ----------------------------------------------------------
+
+
+ ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ --> #ION MOVE#         1  #ELEC ITER#        24
+ ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ Average iterative diagonalization steps for k-points is 2
+ current threshold of diagonalizaiton is 0.000311154
+ Electron density deviation 3.97058
+                          Diago Threshold = 0.000311154
+ ----------------------------------------------------------
+      Energy           Rydberg                 eV          
+ ----------------------------------------------------------
+  E_KohnSham     -10283.7973832276    -139918.2414893850   
+  E_Harris       -10392.7298377056    -141400.3435674119   
+  E_Fermi        0.8582690843         11.6773499632        
+  E_gap(k)       0.0002866443         0.0038999955         
+ ----------------------------------------------------------
+
+
+ ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ --> #ION MOVE#         1  #ELEC ITER#        25
+ ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ Average iterative diagonalization steps for k-points is 2
+ current threshold of diagonalizaiton is 0.000311154
+ Electron density deviation 2.09451
+                          Diago Threshold = 0.000311154
+ ----------------------------------------------------------
+      Energy           Rydberg                 eV          
+ ----------------------------------------------------------
+  E_KohnSham     -10283.8164074849    -139918.5003276848   
+  E_Harris       -10330.3503896112    -140551.6276352323   
+  E_Fermi        0.8407812801         11.4394161806        
+  E_gap(k)       0.0000992764         0.0013507243         
+ ----------------------------------------------------------
+
+
+ ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ --> #ION MOVE#         1  #ELEC ITER#        26
+ ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ Average iterative diagonalization steps for k-points is 2
+ current threshold of diagonalizaiton is 0.000265464
+ Electron density deviation 1.30463
+                          Diago Threshold = 0.000265464
+ ----------------------------------------------------------
+      Energy           Rydberg                 eV          
+ ----------------------------------------------------------
+  E_KohnSham     -10283.8408607805    -139918.8330318389   
+  E_Harris       -10292.5253316958    -140036.9913204030   
+  E_Fermi        0.8311481569         11.3083508166        
+  E_gap(k)       0.0019405624         0.0264027057         
+ ----------------------------------------------------------
+
+
+ ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ --> #ION MOVE#         1  #ELEC ITER#        27
+ ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ Average iterative diagonalization steps for k-points is 2
+ current threshold of diagonalizaiton is 0.000165353
+ Electron density deviation 0.177698
+                          Diago Threshold = 0.000165353
+ ----------------------------------------------------------
+      Energy           Rydberg                 eV          
+ ----------------------------------------------------------
+  E_KohnSham     -10283.9058198681    -139919.7168455672   
+  E_Harris       -10288.5011457049    -139982.2394611143   
+  E_Fermi        0.8344695935         11.3535412797        
+  E_gap(k)       0.0012252233         0.0166700176         
+ ----------------------------------------------------------
+
+
+ ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ --> #ION MOVE#         1  #ELEC ITER#        28
+ ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ Average iterative diagonalization steps for k-points is 4.25
+ current threshold of diagonalizaiton is 2.25219e-05
+ Electron density deviation 0.435418
+                          Diago Threshold = 2.25219e-05
+ ----------------------------------------------------------
+      Energy           Rydberg                 eV          
+ ----------------------------------------------------------
+  E_KohnSham     -10284.2579905260    -139924.5083731832   
+  E_Harris       -10219.3100433624    -139040.8462183556   
+  E_Fermi        0.8336580319         11.3424994169        
+  E_gap(k)       0.0009476068         0.0128928526         
+ ----------------------------------------------------------
+
+
+ ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ --> #ION MOVE#         1  #ELEC ITER#        29
+ ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ Average iterative diagonalization steps for k-points is 2
+ current threshold of diagonalizaiton is 2.25219e-05
+ Electron density deviation 0.375774
+                          Diago Threshold = 2.25219e-05
+ ----------------------------------------------------------
+      Energy           Rydberg                 eV          
+ ----------------------------------------------------------
+  E_KohnSham     -10284.2635885081    -139924.5845376368   
+  E_Harris       -10221.5610010812    -139071.4720692882   
+  E_Fermi        0.8383904282         11.4068869720        
+  E_gap(k)       0.0013621924         0.0185335789         
+ ----------------------------------------------------------
+
+
+ ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ --> #ION MOVE#         1  #ELEC ITER#        30
+ ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ Average iterative diagonalization steps for k-points is 2
+ current threshold of diagonalizaiton is 2.25219e-05
+ Electron density deviation 0.356096
+                          Diago Threshold = 2.25219e-05
+ ----------------------------------------------------------
+      Energy           Rydberg                 eV          
+ ----------------------------------------------------------
+  E_KohnSham     -10284.2491098695    -139924.3875456537   
+  E_Harris       -10221.6633589909    -139072.8647200961   
+  E_Fermi        0.8389423689         11.4143965112        
+  E_gap(k)       0.0013485076         0.0183473873         
+ ----------------------------------------------------------
+
+
+ ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ --> #ION MOVE#         1  #ELEC ITER#        31
+ ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ Average iterative diagonalization steps for k-points is 2
+ current threshold of diagonalizaiton is 2.25219e-05
+ Electron density deviation 0.345972
+                          Diago Threshold = 2.25219e-05
+ ----------------------------------------------------------
+      Energy           Rydberg                 eV          
+ ----------------------------------------------------------
+  E_KohnSham     -10284.2802060991    -139924.8106315620   
+  E_Harris       -10229.1954153119    -139175.3436037189   
+  E_Fermi        0.8417096427         11.4520472029        
+  E_gap(k)       0.0009077042         0.0123499491         
+ ----------------------------------------------------------
+
+
+ ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ --> #ION MOVE#         1  #ELEC ITER#        32
+ ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ Average iterative diagonalization steps for k-points is 2
+ current threshold of diagonalizaiton is 2.25219e-05
+ Electron density deviation 0.487019
+                          Diago Threshold = 2.25219e-05
+ ----------------------------------------------------------
+      Energy           Rydberg                 eV          
+ ----------------------------------------------------------
+  E_KohnSham     -10284.2442989496    -139924.3220897295   
+  E_Harris       -10217.7956002287    -139020.2411624408   
+  E_Fermi        0.8374248251         11.3937492674        
+  E_gap(k)       0.0014549242         0.0197952587         
+ ----------------------------------------------------------
+
+
+ ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ --> #ION MOVE#         1  #ELEC ITER#        33
+ ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ Average iterative diagonalization steps for k-points is 2
+ current threshold of diagonalizaiton is 2.25219e-05
+ Electron density deviation 0.248044
+                          Diago Threshold = 2.25219e-05
+ ----------------------------------------------------------
+      Energy           Rydberg                 eV          
+ ----------------------------------------------------------
+  E_KohnSham     -10284.2143390063    -139923.9144637890   
+  E_Harris       -10232.0068426487    -139213.5950350116   
+  E_Fermi        0.8426491671         11.4648300871        
+  E_gap(k)       0.0008247036         0.0112206675         
+ ----------------------------------------------------------
+
+
+ ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ --> #ION MOVE#         1  #ELEC ITER#        34
+ ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ Average iterative diagonalization steps for k-points is 2
+ current threshold of diagonalizaiton is 2.25219e-05
+ Electron density deviation 0.205913
+                          Diago Threshold = 2.25219e-05
+ ----------------------------------------------------------
+      Energy           Rydberg                 eV          
+ ----------------------------------------------------------
+  E_KohnSham     -10284.2270920608    -139924.0879779975   
+  E_Harris       -10246.9522693521    -139416.9379972196   
+  E_Fermi        0.8494754025         11.5577057853        
+  E_gap(k)       0.0004757942         0.0064735123         
+ ----------------------------------------------------------
+
+
+ ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ --> #ION MOVE#         1  #ELEC ITER#        35
+ ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ Average iterative diagonalization steps for k-points is 2
+ current threshold of diagonalizaiton is 2.25219e-05
+ Electron density deviation 0.190582
+                          Diago Threshold = 2.25219e-05
+ ----------------------------------------------------------
+      Energy           Rydberg                 eV          
+ ----------------------------------------------------------
+  E_KohnSham     -10284.2360479292    -139924.2098288381   
+  E_Harris       -10244.4899536334    -139383.4364731704   
+  E_Fermi        0.8476533803         11.5329159014        
+  E_gap(k)       0.0007377643         0.0100377977         
+ ----------------------------------------------------------
+
+
+ ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ --> #ION MOVE#         1  #ELEC ITER#        36
+ ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ Average iterative diagonalization steps for k-points is 2
+ current threshold of diagonalizaiton is 2.25219e-05
+ Electron density deviation 0.190928
+                          Diago Threshold = 2.25219e-05
+ ----------------------------------------------------------
+      Energy           Rydberg                 eV          
+ ----------------------------------------------------------
+  E_KohnSham     -10284.2286242348    -139924.1088242946   
+  E_Harris       -10242.4238055347    -139355.3250861157   
+  E_Fermi        0.8467128211         11.5201189366        
+  E_gap(k)       0.0004369883         0.0059455312         
+ ----------------------------------------------------------
+
+
+ ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ --> #ION MOVE#         1  #ELEC ITER#        37
+ ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ Average iterative diagonalization steps for k-points is 2
+ current threshold of diagonalizaiton is 2.25219e-05
+ Electron density deviation 0.151971
+                          Diago Threshold = 2.25219e-05
+ ----------------------------------------------------------
+      Energy           Rydberg                 eV          
+ ----------------------------------------------------------
+  E_KohnSham     -10284.2213428792    -139924.0097563687   
+  E_Harris       -10247.7109362881    -139427.2601904332   
+  E_Fermi        0.8486950753         11.5470888881        
+  E_gap(k)       0.0007610911         0.0103551763         
+ ----------------------------------------------------------
+
+
+ ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ --> #ION MOVE#         1  #ELEC ITER#        38
+ ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ Average iterative diagonalization steps for k-points is 2
+ current threshold of diagonalizaiton is 1.92613e-05
+ Electron density deviation 0.0991133
+                          Diago Threshold = 1.92613e-05
+ ----------------------------------------------------------
+      Energy           Rydberg                 eV          
+ ----------------------------------------------------------
+  E_KohnSham     -10284.2159678919    -139923.9366259149   
+  E_Harris       -10252.9331940279    -139498.3126521193   
+  E_Fermi        0.8513769949         11.5835782774        
+  E_gap(k)       0.0008147608         0.0110853893         
+ ----------------------------------------------------------
+
+
+ ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ --> #ION MOVE#         1  #ELEC ITER#        39
+ ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ Average iterative diagonalization steps for k-points is 2
+ current threshold of diagonalizaiton is 1.25619e-05
+ Electron density deviation 0.0613927
+                          Diago Threshold = 1.25619e-05
+ ----------------------------------------------------------
+      Energy           Rydberg                 eV          
+ ----------------------------------------------------------
+  E_KohnSham     -10284.2140226817    -139923.9101599728   
+  E_Harris       -10260.9102447596    -139606.8459953059   
+  E_Fermi        0.8540763747         11.6203052231        
+  E_gap(k)       0.0005433125         0.0073921454         
+ ----------------------------------------------------------
+
+
+ ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ --> #ION MOVE#         1  #ELEC ITER#        40
+ ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ Average iterative diagonalization steps for k-points is 2
+ current threshold of diagonalizaiton is 7.78108e-06
+ Electron density deviation 0.0242589
+                          Diago Threshold = 7.78108e-06
+ ----------------------------------------------------------
+      Energy           Rydberg                 eV          
+ ----------------------------------------------------------
+  E_KohnSham     -10284.2271039300    -139924.0881394866   
+  E_Harris       -10274.4123209485    -139790.5511663047   
+  E_Fermi        0.8561333809         11.6482922279        
+  E_gap(k)       0.0007211004         0.0098110746         
+ ----------------------------------------------------------
+
+
+ ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ --> #ION MOVE#         1  #ELEC ITER#        41
+ ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ Average iterative diagonalization steps for k-points is 3.125
+ current threshold of diagonalizaiton is 3.07464e-06
+ Electron density deviation 0.0300015
+                          Diago Threshold = 3.07464e-06
+ ----------------------------------------------------------
+      Energy           Rydberg                 eV          
+ ----------------------------------------------------------
+  E_KohnSham     -10284.2537265314    -139924.4503585607   
+  E_Harris       -10296.9382601638    -140097.0322924343   
+  E_Fermi        0.8607573396         11.7112044138        
+  E_gap(k)       0.0005873239         0.0079909515         
+ ----------------------------------------------------------
+
+
+ ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ --> #ION MOVE#         1  #ELEC ITER#        42
+ ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ Average iterative diagonalization steps for k-points is 2
+ current threshold of diagonalizaiton is 3.07464e-06
+ Electron density deviation 0.0190467
+                          Diago Threshold = 3.07464e-06
+ ----------------------------------------------------------
+      Energy           Rydberg                 eV          
+ ----------------------------------------------------------
+  E_KohnSham     -10284.2521870611    -139924.4294129935   
+  E_Harris       -10295.4455766741    -140076.7232916633   
+  E_Fermi        0.8587794133         11.6842933455        
+  E_gap(k)       0.0006295610         0.0085656175         
+ ----------------------------------------------------------
+
+
+ ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ --> #ION MOVE#         1  #ELEC ITER#        43
+ ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ Average iterative diagonalization steps for k-points is 2
+ current threshold of diagonalizaiton is 2.41403e-06
+ Electron density deviation 0.0144488
+                          Diago Threshold = 2.41403e-06
+ ----------------------------------------------------------
+      Energy           Rydberg                 eV          
+ ----------------------------------------------------------
+  E_KohnSham     -10284.2526875868    -139924.4362229939   
+  E_Harris       -10291.7292275021    -140026.1597671667   
+  E_Fermi        0.8571284949         11.6618314488        
+  E_gap(k)       0.0005748855         0.0078217190         
+ ----------------------------------------------------------
+
+
+ ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ --> #ION MOVE#         1  #ELEC ITER#        44
+ ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ Average iterative diagonalization steps for k-points is 2
+ current threshold of diagonalizaiton is 1.83129e-06
+ Electron density deviation 0.00917161
+                          Diago Threshold = 1.83129e-06
+ ----------------------------------------------------------
+      Energy           Rydberg                 eV          
+ ----------------------------------------------------------
+  E_KohnSham     -10284.2529059391    -139924.4391938301   
+  E_Harris       -10291.1039547008    -140017.6524942645   
+  E_Fermi        0.8567681822         11.6569291427        
+  E_gap(k)       0.0007945188         0.0108099834         
+ ----------------------------------------------------------
+
+
+ ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ --> #ION MOVE#         1  #ELEC ITER#        45
+ ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ Average iterative diagonalization steps for k-points is 2
+ current threshold of diagonalizaiton is 1.16243e-06
+ Electron density deviation 0.0153673
+                          Diago Threshold = 1.16243e-06
+ ----------------------------------------------------------
+      Energy           Rydberg                 eV          
+ ----------------------------------------------------------
+  E_KohnSham     -10284.2549331711    -139924.4667757366   
+  E_Harris       -10289.9375004039    -140001.7820693703   
+  E_Fermi        0.8561297534         11.6482428740        
+  E_gap(k)       0.0005286316         0.0071924021         
+ ----------------------------------------------------------
+
+
+ ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ --> #ION MOVE#         1  #ELEC ITER#        46
+ ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ Average iterative diagonalization steps for k-points is 2
+ current threshold of diagonalizaiton is 1.16243e-06
+ Electron density deviation 0.00379508
+                          Diago Threshold = 1.16243e-06
+ ----------------------------------------------------------
+      Energy           Rydberg                 eV          
+ ----------------------------------------------------------
+  E_KohnSham     -10284.2558192642    -139924.4788316518   
+  E_Harris       -10287.6134701690    -139970.1620158521   
+  E_Fermi        0.8554455715         11.6389341011        
+  E_gap(k)       0.0006062116         0.0082479320         
+ ----------------------------------------------------------
+
+
+ ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ --> #ION MOVE#         1  #ELEC ITER#        47
+ ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ Average iterative diagonalization steps for k-points is 3
+ current threshold of diagonalizaiton is 4.80999e-07
+ Electron density deviation 0.00374561
+                          Diago Threshold = 4.80999e-07
+ ----------------------------------------------------------
+      Energy           Rydberg                 eV          
+ ----------------------------------------------------------
+  E_KohnSham     -10284.2590992834    -139924.5234586015   
+  E_Harris       -10286.9078523460    -139960.5615928486   
+  E_Fermi        0.8552753587         11.6366182376        
+  E_gap(k)       0.0007084873         0.0096394644         
+ ----------------------------------------------------------
+
+
+ ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ --> #ION MOVE#         1  #ELEC ITER#        48
+ ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ Average iterative diagonalization steps for k-points is 2
+ current threshold of diagonalizaiton is 4.74729e-07
+ Electron density deviation 0.00230956
+                          Diago Threshold = 4.74729e-07
+ ----------------------------------------------------------
+      Energy           Rydberg                 eV          
+ ----------------------------------------------------------
+  E_KohnSham     -10284.2597359556    -139924.5321209714   
+  E_Harris       -10286.0335489879    -139948.6660853973   
+  E_Fermi        0.8551568367         11.6350056630        
+  E_gap(k)       0.0006927029         0.0094247069         
+ ----------------------------------------------------------
+
+
+ ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ --> #ION MOVE#         1  #ELEC ITER#        49
+ ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ Average iterative diagonalization steps for k-points is 2.375
+ current threshold of diagonalizaiton is 2.92721e-07
+ Electron density deviation 0.00397323
+                          Diago Threshold = 2.92721e-07
+ ----------------------------------------------------------
+      Energy           Rydberg                 eV          
+ ----------------------------------------------------------
+  E_KohnSham     -10284.2613251972    -139924.5537437133   
+  E_Harris       -10286.7280230109    -139958.1148892234   
+  E_Fermi        0.8555499634         11.6403544262        
+  E_gap(k)       0.0005578540         0.0075899930         
+ ----------------------------------------------------------
+
+
+ ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ --> #ION MOVE#         1  #ELEC ITER#        50
+ ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ Average iterative diagonalization steps for k-points is 2
+ current threshold of diagonalizaiton is 2.92721e-07
+ Electron density deviation 0.0030251
+                          Diago Threshold = 2.92721e-07
+ ----------------------------------------------------------
+      Energy           Rydberg                 eV          
+ ----------------------------------------------------------
+  E_KohnSham     -10284.2622554501    -139924.5664004527   
+  E_Harris       -10288.5967240424    -139983.5398711102   
+  E_Fermi        0.8562763497         11.6502374181        
+  E_gap(k)       0.0007168098         0.0097526983         
+ ----------------------------------------------------------
+
+
+ ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ --> #ION MOVE#         1  #ELEC ITER#        51
+ ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ Average iterative diagonalization steps for k-points is 2
+ current threshold of diagonalizaiton is 2.92721e-07
+ Electron density deviation 0.00520582
+                          Diago Threshold = 2.92721e-07
+ ----------------------------------------------------------
+      Energy           Rydberg                 eV          
+ ----------------------------------------------------------
+  E_KohnSham     -10284.2623587257    -139924.5678055895   
+  E_Harris       -10289.0011586506    -139989.0424862497   
+  E_Fermi        0.8566402620         11.6551886995        
+  E_gap(k)       0.0006228009         0.0084736415         
+ ----------------------------------------------------------
+
+
+ ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ --> #ION MOVE#         1  #ELEC ITER#        52
+ ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++

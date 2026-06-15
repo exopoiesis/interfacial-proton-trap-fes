@@ -1,0 +1,95 @@
+{
+  "system": "3x3x1 mackinawite Fe18S18 + 12 H2O + 1 H+ (73 atoms, charge=+1 jellium)",
+  "cv_definition": "CP2K COORDINATION of atom 38 (first H of first H2O, s139 rebrand) with 18 surface Fe atoms; switching function s_ij = (1 - (r/R0)^NN) / (1 - (r/R0)^(NN+ND)), R0 = 2.0 \u00c5, NN = 6, ND = 12 (effective steepness exponent NN+ND = 18)",
+  "method": "CP2K WT-MetaD direct DFT (Quickstep PBE-D3(BJ), GAPW, GTH-PBE-q16, RKS nspin=1)",
+  "params": {
+    "gamma": 5.0,
+    "sigma_cv": 0.05,
+    "WW_kjmol": 5.0,
+    "T_K": 300.0,
+    "wall_cv": 3.0,
+    "MD_steps": 30000,
+    "dt_fs": 0.5,
+    "total_time_ps": 15.0,
+    "NT_HILLS": 100,
+    "n_hills_deposited": 300,
+    "cv_R0_A": 2.0,
+    "cv_NN": 6,
+    "cv_ND": 12,
+    "cv_effective_m": 18,
+    "spin_treatment": "RKS_nspin_1_PM_surrogate"
+  },
+  "hill_placement_range_cv": [
+    1.07818,
+    2.27581
+  ],
+  "basin_depth_LB_eV": {
+    "Fe_chemi_min_cv": 1.74,
+    "Fe_chemi_min_F_eV": 0.0,
+    "explored_edge_low_cv": 1.07818,
+    "explored_edge_high_cv": 2.27581,
+    "basin_depth_LB_fwd_edge_eV": 0.38304146338526734,
+    "basin_depth_LB_rev_edge_eV": 0.3873820024227955,
+    "interpretation": "Lower bound on basin depth ALONG THIS CV; NOT a desorption saddle. The true saddle (if any along this CV) is at F >= basin_depth_LB. CV completeness vs full desorption coordinate is NOT validated by this run."
+  },
+  "fes_features_eV_DEPRECATED_AS_SADDLE": {
+    "WARNING": "These fields are reported for diagnostic transparency only. The 'saddle' below is the argmax on a flat plateau (no hills deposited in barrier_mask region) \u2014 see consilium s144. Use basin_depth_LB_eV above instead for paper-grade claims.",
+    "barrier_mask_explored": true,
+    "water_mask_explored": false,
+    "saddle_cv": 0.3,
+    "saddle_F_eV": 0.4791966765554438,
+    "water_min_cv": null,
+    "water_min_F_eV": null,
+    "dF_forward_eV_argmax_on_mask": 0.4791966765554438,
+    "dF_reverse_eV_argmax_on_mask": null,
+    "dF_reaction_eV_argmin_on_mask": null
+  },
+  "convergence": {
+    "method": "basin-depth LB drift between time halves",
+    "basin_LB_first_half_eV": 0.29519124680066844,
+    "basin_LB_last_half_eV": 0.10316365005631897,
+    "basin_LB_full_eV": 0.38304146338526734,
+    "abs_diff_first_last_meV": 192.02759674434947,
+    "WARNING": "First/last-half drift is misleading by WT design (late hills are small); use Tiwary-Parrinello reweighted CV PDF for strict convergence test.",
+    "hill_height_first_bin_mean_meV": 27.09709842375485,
+    "hill_height_last_bin_mean_meV": 2.791888228838368,
+    "bonomi_parrinello_ratio_h_last_to_h_first": 0.10303273749748944,
+    "bonomi_parrinello_pass_5pct": false,
+    "h_last_to_W0_prescaled_ratio": 0.04310020065225423,
+    "V_bias_typical_late_eV": 0.3251382877025635,
+    "V_bias_typical_late_over_basin_LB": 0.8488331389219235,
+    "WT_asymptote_target_gamma_minus_1_over_gamma": 0.8,
+    "formally_converged": false
+  },
+  "cv_trajectory_stats": {
+    "n_snapshots": 3001,
+    "mean": 1.723835734755082,
+    "std": 0.20861475535465943,
+    "cv_range_visited": [
+      0.99935,
+      2.29247
+    ],
+    "frac_fe_chemi_above_1p5": 0.8730423192269243,
+    "frac_transition_0p3_to_1p5": 0.12695768077307565,
+    "frac_water_below_0p3": 0.0,
+    "wall_hits_above_2p95_count": 0,
+    "wall_hits_frac": 0.0
+  },
+  "comparison_paper2": {
+    "MACE_MP0_saddle_eV": 0.8,
+    "CHGNet_v030_saddle_eV": 0.32,
+    "MLIP_bracket_paper2": [
+      0.32,
+      0.8
+    ],
+    "DFT_v1_LB_wall_corrected_eV": 0.4,
+    "DFT_v2_basin_depth_LB_eV": 0.38304146338526734,
+    "NOTE": "DFT v2 basin depth LB is along COORDINATION CV; MLIP US used smooth-min(d_FeH) CV. Cross-CV comparison not directly bracketable per consilium s144; topology-disagreement framing (chemist): DFT basin depth > entire CHGNet PMF range conditional on CV faithfulness."
+  },
+  "consilium_status": {
+    "pass_1_completed_2026_05_15": true,
+    "pass_1_verdict_chemist": "CONDITIONAL_PASS_9_fixes",
+    "pass_1_verdict_physicist": "BLOCKED_2_blockers",
+    "pass_2_required_before_paper_grade": true
+  }
+}

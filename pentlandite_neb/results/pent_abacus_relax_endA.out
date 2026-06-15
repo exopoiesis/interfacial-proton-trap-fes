@@ -1,0 +1,112 @@
+                                                                                     
+                              ABACUS v3.9.0.26
+
+               Atomic-orbital Based Ab-initio Computation at UStc                    
+
+                     Website: http://abacus.ustc.edu.cn/                             
+               Documentation: https://abacus.deepmodeling.com/                       
+                  Repository: https://github.com/abacusmodeling/abacus-develop       
+                              https://github.com/deepmodeling/abacus-develop         
+                      Commit: unknown
+
+ Mon Apr  6 06:26:24 2026
+ MAKE THE DIR         : OUT.ABACUS/
+ RUNNING WITH DEVICE  : CPU / Intel(R) Xeon(R) CPU E5-2673 v4 @ 2.30GHz (x2)
+                        GPU / NVIDIA GeForce RTX 4070 Ti (x1)
+ WARNING: some of potential function is set to zero cause of less than 1e-30.
+ WARNING: some of potential function is set to zero cause of less than 1e-30.
+ WARNING: some of potential function is set to zero cause of less than 1e-30.
+ WARNING: some of potential function is set to zero cause of less than 1e-30.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+ Warning: the number of valence electrons in pseudopotential > 8 for Fe: [Ar] 3d6 4s2
+ Warning: the number of valence electrons in pseudopotential > 10 for Ni: [Ar] 3d8 4s2
+ Pseudopotentials with additional electrons can yield (more) accurate outcomes, but may be less efficient.
+ If you're confident that your chosen pseudopotential is appropriate, you can safely ignore this warning.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+ UNIFORM GRID DIM     : 96 * 96 * 96
+ UNIFORM GRID DIM(BIG): 96 * 96 * 96
+ DONE(0.975586   SEC) : SETUP UNITCELL
+ DONE(0.976792   SEC) : INIT K-POINTS
+ ---------------------------------------------------------
+ Self-consistent calculations for electrons
+ ---------------------------------------------------------
+ SPIN    KPOINTS         PROCESSORS  THREADS     
+ 1       8               1           10          
+ ---------------------------------------------------------
+ Use plane wave basis
+ ---------------------------------------------------------
+ ELEMENT NATOM       XC          
+ Fe      20          
+ H       1           
+ Ni      16          
+ S       30          
+ ---------------------------------------------------------
+ Initial plane wave basis and FFT box
+ ---------------------------------------------------------
+ DONE(1.45692    SEC) : INIT PLANEWAVE
+ START CHARGE      : atomic
+ DONE(1.68232    SEC) : LOCAL POTENTIAL
+ DONE(3.04786    SEC) : NON-LOCAL POTENTIAL
+ MEMORY FOR PSI (MB)  : 3115.68
+ WARNING: init_wfc = atomic requires atomic pseudo wavefunctions(PP_PSWFC),
+ but none available. Automatically switch to random initialization.
+ DONE(8.76729    SEC) : INIT BASIS
+
+ ================================================================
+ SELF-CONSISTENT: 
+ ================================================================
+ DONE(63.6413    SEC) : INIT SCF
+ ITER       ETOT/eV          EDIFF/eV         DRHO     TIME/s
+ CG1     -1.39086288e+05   0.00000000e+00   5.5391e+01 363.48
+ CG2     -1.39506394e+05  -4.20105939e+02   7.3531e+00  82.98
+ CG3     -1.39935760e+05  -4.29365669e+02   4.6118e+01 285.24
+ CG4     -1.39967357e+05  -3.15972896e+01   5.1561e+01  59.46
+ CG5     -1.39946147e+05   2.12098278e+01   3.8652e+01  56.79
+ CG6     -1.39920508e+05   2.56390377e+01   3.1615e+01  57.04
+ CG7     -1.39918469e+05   2.03935955e+00   2.1475e+01  56.85
+ CG8     -1.39905947e+05   1.25224365e+01   1.8971e+01  56.98
+ CG9     -1.39891131e+05   1.48154201e+01   1.3694e+01  56.82
+ CG10    -1.39874898e+05   1.62329507e+01   1.1674e+01  57.16
+ CG11    -1.39873006e+05   1.89193693e+00   6.9241e+00  57.36
+ CG12    -1.39903379e+05  -3.03728209e+01   4.3231e+00  67.44
+ CG13    -1.39946400e+05  -4.30212455e+01   2.3676e+01  93.78
+ CG14    -1.39925419e+05   2.09815249e+01   1.7909e+01  56.87
+ CG15    -1.39893700e+05   3.17191316e+01   7.7535e+00  56.84
+ CG16    -1.39913054e+05  -1.93545403e+01   3.4324e+00  61.44
+ CG17    -1.39919642e+05  -6.58728637e+00   2.4550e+00  57.11
+ CG18    -1.39923893e+05  -4.25176485e+00   3.2257e+00  58.10
+ CG19    -1.39927107e+05  -3.21381028e+00   1.1323e+01  56.84
+ CG20    -1.39921116e+05   5.99092440e+00   1.6173e+01  56.94
+ CG21    -1.39921736e+05  -6.20107959e-01   6.6415e+00  56.84
+ CG22    -1.39921413e+05   3.23569742e-01   5.1861e+00  56.79
+ CG23    -1.39921020e+05   3.92227025e-01   4.7733e+00  56.78
+ CG24    -1.39918241e+05   2.77899295e+00   3.9706e+00  56.84
+ CG25    -1.39918500e+05  -2.58838300e-01   2.0945e+00  56.76
+ CG26    -1.39918833e+05  -3.32704154e-01   1.3046e+00  56.80
+ CG27    -1.39919717e+05  -8.83813728e-01   1.7770e-01  59.63
+ CG28    -1.39924508e+05  -4.79152762e+00   4.3542e-01 132.38
+ CG29    -1.39924585e+05  -7.61644536e-02   3.7577e-01  57.22
+ CG30    -1.39924388e+05   1.96991983e-01   3.5610e-01  56.69
+ CG31    -1.39924811e+05  -4.23085908e-01   3.4597e-01  56.89
+ CG32    -1.39924322e+05   4.88541832e-01   4.8702e-01  56.75
+ CG33    -1.39923914e+05   4.07625941e-01   2.4804e-01  56.80
+ CG34    -1.39924088e+05  -1.73514209e-01   2.0591e-01  56.98
+ CG35    -1.39924210e+05  -1.21850841e-01   1.9058e-01  56.81
+ CG36    -1.39924109e+05   1.01004543e-01   1.9093e-01  56.87
+ CG37    -1.39924010e+05   9.90679259e-02   1.5197e-01  56.78
+ CG38    -1.39923937e+05   7.31304537e-02   9.9113e-02  56.92
+ CG39    -1.39923910e+05   2.64659422e-02   6.1393e-02  58.02
+ CG40    -1.39924088e+05  -1.77979514e-01   2.4259e-02  72.85
+ CG41    -1.39924450e+05  -3.62219074e-01   3.0002e-02 103.63
+ CG42    -1.39924429e+05   2.09455672e-02   1.9047e-02  56.89
+ CG43    -1.39924436e+05  -6.81000041e-03   1.4449e-02  57.50
+ CG44    -1.39924439e+05  -2.97083621e-03   9.1716e-03  60.70
+ CG45    -1.39924467e+05  -2.75819065e-02   1.5367e-02  74.37
+ CG46    -1.39924479e+05  -1.20559153e-02   3.7951e-03  57.69
+ CG47    -1.39924523e+05  -4.46269497e-02   3.7456e-03  95.20
+ CG48    -1.39924532e+05  -8.66236994e-03   2.3096e-03  58.26
+ CG49    -1.39924554e+05  -2.16227419e-02   3.9732e-03  81.85
+ CG50    -1.39924566e+05  -1.26567393e-02   3.0251e-03  69.80
+ CG51    -1.39924568e+05  -1.40513681e-03   5.2058e-03  67.54

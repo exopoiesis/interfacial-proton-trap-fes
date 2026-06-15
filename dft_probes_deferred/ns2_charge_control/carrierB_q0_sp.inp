@@ -1,0 +1,97 @@
+# NS-2 TEST: artifact control -- charge=0, nspin=2 SP on carrier_B hold snapshot i=1280.
+# Q: at NEUTRAL charge does H38 localize on S (=> s168 "delocalization" was a +1 Coulombic artifact)?
+# Same confined cell 11.022x11.022x6.5 that carrier_B CONVERGED on (NOT the slab). N_e=493 ODD -> nspin=2.
+# MV cold smearing (РЕШЕНИЕ-109: Fe-S metal limit-cycles on FD). MAGNETIZATION 3.0 Fe (s113 symmetry break).
+&GLOBAL
+  PROJECT carrierB_q0_sp
+  RUN_TYPE ENERGY
+  PRINT_LEVEL MEDIUM
+  PREFERRED_DIAG_LIBRARY SCALAPACK
+  &FM
+    TYPE_OF_MATRIX_MULTIPLICATION SCALAPACK
+  &END FM
+&END GLOBAL
+
+&FORCE_EVAL
+  METHOD Quickstep
+  &DFT
+    BASIS_SET_FILE_NAME BASIS_MOLOPT
+    POTENTIAL_FILE_NAME GTH_POTENTIALS
+    CHARGE 0
+    UKS .TRUE.
+    &QS
+      EPS_DEFAULT 1.0E-12
+    &END QS
+    &MGRID
+      CUTOFF 600
+      REL_CUTOFF 60
+      NGRIDS 4
+    &END MGRID
+    &XC
+      &XC_FUNCTIONAL PBE
+      &END XC_FUNCTIONAL
+      &VDW_POTENTIAL
+        POTENTIAL_TYPE PAIR_POTENTIAL
+        &PAIR_POTENTIAL
+          TYPE DFTD3(BJ)
+          REFERENCE_FUNCTIONAL PBE
+        &END PAIR_POTENTIAL
+      &END VDW_POTENTIAL
+    &END XC
+    &SCF
+      SCF_GUESS ATOMIC
+      MAX_SCF 200
+      EPS_SCF 5.0E-3
+      ADDED_MOS 128
+      &DIAGONALIZATION
+        ALGORITHM STANDARD
+      &END DIAGONALIZATION
+      &MIXING
+        METHOD BROYDEN_MIXING
+        ALPHA 0.1
+        NBROYDEN 12
+      &END MIXING
+      &SMEAR
+        METHOD MARZARI_VANDERBILT
+        ELECTRONIC_TEMPERATURE [K] 1000
+      &END SMEAR
+    &END SCF
+    &PRINT
+      &MULLIKEN ON
+        FILENAME __STD_OUT__
+      &END MULLIKEN
+      &LOWDIN ON
+        FILENAME __STD_OUT__
+      &END LOWDIN
+    &END PRINT
+  &END DFT
+  &SUBSYS
+    &CELL
+      A  11.022  0.000  0.000
+      B   0.000 11.022  0.000
+      C   0.000  0.000  6.500
+      PERIODIC XYZ
+    &END CELL
+    &TOPOLOGY
+      COORD_FILE_NAME sp_frame.xyz
+      COORD_FILE_FORMAT XYZ
+    &END TOPOLOGY
+    &KIND Fe
+      BASIS_SET DZVP-MOLOPT-SR-GTH
+      POTENTIAL GTH-PBE-q16
+      MAGNETIZATION 3.0
+    &END KIND
+    &KIND S
+      BASIS_SET DZVP-MOLOPT-SR-GTH
+      POTENTIAL GTH-PBE-q6
+    &END KIND
+    &KIND O
+      BASIS_SET DZVP-MOLOPT-SR-GTH
+      POTENTIAL GTH-PBE-q6
+    &END KIND
+    &KIND H
+      BASIS_SET DZVP-MOLOPT-SR-GTH
+      POTENTIAL GTH-PBE-q1
+    &END KIND
+  &END SUBSYS
+&END FORCE_EVAL

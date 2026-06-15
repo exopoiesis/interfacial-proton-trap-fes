@@ -1,0 +1,118 @@
+# TM-Spec — pentlandite vacancy-anchored proton migration (S-H...S), direct DFT CI-NEB.
+# Inner-layer proton-blocking barrier for the bilayer membrane (Paper #2, KineticTrap, §3.6).
+# Authored on assembly of the data repository; numbers sourced from the manuscript and
+# the repository result files (pentlandite_neb/results/). Reported conservatively.
+
+spec: tm-spec/0.2
+kind: NEBCalculation
+id: tm.pentlandite_vfe.h_proton.neb_dft.2026-05
+# NOTE (Paper #2 mapping): reported in Paper #2 "KineticTrap" §3.6 (inner-layer proton blocker).
+# Distinct from the MLIPvsDFT (Paper #1) pentlandite entry, which is a foundation-MLIP NEB
+# (MACE-MP-0, which collapses the proton into a spurious Fe-hydride well); this is direct DFT.
+schema_url: https://exopoiesis.space/tm-spec/0.2.json
+
+structure:
+  formula: "(Fe,Ni)9S8 with one Fe vacancy (V_Fe) + 1 H"
+  prototype: "pentlandite, Fm-3m"
+  space_group: { number: 225 }
+  defects:
+    - { type: vacancy, site: Fe, count: 1, note: "V_Fe; proton migrates between the two S flanking the vacancy" }
+  carrier: "interstitial H+ (S-bound; S-H...S transfer)"
+  cells_used:
+    - { label: cp2k_supercell, n_atoms: 136, mobile_atoms: 28, note: "proton + first coordination shell relaxed (frozen framework)" }
+    - { label: abacus_conventional, n_atoms: 67, note: "conventional cell - V_Fe; PW, k-mesh 2x2x2" }
+  pbc: [true, true, true]
+
+magnetic:
+  state: PM-surrogate
+  collinear: true
+  note: >
+    Computed closed-shell (RKS) as a 298 K paramagnetic surrogate: pentlandite is paramagnetic
+    above T_C ~= 195-220 K and its spin-polarized solution does not converge to a single sheet.
+    The 0 K ferrimagnetic ground state lies on a different energy sheet (systematic not captured
+    by the cross-code check). See manuscript §4.3.
+  surrogate_warning: "RKS paramagnetic proxy; spin-sheet systematic uncharacterized"
+
+calculation:
+  method: DFT
+  level:
+    xc: PBE
+    vdw: D3-BJ
+    basis: { kind: gaussians, family: GTH_MOLOPT }     # CP2K (primary)
+    pseudopotential: GTH-PBE
+    spin: none                                          # RKS surrogate
+  code:
+    name: CP2K                                          # primary
+    cross_check_code: ABACUS                            # independent LCAO/PW cross-check
+  approximations:
+    - frozen_framework: "only proton + first shell (28/136) relax; un-relaxed lattice tends to OVER-estimate the barrier -> conservative toward 'blocking'"
+    - spin: "RKS paramagnetic surrogate (see magnetic.note)"
+    - zpe: "not included (ZPE for H transfer typically -50 to -100 meV)"
+    - convergence: "saddle energy stable to +-0.001 eV over final 3 h; not converged to strict max-force tol -> residual ~<=0.05 eV"
+
+workflow:
+  kind: NEB
+  variant: climbing-image
+  optimizer: LBFGS
+  n_images: 5-7
+  saddle_geometry: { d_HS_A: [1.54, 1.65], d_HFe_A: 2.8, note: "symmetric S-H...S at the saddle; proton stays far from any Fe (no Fe-hydride)" }
+  paired_scripts:
+    - pentlandite_neb/scripts/neb_pent_conv_kpts.py
+    - pentlandite_neb/scripts/neb_pentlandite_abacus_conv_kpts.py
+
+results:
+  barrier_eV:
+    primary_cp2k:        0.39      # *** paper value, §3.6 ***
+    cross_check_abacus:  0.44      # ABACUS, Gamma-only conventional cell (= 0.442 in repo result file)
+  convergence_variants:            # honest spread across cell/k-mesh/code (for transparency)
+    abacus_conventional_2x2x2_PW_eV: 0.413   # pentlandite_neb/results/neb_pentlandite_conv_kpts_result.json
+    abacus_gamma_conventional_eV:    0.442
+    primitive_cell_underconverged:           # small-cell, periodic-image proton interaction -> NOT converged, not quoted
+      gpaw_eV:        1.12
+      abacus_lcao_eV: 0.90
+    note: "converged conventional-cell / k-sampled values cluster at 0.39-0.44 eV; primitive-cell values (~0.9-1.1 eV) are inflated by image interaction and are NOT the reported barrier"
+  interpretation: |
+    Barrier ~= 0.4 eV ~= 15 k_BT at 300 K: six orders of magnitude slower than the
+    near-barrierless in-plane mackinawite hop -> pentlandite is a proton blocker.
+    Eyring transport conversion (paper §3.6 + transport SI): proton residence
+    ~0.4-2.5 us, cross-barrier D ~1e-14 m^2/s, electron-to-proton conductivity selectivity ~1e7.
+  status: PASS
+  paper_quotable: true             # qualitative blocking criterion (not a precise rate)
+  caveat: "qualitative blocking criterion, not a converged quantitative rate (frozen-framework + RKS surrogate + no ZPE; §4.3). The primary (Fe,Ni)S-centric membrane design does not depend on the precise value."
+
+sanity:
+  - { id: G_carrier_S_bound,  rule: "saddle is S-H...S, proton > 2.5 A from any Fe (no Fe-hydride)", observed: "d_HFe ~ 2.8 A", pass: true }
+  - { id: G_two_codes,        rule: ">=2 independent DFT codes agree on magnitude+role",            observed: "CP2K 0.39 / ABACUS 0.44",   pass: true }
+  - { id: G_cell_convergence, rule: "converged-cell values stable; primitive flagged",              observed: "0.39-0.44 (conv) vs 0.9-1.1 (prim, flagged)", pass: warn }
+  - { id: G_no_mlip,          rule: "MLIP not used for this path (collapses to Fe-hydride)",        observed: "DFT-only",                  pass: true }
+
+provenance:
+  date: "2026-05 (DFT campaign; exact run metadata in repo result files / Zenodo deposit)"
+  author: igor@exopoiesis.space
+  parents:
+    - "run.cp2k_neb_pent_vfe.2026-05"
+    - "run.abacus_neb_pent_conv_kpts.2026-05"
+  compute:
+    host: vast.ai (A100)
+    note: "CP2K CI-NEB long run; ABACUS PW-GPU cross-check (walltime ~3 h, see result file)"
+  hash:
+    inputs:  sha256:placeholder_to_be_computed
+    outputs: sha256:placeholder_to_be_computed
+
+# ── CROSS-REFERENCES (Third Matter paper family) ──────────────────────────
+cross_ref:
+  paper:
+    name: KineticTrap
+    title: "Confinement-Stabilized Interfacial Hydrogen Trap and Proton Retention in a Pentlandite-Mackinawite Bilayer Membrane"
+    section: "§3.6"
+    repo: https://github.com/exopoiesis/interfacial-proton-trap-fes
+    doi: "Zenodo DOI on acceptance"
+  related:
+    - name: MLIPvsDFT
+      relation: companion
+      repo: https://github.com/exopoiesis/mlip-vs-dft-iron-sulfides
+      note: "foundation-MLIP failure-mode taxonomy: MACE/CHGNet collapse this S-H...S path into a spurious Fe-hydride well"
+    - name: tm-spec
+      relation: schema
+      url: https://exopoiesis.space/tm-spec
+      note: "the machine-readable specification standard this file conforms to"

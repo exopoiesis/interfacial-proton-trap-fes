@@ -1,0 +1,26 @@
+name: tests
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  pytest:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.11", "3.12"]
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Install CPU dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install numpy scipy matplotlib PyYAML pytest
+      - name: Run tests (CPU-only; no GPU/DFT/MLIP)
+        run: pytest tests/ -v

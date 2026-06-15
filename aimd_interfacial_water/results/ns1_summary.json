@@ -1,0 +1,128 @@
+{
+  "kT_eV": 0.02585220500595948,
+  "cell_A": [
+    11.022,
+    11.022,
+    6.5
+  ],
+  "note_145atom": "Real 145-atom W1 AIMD (cell c=13, 24 H2O) NOT present locally; all local w1_grotthuss = 73-atom W2-geometry. 145-atom part SKIPPED (would require harvest from Vast.ai via safe_harvest.sh).",
+  "note_reweight": "plumed_carrier_B.dat is binary/unreadable and NO COLVAR/restraint.bias output was harvested for carrier_B -> bias-reweighted 2D FES (path iii) NOT possible. carrier-indicator s(t) is bias-INDEPENDENT and answers the main NS-1 carrier question directly.",
+  "files": {
+    "carrier_B": {
+      "label": "carrier_B",
+      "path": "D:\\home\\ignat\\project-third-matter\\results\\carrier_B\\carrier_B-pos-1.xyz",
+      "nframes": 651,
+      "composition": {
+        "Fe": 18,
+        "S": 18,
+        "O": 12,
+        "H": 25
+      },
+      "hydride_atom_1based": 38,
+      "hydride_z_frame0": 5.090987,
+      "s_mean_all": 0.20930827120299908,
+      "s_std_all": 0.35908486310602616,
+      "s_mean_hold": 0.04863158498026034,
+      "s_std_hold": 0.2067445810416918,
+      "hold_frames": 501,
+      "dFe_min_hold_mean": 2.1970630036823273,
+      "dS_min_hold_mean": 2.518777963356474,
+      "dO_min_hold_mean": 2.245694588662588,
+      "carrier_occupancy_pct_hold": {
+        "Fe": 0.0,
+        "S": 0.0,
+        "O": 0.0,
+        "in_flight": 100.0
+      },
+      "q_hydride_mean_hold": 0.004662307334496142,
+      "nn_Fe_gap_mean_hold_A": 0.04643457424561581,
+      "modal_nearest_Fe_1based": 10,
+      "modal_nearest_Fe_pct_hold": 50.29940119760479,
+      "_s_hist": "  [ -0.362, -0.327)    13 ###########\n  [ -0.327, -0.293)     8 ######\n  [ -0.293, -0.258)     5 ####\n  [ -0.258, -0.223)    15 ############\n  [ -0.223, -0.188)    14 ###########\n  [ -0.188, -0.153)    20 #################\n  [ -0.153, -0.118)    43 ####################################\n  [ -0.118, -0.084)    29 ########################\n  [ -0.084, -0.049)    47 ########################################\n  [ -0.049, -0.014)    39 #################################\n  [ -0.014,  0.021)    29 ########################\n  [  0.021,  0.056)    21 #################\n  [  0.056,  0.091)    15 ############\n  [  0.091,  0.126)    18 ###############\n  [  0.126,  0.160)    13 ###########\n  [  0.160,  0.195)    29 ########################\n  [  0.195,  0.230)    27 ######################\n  [  0.230,  0.265)    26 ######################\n  [  0.265,  0.300)    17 ##############\n  [  0.300,  0.335)    17 ##############\n  [  0.335,  0.370)    19 ################\n  [  0.370,  0.404)    16 #############\n  [  0.404,  0.439)     6 #####\n  [  0.439,  0.474)    10 ########\n  [  0.474,  0.509)     5 ####"
+    },
+    "carrier_2p40": {
+      "label": "carrier_2p40",
+      "path": "D:\\home\\ignat\\project-third-matter\\results\\carrier_2p40\\carrier_2p40-pos-1.xyz",
+      "nframes": 301,
+      "composition": {
+        "Fe": 18,
+        "S": 18,
+        "O": 12,
+        "H": 25
+      },
+      "hydride_atom_1based": 38,
+      "hydride_z_frame0": 5.090987,
+      "s_mean_all": 0.5112141259662191,
+      "s_std_all": 0.28681722169380763,
+      "s_mean_hold": 0.2780145128325437,
+      "s_std_hold": 0.11192196432517372,
+      "hold_frames": 151,
+      "dFe_min_hold_mean": 2.18461403130694,
+      "dS_min_hold_mean": 2.5269741911223633,
+      "dO_min_hold_mean": 2.4626285441394833,
+      "carrier_occupancy_pct_hold": {
+        "Fe": 0.0,
+        "S": 0.0,
+        "O": 0.0,
+        "in_flight": 100.0
+      },
+      "q_hydride_mean_hold": 0.005039013864718204,
+      "nn_Fe_gap_mean_hold_A": 0.05884514140668378,
+      "modal_nearest_Fe_1based": 10,
+      "modal_nearest_Fe_pct_hold": 50.993377483443716,
+      "_s_hist": "  [  0.062,  0.080)     5 ################\n  [  0.080,  0.098)     1 ###\n  [  0.098,  0.116)     6 ####################\n  [  0.116,  0.134)     6 ####################\n  [  0.134,  0.152)     4 #############\n  [  0.152,  0.170)     2 ######\n  [  0.170,  0.187)    10 #################################\n  [  0.187,  0.205)    12 ########################################\n  [  0.205,  0.223)     6 ####################\n  [  0.223,  0.241)    11 ####################################\n  [  0.241,  0.259)     9 ##############################\n  [  0.259,  0.277)     7 #######################\n  [  0.277,  0.295)     6 ####################\n  [  0.295,  0.312)     8 ##########################\n  [  0.312,  0.330)     6 ####################\n  [  0.330,  0.348)     5 ################\n  [  0.348,  0.366)    10 #################################\n  [  0.366,  0.384)     7 #######################\n  [  0.384,  0.402)     7 #######################\n  [  0.402,  0.420)     3 ##########\n  [  0.420,  0.437)     4 #############\n  [  0.437,  0.455)     5 ################\n  [  0.455,  0.473)     5 ################\n  [  0.473,  0.491)     3 ##########\n  [  0.491,  0.509)     3 ##########"
+    },
+    "w1_grotthuss": {
+      "label": "w1_grotthuss",
+      "path": "D:\\home\\ignat\\project-third-matter\\results\\w1_grotthuss\\grotthuss-pos-1.xyz",
+      "nframes": 3199,
+      "composition": {
+        "Fe": 18,
+        "S": 18,
+        "O": 12,
+        "H": 25
+      },
+      "hydride_atom_1based": 38,
+      "hydride_z_frame0": 3.45638133,
+      "s_mean_all": 0.6998060925492207,
+      "s_std_all": 0.7351075230718818,
+      "s_mean_hold": 0.7928472963607917,
+      "s_std_hold": 0.6087505713025934,
+      "hold_frames": 3049,
+      "dFe_min_hold_mean": 1.6398728998463412,
+      "dS_min_hold_mean": 2.170105061595348,
+      "dO_min_hold_mean": 2.432720196207133,
+      "carrier_occupancy_pct_hold": {
+        "Fe": 88.4224335847819,
+        "S": 1.4430960970810103,
+        "O": 5.706789111183995,
+        "in_flight": 4.427681206953099
+      },
+      "q_hydride_mean_hold": 0.5571114905318747,
+      "nn_Fe_gap_mean_hold_A": 0.414680627554844,
+      "modal_nearest_Fe_1based": 13,
+      "modal_nearest_Fe_pct_hold": 34.60150869137422,
+      "_s_hist": "  [ -1.680, -1.540)     8 \n  [ -1.540, -1.399)    20 #\n  [ -1.399, -1.259)    16 #\n  [ -1.259, -1.119)    21 #\n  [ -1.119, -0.978)    25 #\n  [ -0.978, -0.838)     5 \n  [ -0.838, -0.698)    29 ##\n  [ -0.698, -0.557)    38 ##\n  [ -0.557, -0.417)    31 ##\n  [ -0.417, -0.277)    76 #####\n  [ -0.277, -0.136)    43 ###\n  [ -0.136,  0.004)    36 ##\n  [  0.004,  0.144)    34 ##\n  [  0.144,  0.285)    62 ####\n  [  0.285,  0.425)    69 #####\n  [  0.425,  0.565)   104 #######\n  [  0.565,  0.706)   213 ###############\n  [  0.706,  0.846)   350 ##########################\n  [  0.846,  0.986)   534 ########################################\n  [  0.986,  1.127)   423 ###############################\n  [  1.127,  1.267)   410 ##############################\n  [  1.267,  1.407)   314 #######################\n  [  1.407,  1.548)   147 ###########\n  [  1.548,  1.688)    27 ##\n  [  1.688,  1.828)    14 #"
+    }
+  },
+  "mcec_water_w1_grotthuss": {
+    "applied_to": "w1_grotthuss (73-atom, unbiased)",
+    "n_water_O": 12,
+    "n_H_in_sigmaH": 24,
+    "hydride_excluded_1based": 38,
+    "xi_z_mean": -0.04601933543869031,
+    "xi_z_std": 0.2129520725005667,
+    "xi_lateral_mean_A": 12.919890653388403,
+    "xi_lateral_std_A": 7.289041147651515,
+    "note": "xi_CEC vector tracks excess-proton center in water (Koenig Eq.7, w_O=2, rsw=1.3, dsw=0.03, MIC all axes). Hydride atom 38 excluded from Sigma_H (it is on Fe, not Bronsted network).",
+    "_xi_z_hist": "  [ -1.463, -1.375)    36 \n  [ -1.375, -1.287)     7 \n  [ -1.287, -1.199)    18 \n  [ -1.199, -1.112)     5 \n  [ -1.112, -1.024)     2 \n  [ -1.024, -0.936)     7 \n  [ -0.936, -0.848)     5 \n  [ -0.848, -0.760)     3 \n  [ -0.760, -0.672)     4 \n  [ -0.672, -0.584)     2 \n  [ -0.584, -0.497)     7 \n  [ -0.497, -0.409)    17 \n  [ -0.409, -0.321)    26 \n  [ -0.321, -0.233)    16 \n  [ -0.233, -0.145)    18 \n  [ -0.145, -0.057)    92 #\n  [ -0.057,  0.030)  2875 ########################################\n  [  0.030,  0.118)    38 \n  [  0.118,  0.206)    17 \n  [  0.206,  0.294)     4 ",
+    "FES_xi_z_max_eV": 0.20445874884887794,
+    "FES_3kT_eV": 0.07755661501787844
+  },
+  "verdict_NS1": {
+    "carrier_B": "ROBUST_DELOCALIZATION",
+    "w1_grotthuss": "SEE_DETAIL",
+    "overall": "ROBUST_DELOCALIZATION",
+    "rationale": "carrier-indicator s and per-frame carrier classification: hydride neither commits to a single Fe nor migrates to water/S. in_flight fraction dominant on hold. No bimodal s -> no clear saddle. Quantitative barrier NOT extractable (no harvested bias for reweighting; single steered probe) -> qualitative verdict only, REVIEW-grade."
+  }
+}

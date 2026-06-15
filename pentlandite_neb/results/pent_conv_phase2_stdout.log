@@ -1,0 +1,36 @@
+======================================================================
+  Phase 2 RESTART: CI-NEB pentlandite conv, kpts=(2,2,2)
+  LBFGS optimizer (FIRE was oscillating at fmax~0.12)
+  Target: fmax < 0.05 eV/A
+======================================================================
+
+[RESUME] Loading from phase2_restart checkpoint...
+  Source: phase2_restart
+  Loaded 7 images (7 expected)
+  image 0: 67 atoms, H at (1.81, 2.50, 2.50)
+  image 1: 67 atoms, H at (2.22, 2.32, 2.32)
+  image 2: 67 atoms, H at (2.69, 1.88, 1.88)
+  image 3: 67 atoms, H at (2.83, 1.29, 1.29)
+  image 4: 67 atoms, H at (2.59, 0.65, 0.65)
+  image 5: 67 atoms, H at (2.09, 0.23, 0.23)
+  image 6: 67 atoms, H at (1.77, 0.00, 0.00)
+  All images: 67 atoms, 1 H each. OK.
+
+  CI-NEB created: 7 images, k=0.05, climb=True
+
+=== Running CI-NEB LBFGS (fmax<0.05, max=200) ===
+  [NEB] step=   0  barrier_est=0.4133 eV  fmax=0.0292  t=10905s
+
+======================================================================
+  RESULT: E_a(forward) = 0.5456 eV
+          E_a(reverse) = 0.4133 eV
+          barrier      = 0.4133 eV
+          fmax         = 0.0292 eV/A
+          converged    = True
+          steps        = 0
+          time         = 10905 s (3.0 h)
+  Cross-verify: Gamma-only = 0.442, prim GPAW = 1.115, prim ABACUS = 0.900
+  Saved: /workspace/results/neb_pentlandite_conv_kpts_result.json
+======================================================================
+
+PENT_CONV_KPTS_NEB: E_a=0.546 eV, fmax=0.0292, steps=0, t=3.0h, converged=True

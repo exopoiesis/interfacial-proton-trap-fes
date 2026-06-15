@@ -1,0 +1,285 @@
+#
+# CP2K WT-MetaD v2 — Fe-chemi FES (s130 restart with methodology fixes)
+#
+# REASON FOR RESTART (s130, 2026-05-01):
+#   v1 ran 11.5 ps, 230 hills, gave ΔF# ≥ 0.40 eV (math-corrected lower bound,
+#   wall correction included). NOT converged + 3 setup issues identified:
+#     1. WALL POSITION 1.2 too restrictive — initial CV=1.72 already above wall,
+#        80% of hills deposited in wall region → bias fights wall, not fills well.
+#     2. WTGAMMA=10 too gentle — ((γ-1)/γ)*ΔF asymptotic = 0.9*ΔF, slow to fill.
+#     3. WW=1 kJ/mol too small — single hill ≈ 0.4 kT, slow accumulation.
+#
+# FIXES (applied here after chemist + physicist review s130, both CONDITIONAL_PASS):
+#   1. WALL POSITION 3.0 (physicist suggested 3.0 vs original draft 2.5 — extra
+#      margin для multi-Fe hollow site geometry). Initial CV 1.4-1.7 far from wall.
+#   2. WTGAMMA 5 — k_B ΔT = 4*kT = 104 meV (vs 234 meV at γ=10).
+#      Physicist note: γ=5 на edge для wells 50-100 kJ/mol; FES в well bottom может
+#      иметь error ~5 kJ/mol. Acceptable для lower bound, marginal для publication-grade.
+#      User explicit choice (s130) — keep at 5.
+#   3. WW [kjmol] 5.0 — single hill ≈ 2 kT, 5x faster filling. Chemist+Physicist
+#      flag: 2 kT — на upper bound допустимого. Monitoring rule: если первые 1-2 ps
+#      покажут CV oscillations с амплитудой >0.3 (hyperactive bias) → kill+restart с WW=3.
+#
+# RESTORED FROM v1 (chemist+physicist HIGH severity flags):
+#   - ELECTRONIC_TEMPERATURE 500K (was 300K — regression that would destabilize SCF)
+#   - &OUTER_SCF block (removed in draft — required для charge convergence в metallic
+#     Fe system с smearing)
+#
+# RESTART STRATEGY:
+#   - SCF wfn restart from grotthuss_metadyn-RESTART.wfn (3-5x SCF speedup)
+#   - Atomic positions: from final frame of grotthuss_metadyn-pos-1.xyz (s130 harvest)
+#     → rewrite to structure_v2_restart.xyz
+#   - Velocities: NEW from random Gaussian @ 300K (re-equilibration ~0.5-1 ps)
+#     → keeping continuous velocities risk: thermostat coupled to v1 metadyn forces;
+#       cleaner to restart velocities from scratch.
+#   - Metadyn hills: FRESH (do NOT load v1 hills; γ change makes them incompatible).
+#   - Step counter: RESET to 0 (independent run for clean comparison).
+#
+# Expected timeline (s130 analysis):
+#   - Equivalent quality to v1 (apparent ΔF# ~0.4 eV): ~1 ps = ~17 hours wall-clock
+#   - Improved quality (visible barrier crossing): ~5-8 ps = 3-5 days
+#   - Full converged FES: ~10-15 ps = 7-10 days
+#
+# Cost target: ~$50-70 at $0.28/h, vs $181 status quo. Still much higher than NEB
+# alternative (~$30, 1-2 days), but provides T-effect cross-validation.
+#
+# NOTE: Stop v1 cleanly via SIGTERM (allow .restart write); harvest final state;
+#       deploy this v2 inp + new structure file.
+#
+# POST-DEPLOY MONITORING (per physicist review):
+#   1. First 1 ps (2000 steps): re-equilibration window. EXCLUDE from final FES analysis
+#      (post-process: ignore hills with t < 1000 fs). System recovers from velocity
+#      randomization via Nose thermostat (timescale ~3-5*TIMECON = 1.5-2.5 ps).
+#   2. After 2 ps: check hills CV distribution. If clustering at extreme CV (>2.0) or
+#      pinball oscillations CV amplitude >0.3 → over-bias → kill, reduce WW to 3.0,
+#      restart.
+#   3. Convergence diagnostics (canonical):
+#      - Cumulative window analysis: max|F_w[i] − F_w[i-1]| < 2 kJ/mol на последних 2 windows
+#      - Block averaging FES: σ(F) on CV grid < 1 kJ/mol
+#      - Effective transition count CV<0.5 ↔ CV>1.5: ≥5-10 events для статистической
+#        convergence (deep wells редко достигают)
+#
+# KNOWN CAVEAT (inherited from v1): cell C=6.5 Å with PERIODIC XYZ → vacuum < 1.5 Å
+#   between periodic images. v1 assumed bulk-like representation (no slab vacuum).
+#   For this restart, KEEP same cell to maintain comparability with v1. For future
+#   campaigns: increase C to ≥25 Å + POISSON_SOLVER MT, true slab geometry.
+#
+# References:
+#   - knowledge/W2_DEBUG_ANALYSIS_2026-05-01.md (math + recommendations)
+#   - knowledge/W1W2_ANALYSIS_2026-05-01.md (initial agent analysis)
+#   - infra/cp2k_grotthuss_metadyn/grotthuss_metadyn.inp (v1 inp, s121, BLOCKED)
+#
+
+&GLOBAL
+  PROJECT grotthuss_metadyn_v2
+  RUN_TYPE MD
+  PRINT_LEVEL LOW
+  WALLTIME -1
+  PREFERRED_DIAG_LIBRARY SCALAPACK
+&END GLOBAL
+
+&FORCE_EVAL
+  METHOD Quickstep
+  &DFT
+    BASIS_SET_FILE_NAME BASIS_MOLOPT
+    POTENTIAL_FILE_NAME GTH_POTENTIALS
+    CHARGE 1                          ! same as v1: excess proton on slab+water
+
+    ! Use v1 wfn for SCF speedup. WFN_RESTART_FILE_NAME points to the v1 wfn copy
+    ! (renamed at deploy time to grotthuss_metadyn_v2-RESTART.wfn for project consistency).
+    WFN_RESTART_FILE_NAME ./grotthuss_metadyn_v2-RESTART.wfn
+
+    &QS
+      EPS_DEFAULT 1.0E-12
+      EXTRAPOLATION ASPC
+      EXTRAPOLATION_ORDER 3
+    &END QS
+
+    &MGRID
+      CUTOFF 320
+      REL_CUTOFF 40
+      NGRIDS 4
+    &END MGRID
+
+    &XC
+      &XC_FUNCTIONAL PBE
+      &END XC_FUNCTIONAL
+      &VDW_POTENTIAL
+        POTENTIAL_TYPE PAIR_POTENTIAL
+        &PAIR_POTENTIAL
+          TYPE DFTD3(BJ)
+          REFERENCE_FUNCTIONAL PBE
+        &END PAIR_POTENTIAL
+      &END VDW_POTENTIAL
+    &END XC
+
+    &SCF
+      SCF_GUESS RESTART
+      MAX_SCF 500
+      EPS_SCF 1.0E-5
+      ADDED_MOS 100
+      &DIAGONALIZATION
+        ALGORITHM STANDARD
+      &END DIAGONALIZATION
+      &MIXING
+        METHOD BROYDEN_MIXING
+        ALPHA 0.2
+        NBROYDEN 8
+      &END MIXING
+      &SMEAR
+        METHOD FERMI_DIRAC
+        ELECTRONIC_TEMPERATURE [K] 500.0   ! FIX (review s130): revert from 300K
+                                            ! 500K = v1, ensures stable SCF for metallic Fe slab
+                                            ! T_phys=300K via NVT thermostat; smearing T artificial
+      &END SMEAR
+      ! FIX (review s130): restore OUTER_SCF for charge convergence in metallic system
+      &OUTER_SCF
+        EPS_SCF 1.0E-5
+        MAX_SCF 10
+      &END OUTER_SCF
+    &END SCF
+
+    &POISSON
+      PERIODIC XYZ
+    &END POISSON
+  &END DFT
+
+  &SUBSYS
+    &CELL
+      A     11.022000   0.000000   0.000000
+      B      0.000000  11.022000   0.000000
+      C      0.000000   0.000000   6.500000
+      PERIODIC XYZ
+    &END CELL
+
+    &TOPOLOGY
+      ! Last frame from v1 pos-1.xyz, copied to structure_v2_restart.xyz at deploy
+      COORD_FILE_NAME structure_v2_restart.xyz
+      COORD_FILE_FORMAT XYZ
+    &END TOPOLOGY
+
+    &COLVAR
+      &COORDINATION
+        ! SAME CV as v1 (verified valid in s130 W2_DEBUG_ANALYSIS section 4):
+        ! No Grotthuss exchange of H_37 observed in v1 over 11.5 ps,
+        ! so CV(H_37) is faithful proxy for "specific H desorption from Fe surface".
+        ATOMS_FROM 38
+        ATOMS_TO   1 2 5 6 9 10 13 14 17 18 21 22 25 26 29 30 33 34
+        R_0 [angstrom] 2.0
+        NN 6
+        ND 12
+      &END COORDINATION
+    &END COLVAR
+
+    &KIND Fe
+      BASIS_SET DZVP-MOLOPT-SR-GTH
+      POTENTIAL GTH-PBE-q16
+    &END KIND
+    &KIND S
+      BASIS_SET DZVP-MOLOPT-SR-GTH
+      POTENTIAL GTH-PBE-q6
+    &END KIND
+    &KIND O
+      BASIS_SET DZVP-MOLOPT-SR-GTH
+      POTENTIAL GTH-PBE-q6
+    &END KIND
+    &KIND H
+      BASIS_SET DZVP-MOLOPT-SR-GTH
+      POTENTIAL GTH-PBE-q1
+    &END KIND
+  &END SUBSYS
+&END FORCE_EVAL
+
+&MOTION
+  &MD
+    ENSEMBLE NVT
+    STEPS 30000                        ! 15 ps target (Q-conv via window analysis)
+    TIMESTEP [fs] 0.5
+    TEMPERATURE [K] 300.0
+    &THERMOSTAT
+      TYPE NOSE
+      REGION GLOBAL
+      &NOSE
+        LENGTH 3
+        TIMECON [fs] 500.0
+        MTS 2
+      &END NOSE
+    &END THERMOSTAT
+  &END MD
+
+  &FREE_ENERGY
+    METHOD METADYN
+    &METADYN
+      DO_HILLS .TRUE.
+      USE_PLUMED .FALSE.
+      WW [kjmol] 5.0                  ! FIX #3: 5x v1 (1.0). Single hill ≈ 2 kT.
+      NT_HILLS 100                    ! same: deposit every 100 MD steps = 50 fs
+      WELL_TEMPERED .TRUE.
+      WTGAMMA 5                       ! FIX #2: was 10. ΔT = 4T = 1200 K, k_B ΔT = 104 meV.
+      &METAVAR
+        COLVAR 1
+        SCALE 0.05                    ! same: σ in CV units
+        ! FIX #1: upper wall moved from CV>1.2 to CV>3.0
+        ! Initial CV ~ 1.4-1.7 (Fe-coord region) is now FAR from wall.
+        ! Physicist review (s130): physical max ~2.6 для H в idealized hollow site,
+        ! поэтому wall at 3.0 (vs 2.5 first attempt) — extra 0.4 CV margin для safety.
+        ! Wall triggers only при truly unphysical hyper-coordination (>5 Fe @ d~R0).
+        &WALL
+          TYPE QUARTIC
+          POSITION 3.0                ! changed from 1.2 (s130 fix), 2.5→3.0 (physicist review)
+          &QUARTIC
+            DIRECTION WALL_PLUS
+            K [kjmol] 500.0
+          &END QUARTIC
+        &END WALL
+        &WALL
+          TYPE QUARTIC
+          POSITION -0.1                ! same lower wall (geometric — CV≥0)
+          &QUARTIC
+            DIRECTION WALL_MINUS
+            K [kjmol] 500.0
+          &END QUARTIC
+        &END WALL
+      &END METAVAR
+      &PRINT
+        &HILLS
+          &EACH
+            MD 100
+          &END EACH
+        &END HILLS
+        &COLVAR
+          &EACH
+            MD 10
+          &END EACH
+        &END COLVAR
+      &END PRINT
+    &END METADYN
+  &END FREE_ENERGY
+
+  &PRINT
+    &TRAJECTORY
+      &EACH
+        MD 1
+      &END EACH
+      FORMAT XYZ
+    &END TRAJECTORY
+    &VELOCITIES
+      &EACH
+        MD 8                           ! Was MD 10. 4 fs/frame → Nyquist 4166 cm⁻¹
+                                       ! Resolves O-H stretch ~3500 cm⁻¹ for VDOS.
+                                       ! (s130 lesson from W1 vel stride bug)
+      &END EACH
+    &END VELOCITIES
+    &RESTART
+      &EACH
+        MD 10
+      &END EACH
+      BACKUP_COPIES 2
+    &END RESTART
+    &RESTART_HISTORY
+      &EACH
+        MD 2000
+      &END EACH
+    &END RESTART_HISTORY
+  &END PRINT
+&END MOTION

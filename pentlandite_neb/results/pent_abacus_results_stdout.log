@@ -1,0 +1,22 @@
+abacuslite imported OK
+===LAUNCHED OK
+=======================================================
+  DFT NEB: pentlandite H diffusion (ABACUS PW GPU, conv. cell)
+  68 atoms, Fm-3m, a=10.044 A, kpts=(2,2,2), ecutwfc=60 Ry
+  Two-phase NEB: climb=False->True, k=0.05, 5 images
+  Cross-verify: GPAW=1.115 eV, MACE(conv)=1.43 eV
+======================================================================
+
+[1/5] Build pentlandite conv (68 at)
+  Pentlandite conv: Fe20Ni16S32, 68 atoms
+  Cell: 10.044 x 10.044 x 10.044 A, Fm-3m (#225)
+  Min distance: 2.175 A
+
+[2/5] Find nearest S-S pair (vacancy hop)
+  S pair: атомы #36 и #44, dist = 3.551 A
+
+[3/5] Build endpoints
+  endA: 67 at, HFe20Ni16S30, min H-dist=2.175 A
+  endB: 67 at, HFe20Ni16S30, min H-dist=2.175 A
+
+[4/5] Relax endpoints (H only, FIRE fmax=0.05)

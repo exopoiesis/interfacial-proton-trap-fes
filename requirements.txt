@@ -1,0 +1,22 @@
+# Core analysis (CPU) — transport model, WHAM/UQ, energy balance, figures, tests
+numpy>=1.24
+scipy>=1.10
+matplotlib>=3.7
+SALib>=1.4            # Sobol total-effect sensitivity (transport_model)
+PyYAML>=6.0          # TM-Spec parsing/validation (tests)
+pytest>=7.0          # test suite (tests/)
+
+# Atomistic tooling
+ase>=3.22            # structures, NEB driver, MD restraint
+
+# Machine-learning interatomic potentials (GPU recommended) — mlip_umbrella_sampling
+mace-torch>=0.3.0    # MACE-MP-0 (medium)
+chgnet>=0.3.0        # CHGNet v0.3.0
+torch>=2.0           # CUDA build recommended
+
+# DFT codes (external, not pip-installable):
+#   CP2K   >= 2024.x  — AIMD, WT-MetaD, pentlandite CI-NEB
+#   ABACUS            — pentlandite NEB cross-check (LCAO basis)
+#
+# Formal proof (proofs/KineticTrap.lean):
+#   Lean 4 + mathlib  — install via elan/lake; see proofs/ header

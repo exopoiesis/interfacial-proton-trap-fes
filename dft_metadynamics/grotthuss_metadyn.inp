@@ -1,0 +1,244 @@
+#
+# CP2K AIMD Grotthuss — Well-Tempered Metadynamics (s121, 2026-04-23)
+# Goal: compute free energy profile для excess proton transfer between
+# (a) Fe-chemisorbed state и (b) bulk water state. Get barrier + equilibrium constant.
+#
+# Answers definitively:
+#   - Is Fe-chemi thermodynamic minimum or kinetic trap?
+#   - What's the barrier for desorption Fe-H → H in water?
+#   - What's the equilibrium ratio Fe-chemi / bulk-water at 300K?
+#
+# System: 3x3x1 mackinawite + 12 H2O + 1 H+ = 73 atoms (same as 3×3×1 production)
+# Method: PBE-D3(BJ), nspin=1, NVT 300K, dt=0.5 fs
+# Metadynamics: Well-Tempered, CV = proton-Fe coordination number
+#
+# CV design (COORDINATION):
+#   n_FeH = Σ_k [1 - (d_Fe_k - H_excess / R0)^NN] / [1 - (d_Fe_k - H_excess / R0)^NN+MM]
+#   where H_excess is defined via EXCLUDE_HYDROGENS_OF... but simpler:
+#   Use DISTANCE_POINT_PLANE between excess H atom and Fe slab centroid plane
+#   Or: PROTON_COORD with switching on d_O(H) to detect "excess" H dynamically
+#
+# Chosen: COORDINATION NUMBER with ATOMS=[all_Fe], POINTS=[excess_H_tracer].
+# Problem: "excess H" atom identity changes during Grotthuss → need fictitious atom
+#           OR average CV over all H (simpler).
+# Chosen v1 (simplest): track specific atom index 37 (current excess H in 3×3×1
+#           from fe_h_distance analysis, 100% Fe-chemisorbed).
+#           Start METADYN from existing equilibrated structure where H_37 is on Fe.
+#           Bias CV = coordination number of H_37 with all 18 Fe atoms.
+#           Expected: initial CV ≈ 1 (Fe-chemi), driven toward CV < 0.1 (water).
+#
+# Well-Tempered params (s121 review: APPROVE with caveats from Physicist, BLOCKED by Chemist
+# on identity-CV concern. Compromise: accepted identity CV for 3×3×1 test where s121
+# showed H_37 is stuck on Fe — minimal Grotthuss interference expected. FES interpretation
+# is "forward desorption barrier of H_37 from Fe surface", not general excess-proton FES.
+# Caveat documented in SI. Reverse rate + full FES requires better CV — deferred):
+#   Gaussian height: 1.0 kJ/mol (~0.4 kT)
+#   Gaussian width σ: 0.05 (CV units, dimensionless coordination number)
+#   Deposit every: 100 steps (50 fs)
+#   WT factor γ: 10 → ΔT = (γ-1)T = 2700 K (fixed from s121 review)
+#   Total steps: 100000 (50 ps) — s121 Physicist: +40% for safety margin on convergence
+#   + WALL potential on CV > 1.2 to prevent unphysical over-coordination (s121 Physicist)
+#
+# REVIEW s121 APPROVED (Physicist) with these fixes applied.
+# Chemist concern: CV tracks atom H_37, not excess charge. For 3×3×1 H_37 chronically
+# Fe-chemisorbed per fe_h_distance — valid. For 3×3×2 or different systems a
+# weighted-sum CV would be needed. Will document in SI-E.
+#
+
+&GLOBAL
+  PROJECT grotthuss_metadyn
+  RUN_TYPE MD
+  PRINT_LEVEL LOW
+  WALLTIME -1
+  PREFERRED_DIAG_LIBRARY SCALAPACK
+&END GLOBAL
+
+&FORCE_EVAL
+  METHOD Quickstep
+  &DFT
+    BASIS_SET_FILE_NAME BASIS_MOLOPT
+    POTENTIAL_FILE_NAME GTH_POTENTIALS
+    CHARGE 1
+
+    &QS
+      EPS_DEFAULT 1.0E-12
+      EXTRAPOLATION ASPC
+      EXTRAPOLATION_ORDER 3
+    &END QS
+
+    &MGRID
+      CUTOFF 320
+      REL_CUTOFF 40
+      NGRIDS 4
+    &END MGRID
+
+    &XC
+      &XC_FUNCTIONAL PBE
+      &END XC_FUNCTIONAL
+      &VDW_POTENTIAL
+        POTENTIAL_TYPE PAIR_POTENTIAL
+        &PAIR_POTENTIAL
+          TYPE DFTD3(BJ)
+          REFERENCE_FUNCTIONAL PBE
+        &END PAIR_POTENTIAL
+      &END VDW_POTENTIAL
+    &END XC
+
+    &SCF
+      SCF_GUESS RESTART
+      MAX_SCF 300
+      EPS_SCF 1.0E-5
+      ADDED_MOS 40
+      &DIAGONALIZATION
+        ALGORITHM STANDARD
+      &END DIAGONALIZATION
+      &MIXING
+        METHOD BROYDEN_MIXING
+        ALPHA 0.2
+        NBROYDEN 8
+      &END MIXING
+      &SMEAR
+        METHOD FERMI_DIRAC
+        ELECTRONIC_TEMPERATURE [K] 500
+      &END SMEAR
+      &OUTER_SCF
+        EPS_SCF 1.0E-5
+        MAX_SCF 10
+      &END OUTER_SCF
+    &END SCF
+  &END DFT
+
+  &SUBSYS
+    &CELL
+      A  11.022  0.000  0.000
+      B   0.000 11.022  0.000
+      C   0.000  0.000  6.500
+      PERIODIC XYZ
+    &END CELL
+
+    &TOPOLOGY
+      COORD_FILE_NAME structure.xyz
+      COORD_FILE_FORMAT XYZ
+    &END TOPOLOGY
+
+    &COLVAR
+      &COORDINATION
+        ! Coordination number of excess H_37 (1-based atom #38)
+        ! with all 18 Fe atoms (1-based indices from structure.xyz):
+        ! Fe: [1, 2, 5, 6, 9, 10, 13, 14, 17, 18, 21, 22, 25, 26, 29, 30, 33, 34]
+        ATOMS_FROM 38
+        ATOMS_TO   1 2 5 6 9 10 13 14 17 18 21 22 25 26 29 30 33 34
+        R_0 [angstrom] 2.0                ! switching radius (midway Fe-H 1.6 and bulk 2.5)
+        NN 6
+        ND 12
+      &END COORDINATION
+    &END COLVAR
+
+    &KIND Fe
+      BASIS_SET DZVP-MOLOPT-SR-GTH
+      POTENTIAL GTH-PBE-q16
+    &END KIND
+    &KIND S
+      BASIS_SET DZVP-MOLOPT-SR-GTH
+      POTENTIAL GTH-PBE-q6
+    &END KIND
+    &KIND O
+      BASIS_SET DZVP-MOLOPT-SR-GTH
+      POTENTIAL GTH-PBE-q6
+    &END KIND
+    &KIND H
+      BASIS_SET DZVP-MOLOPT-SR-GTH
+      POTENTIAL GTH-PBE-q1
+    &END KIND
+  &END SUBSYS
+&END FORCE_EVAL
+
+&MOTION
+  &MD
+    ENSEMBLE NVT
+    STEPS 100000                         ! 50 ps (s121 review: safety for WT convergence)
+    TIMESTEP [fs] 0.5
+    TEMPERATURE [K] 300.0
+    &THERMOSTAT
+      TYPE NOSE
+      REGION GLOBAL
+      &NOSE
+        LENGTH 3
+        TIMECON [fs] 500.0
+        MTS 2
+      &END NOSE
+    &END THERMOSTAT
+  &END MD
+
+  &FREE_ENERGY
+    METHOD METADYN
+    &METADYN
+      DO_HILLS .TRUE.
+      USE_PLUMED .FALSE.                 ! native CP2K metadyn
+      WW [kjmol] 1.0                     ! Gaussian height (0.4 kT)
+      NT_HILLS 100                       ! deposit every 100 MD steps = 50 fs
+      WELL_TEMPERED .TRUE.
+      WTGAMMA 10                         ! bias factor; ΔT = (γ-1)T = 2700 K
+      ! NOTE: TEMPERATURE keyword в &METADYN = для Lagrangian scheme ТОЛЬКО.
+      ! Для WT-MetaD физическая T берётся из thermostat. DELTA_T альтернатива WTGAMMA.
+      &METAVAR
+        COLVAR 1                         ! points to COLVAR above
+        SCALE 0.05                       ! Gaussian width σ in CV units
+        ! Wall potentials to prevent unphysical CV excursions (s121 Physicist)
+        &WALL
+          TYPE QUARTIC
+          POSITION 1.2                   ! upper bound (typical chemisorbed ≈1)
+          &QUARTIC
+            DIRECTION WALL_PLUS
+            K [kjmol] 500.0
+          &END QUARTIC
+        &END WALL
+        &WALL
+          TYPE QUARTIC
+          POSITION -0.1                  ! lower bound (soft, CV geometrically ≥0)
+          &QUARTIC
+            DIRECTION WALL_MINUS
+            K [kjmol] 500.0
+          &END QUARTIC
+        &END WALL
+      &END METAVAR
+      &PRINT
+        &HILLS
+          &EACH
+            MD 100
+          &END EACH
+        &END HILLS
+        &COLVAR
+          &EACH
+            MD 10
+          &END EACH
+        &END COLVAR
+      &END PRINT
+    &END METADYN
+  &END FREE_ENERGY
+
+  &PRINT
+    &TRAJECTORY
+      &EACH
+        MD 1
+      &END EACH
+      FORMAT XYZ
+    &END TRAJECTORY
+    &VELOCITIES
+      &EACH
+        MD 10
+      &END EACH
+    &END VELOCITIES
+    &RESTART
+      &EACH
+        MD 10
+      &END EACH
+      BACKUP_COPIES 2
+    &END RESTART
+    &RESTART_HISTORY
+      &EACH
+        MD 2000
+      &END EACH
+    &END RESTART_HISTORY
+  &END PRINT
+&END MOTION

@@ -1,0 +1,16 @@
+cff-version: 1.2.0
+message: "If you use this data or code, please cite the manuscript and this repository."
+title: "Confinement-Stabilized Interfacial Hydrogen Trap and Proton Retention in a Pentlandite–Mackinawite Bilayer Membrane"
+authors:
+  - family-names: Morozov
+    given-names: Igor N.
+    orcid: "https://orcid.org/0009-0007-3863-1747"
+    affiliation: "Independent Researcher, Ukraine"
+year: 2026
+url: "https://github.com/exopoiesis/interfacial-proton-trap-fes"
+license: MIT
+type: software
+notes: >-
+  Data and code supporting the manuscript. Raw trajectories deposited to Zenodo
+  with an archival DOI on acceptance. Code under MIT; manuscript, figures and
+  data under CC-BY-4.0.

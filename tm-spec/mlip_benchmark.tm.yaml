@@ -1,0 +1,150 @@
+# Pilot TM-Spec artefact #6: MLIP cross-method benchmark vs DFT
+# MACE-MP-0 + CHGNet vs CP2K WT-MetaD reference.
+# Status: [DRAFT v0.2 — DONE]
+#
+# *** NEW kind: MLIPBenchmark ***
+# Cross-method comparison framework. Distinct from USCalculation (which describes
+# a SINGLE run of one MLIP) — this describes the COMPARISON across backends + DFT.
+
+spec: tm-spec/0.2
+kind: MLIPBenchmark
+id: tm.mack_3x3x1.h_proton.mlip_bench_us.2026-05-06
+# NOTE (Paper #2 mapping): this computation is reported in Paper #2 "KineticTrap" §3.3 (apples-to-apples MACE-vs-CHGNet benchmark on the detachment PMF).
+# Any 'paper #1' references in the notes below are pre-split provenance (the kinetic-trap work was moved from the MLIPvsDFT paper into this one).
+schema_url: https://exopoiesis.space/tm-spec/0.2.json
+
+reconciliation: "Dated v1 provenance snapshot; values reconciled to the final manuscript on repo assembly. Where v1 differs (composition, DFT metad gamma/wall/LB, magnetic/U labels), the manuscript (KineticTrap) is authoritative."
+
+# ── 1. STRUCTURE (same hybrid system as w2_us_pmf) ───────
+structure:
+  composition:
+    solid:    Fe18S18                          # 3×3×1 mack supercell
+    aqueous:  "12 H2O + 1 H+"
+  prototype: AB_tP4_129_a_c
+  space_group: { number: 129, symbol: P4/nmm }
+  cell: { a: 11.022  Å, c: 6.500  Å }
+  supercell: [3, 3, 1]
+  pbc: [true, true, true]
+
+# ── 2-4. DEFECTS / MAGNETIC / ENVIRONMENT (same as w2_us_pmf, abbreviated) ──
+defects:
+  reactions: ["nil → H_aq^+(water_layer) + e'(solid)"]
+  population: { H_excess: { count: 1, location: aqueous_layer } }
+
+magnetic: { state: NM, collinear: true, magmoms_uB: {}, surrogate_warning: "PBE PM-itinerant proxy" }
+
+environment: { phase: aqueous_at_solid_interface, T: 300 K, pH: implied_~0, redox: null }
+
+# ── 5. CALCULATION (multi-method — both MLIPs + DFT reference) ──
+calculation:
+  method: MLIP
+  backends:
+    - { name: MACE-MP-0,         variant: medium,  version: "MACE-MP-0 medium (version unpinned in env; see requirements)",  foundation: true, fine_tuned: false }
+    - { name: CHGNet,            variant: v0.3.0,  foundation: true, fine_tuned: false }
+  level: { type: ML_potential }
+
+# ── 6. BENCHMARK SETUP (NEW SECTION) ─────────────────────
+benchmark_setup:
+  reference:
+    method: "DFT WT-MetaD (CP2K)"
+    code:   CP2K
+    system: "mack 3×3×1 + 12 H2O + H+"
+    ref:    "tm.mack_3x3x1.h_proton.metad_v1.2026-04-30"   # paired pilot
+  test_systems:
+    - { id: us_setup_3x3x1, system: "mack 3×3×1 + 12 H2O + H+", windows: 18, duration_ps: 9 }
+  test_observables:
+    - "PMF saddle ΔF# (eV)"
+    - "PMF basin position (Å, d_FeH)"
+    - "frac_correct_basin (Fe-chemi vs aqueous)"
+    - "consistency with DFT WT-MetaD lower bound"
+
+# ── 7. METRICS (NEW SECTION) ─────────────────────────────
+metrics:
+  abs_diff_saddle_eV:
+    MACE_vs_CHGNet:    0.48
+    MACE_vs_DFT_LB:    0.48                         # MACE 0.80 - DFT LB 0.32 (manuscript canonical §3.2)
+    CHGNet_vs_DFT_LB:  0.00                         # CHGNet 0.32 = DFT LB 0.32 (manuscript canonical)
+    note: "DFT LB updated v1 0.40 -> final >=0.32 eV (§3.2; v2 basin LB 0.383)"
+  Ea_correlation_R2:                                  # not applicable, scalar comparison
+    note: "single-system comparison, no R²"
+  frac_correct_basin:
+    MACE_pre_flight:   0.966                         # 5 ps NVT @ 300 K, Fe-chemi fraction
+    CHGNet_pre_flight: 0.998
+    DFT_v1_reference:  1.000                          # 14 ps DFT reference
+  saddle_position_A:
+    MACE:    2.23
+    CHGNet:  2.41
+    DFT_LB:  null                                     # WT-MetaD doesn't give point estimate
+
+# ── 8. RESULTS (NEW $defs/results_mlip_bench) ────────────
+results:
+  per_backend:
+    MACE-MP-0:
+      saddle_eV: 0.80
+      basin_min_d_A: 1.62
+      pre_flight_pass: true
+      paper_quotable: true
+    CHGNet-v0.3.0:
+      saddle_eV: 0.32
+      basin_min_d_A: 1.55
+      pre_flight_pass: true
+      paper_quotable: true
+  verdict:
+    qualitative: "Both MLIPs reproduce kinetic trap (>> 5 kT_room = 0.13 eV at 300 K)."
+    quantitative_bracket_eV: [0.32, 0.80]
+    consistent_with_DFT: true
+    DFT_LB_within_bracket: true                       # DFT LB >=0.32 (manuscript canonical) at bottom of [0.32, 0.80] ✓
+  consistency_with_DFT:
+    MACE_consistent: true                              # 0.80 eV saddle, upper end of bracket
+    CHGNet_consistent: true                            # 0.32 eV, coincides with DFT LB; still >> kT
+  status: PASS
+  paper_quotable: true
+  validated_by: [chemist@opus, physicist@opus, consilium_v2_2026-05-06]
+  notes: |
+    Two-regime narrative quantitatively confirmed (this paper, KineticTrap §3.3):
+    3×3×1 mack + H+ → trap >> 5 kT. For this paper (KineticTrap §3.3): cite
+    "ΔF# bracket 0.32-0.80 eV (MLIP-MLIP apples-to-apples cross-validation,
+    consistent with the DFT basin lower bound >=0.32 eV; §3.2)".
+
+# ── 9. SANITY GATES ──────────────────────────────────────
+sanity:
+  - { id: G15_dual_backend,        rule: "≥2 MLIP backends compared",                          observed: "MACE + CHGNet", pass: true }
+  - { id: G16_dft_consistency,     rule: "MLIP bracket consistent with DFT LB",                observed: "DFT LB >=0.32 ∈ [0.32, 0.80]", pass: true }
+  - { id: G27_pre_flight_pass,     rule: "Both MLIPs reproduce Fe-chemi >95% in pre-flight",   observed: "96.6% / 99.8%", pass: true }
+  - { id: G28_qualitative_agree,   rule: "Both MLIPs qualitatively agree on kinetic trap",      pass: true }
+
+# ── 10. PROVENANCE ───────────────────────────────────────
+provenance:
+  date: 2026-05-06
+  author: igor@exopoiesis.space
+  parents:
+    - "tm.mack_3x3x1.h_proton.us_pmf.2026-05-06"        # MACE+CHGNet US runs
+    - "tm.mack_3x3x1.h_proton.metad_v1.2026-04-30"       # DFT reference
+  literature: ["Kumar1992_WHAM"]
+  compute:
+    host: gpu-host
+    gpu: RTX 4070 12 GB
+    cost_usd: 0.0
+    walltime_h: 9.13                                      # MLIP US sequential
+  hash:
+    inputs:  sha256:placeholder_to_be_computed
+    outputs: sha256:placeholder_to_be_computed
+
+# ── CROSS-REFERENCES (Third Matter paper family) ──────────────────────────
+# Added on assembly of the Paper #2 data repository (interfacial-proton-trap-fes).
+cross_ref:
+  paper:
+    name: KineticTrap
+    title: "Confinement-Stabilized Interfacial Hydrogen Trap and Proton Retention in a Pentlandite-Mackinawite Bilayer Membrane"
+    section: "§3.3"
+    repo: https://github.com/exopoiesis/interfacial-proton-trap-fes
+    doi: "Zenodo DOI on acceptance"
+  related:
+    - name: MLIPvsDFT
+      relation: companion
+      repo: https://github.com/exopoiesis/mlip-vs-dft-iron-sulfides
+      note: "foundation-MLIP failure-mode taxonomy for iron-sulfide defect kinetics"
+    - name: tm-spec
+      relation: schema
+      url: https://exopoiesis.space/tm-spec
+      note: "the machine-readable specification standard this file conforms to"

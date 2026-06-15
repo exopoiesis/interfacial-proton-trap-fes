@@ -1,0 +1,86 @@
+# TM-Spec (ANTI-EXAMPLE / decision record) — US-preflight gate on the confined-system MLIP data.
+# Documents WHY the full direct-DFT umbrella-sampling PMF was DEFERRED (§3.3), and the
+# carrier-topology split it surfaced. The gate itself ran and PASSED; the expensive DFT campaign
+# it gates was deferred. Kept as an honest anti-example, not a paper-quotable barrier.
+
+spec: tm-spec/0.2
+kind: USPreflightGate
+id: tm.mack_3x3x1.h_proton.us_preflight_gate.2026-05
+# NOTE (Paper #2 mapping): the decision underlying "DFT umbrella sampling deferred to follow-up"
+# in §3.3, and the carrier-topology disagreement reported there. Gate ENGINE = prodromos
+# (separate methods paper); this file records its APPLICATION to the confined-system data.
+schema_url: https://exopoiesis.space/tm-spec/0.2.json
+
+inputs:
+  description: "the 18-window MACE-MP-0 + CHGNet umbrella-sampling colvar data (../mlip_umbrella_sampling/data/)"
+  parents:
+    - tm.mack_3x3x1.h_proton.us_pmf.2026-05-06
+    - tm.mack_3x3x1.h_proton.mlip_bench_us.2026-05-06
+
+engine:
+  name: prodromos
+  tool: us_preflight_gate.py
+  cli: "prodromos us-preflight / prodromos us-carrier-router"
+  cost_usd: 0.00            # $0 preflight on already-computed MLIP data
+  layers: [U0_triage, U1_umbrella_integration, U2_FP_blocking, U3_fisher_CRB, U3.5_eyring_kramers, U4_discrimination_placement, U5a_carrier_router]
+
+results:
+  gate_verdict: PASS
+  gated_campaign: full_DFT_umbrella_sampling_PMF
+  gated_campaign_status: DEFERRED       # *** the load-bearing outcome: full DFT US not run ***
+  ui_barriers_eV:                        # umbrella-integration on disjoint windows ($0), not WHAM
+    mace:   0.674                        # ~0.80 eV (WHAM) — UI lower of disjoint windows
+    chgnet: 0.298                        # ~0.32 eV (WHAM) — reproduces s136 essentially exactly
+    note: "WHAM REFUSED on these disjoint windows (overlap~0); UI only. Qualitative MACE >> CHGNet robust."
+  recommended_dft_windows_A: [1.71, 1.90, 3.17]   # discrimination-optimal flanks (SELECT the MLIP; do not reconstruct a PMF)
+  discrimination_d2: { rho_0: 409.5, rho_0p5: 204.8, rho_0p8: 81.9 }   # PASS even at worst-case co-trained error corr
+  honest_headline: "discriminable at >=2 ps/DFT-window even at rho=0.8 (d^2=32 >= 22); GO is robust but not free"
+  carrier_router_U5a:
+    verdict: WARN
+    route: U5
+    max_JS: 0.710
+    carrier_sequence:
+      mace:   "Fe (1.50-2.10 A) -> water-O (>=2.25 A); skips S"
+      chgnet: "Fe (1.50-1.80 A) -> S (1.95-2.40 A) -> water-O (>=2.55 A)"
+      reconciliation_note: "the gate's coarse 'Fe->water-O' bin is the discrete-host precursor of the manuscript's precise 'in-flight, neither-bound' reading (§3.3); the >=2.25 A bin is non-bonded (O-H bond ~1.0 A), so NOT a contradiction with 'MACE in-flight'."
+    reading: "the two MLIPs disagree on the H-CARRIER (mechanism), not only barrier height -> the bracket must be qualified (§3.3)"
+  eyring_kramers_U3p5: { rate_ratio_chgnet_over_mace: 2.1e6, note: "prefactor-free k*tau0=exp(-b dF); feeds the §3.2 residence-time claim, order-of-magnitude" }
+  status: REVIEW
+  paper_quotable: false                  # supporting decision record; the bracket/carrier claims are quoted from us_pmf + carrier_detachment, not from this gate
+  why_deferred: |
+    The gate showed (a) the full 18-window DFT PMF is not the cost-effective disambiguation
+    (3 spot windows select the MLIP), and (b) the disagreement is a carrier-topology / mechanism
+    split, not a clean height difference -- so a single-CV DFT PMF would not cleanly resolve it.
+    A biased 2-D / extended-CV DFT PMF is the correct future tool. Hence "deferred to follow-up" (§3.3).
+
+caveats:
+  - "error-correlation rho is ASSUMED not measured (MACE+CHGNet co-trained on MP/PBE -> agreement != validation); read worst-case rho=0.8"
+  - "UI barriers are disjoint-window lower estimates; cite the WHAM bracket [0.32, 0.80] eV from us_pmf for the paper value"
+  - "the recommended windows SELECT an MLIP; they do NOT reconstruct a DFT PMF"
+
+provenance:
+  date: "2026-05 (s136)"
+  author: igor@exopoiesis.space
+  compute: { host: "local ($0 preflight on existing MLIP data)", cost_usd: 0.00 }
+  artifacts: [us_preflight_s136.json, analyze_dft_us.py]
+
+# ── CROSS-REFERENCES (Third Matter paper family) ──────────────────────────
+cross_ref:
+  paper:
+    name: KineticTrap
+    title: "Confinement-Stabilized Interfacial Hydrogen Trap and Proton Retention in a Pentlandite-Mackinawite Bilayer Membrane"
+    section: "§3.3 (DFT umbrella sampling deferred; carrier-topology split)"
+    repo: https://github.com/exopoiesis/interfacial-proton-trap-fes
+    doi: "Zenodo DOI on acceptance"
+  related:
+    - name: prodromos
+      relation: gate_engine
+      note: "the US-preflight gate (us_preflight_gate.py) — discrimination-optimal DFT-window placement + carrier-router; subject of a separate methods paper"
+    - name: MLIPvsDFT
+      relation: companion
+      repo: https://github.com/exopoiesis/mlip-vs-dft-iron-sulfides
+      note: "foundation-MLIP failure-mode taxonomy"
+    - name: tm-spec
+      relation: schema
+      url: https://exopoiesis.space/tm-spec
+      note: "machine-readable specification standard"

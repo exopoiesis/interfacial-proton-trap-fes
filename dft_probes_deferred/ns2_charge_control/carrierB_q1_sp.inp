@@ -1,0 +1,95 @@
+# NS-2 CONTROL: reproduce original carrier_B electronic state -- charge=+1, nspin=1, SP on SAME snapshot i=1280.
+# This is the "q=+1 delocalized" reference for the A/B. N_e=492 even -> nspin=1 (FERMI 500K as original).
+# Compare Mulliken charge on H38 here vs the q0 test: if H delocalized/Fe-character here but localizes on S at q0 -> +1 artifact.
+&GLOBAL
+  PROJECT carrierB_q1_sp
+  RUN_TYPE ENERGY
+  PRINT_LEVEL MEDIUM
+  PREFERRED_DIAG_LIBRARY SCALAPACK
+  &FM
+    TYPE_OF_MATRIX_MULTIPLICATION SCALAPACK
+  &END FM
+&END GLOBAL
+
+&FORCE_EVAL
+  METHOD Quickstep
+  &DFT
+    BASIS_SET_FILE_NAME BASIS_MOLOPT
+    POTENTIAL_FILE_NAME GTH_POTENTIALS
+    CHARGE 1
+    &QS
+      EPS_DEFAULT 1.0E-12
+    &END QS
+    &MGRID
+      CUTOFF 600
+      REL_CUTOFF 60
+      NGRIDS 4
+    &END MGRID
+    &XC
+      &XC_FUNCTIONAL PBE
+      &END XC_FUNCTIONAL
+      &VDW_POTENTIAL
+        POTENTIAL_TYPE PAIR_POTENTIAL
+        &PAIR_POTENTIAL
+          TYPE DFTD3(BJ)
+          REFERENCE_FUNCTIONAL PBE
+        &END PAIR_POTENTIAL
+      &END VDW_POTENTIAL
+    &END XC
+    &SCF
+      SCF_GUESS ATOMIC
+      MAX_SCF 300
+      EPS_SCF 1.0E-5
+      ADDED_MOS 64
+      &DIAGONALIZATION
+        ALGORITHM STANDARD
+      &END DIAGONALIZATION
+      &MIXING
+        METHOD BROYDEN_MIXING
+        ALPHA 0.2
+        NBROYDEN 8
+      &END MIXING
+      &SMEAR
+        METHOD FERMI_DIRAC
+        ELECTRONIC_TEMPERATURE [K] 500
+      &END SMEAR
+      &OUTER_SCF
+        EPS_SCF 1.0E-5
+        MAX_SCF 15
+      &END OUTER_SCF
+    &END SCF
+    &PRINT
+      &MULLIKEN ON
+        FILENAME __STD_OUT__
+      &END MULLIKEN
+    &END PRINT
+  &END DFT
+  &SUBSYS
+    &CELL
+      A  11.022  0.000  0.000
+      B   0.000 11.022  0.000
+      C   0.000  0.000  6.500
+      PERIODIC XYZ
+    &END CELL
+    &TOPOLOGY
+      COORD_FILE_NAME sp_frame.xyz
+      COORD_FILE_FORMAT XYZ
+    &END TOPOLOGY
+    &KIND Fe
+      BASIS_SET DZVP-MOLOPT-SR-GTH
+      POTENTIAL GTH-PBE-q16
+    &END KIND
+    &KIND S
+      BASIS_SET DZVP-MOLOPT-SR-GTH
+      POTENTIAL GTH-PBE-q6
+    &END KIND
+    &KIND O
+      BASIS_SET DZVP-MOLOPT-SR-GTH
+      POTENTIAL GTH-PBE-q6
+    &END KIND
+    &KIND H
+      BASIS_SET DZVP-MOLOPT-SR-GTH
+      POTENTIAL GTH-PBE-q1
+    &END KIND
+  &END SUBSYS
+&END FORCE_EVAL

@@ -1,0 +1,40 @@
+{
+  "system": "3x3x1 mackinawite + 12 H2O + 1 H+; CP2K WT-MetaD v2 15 ps",
+  "cv_definition": "COORDINATION(H_38, 18 Fe, R0=2.0, NN=6, ND=12)",
+  "trajectory_subsample": 30,
+  "n_frames_analyzed": 1001,
+  "cell": [
+    11.022,
+    11.022,
+    6.5
+  ],
+  "min_d_FeH_stats": {
+    "mean_A": 1.5993749231698446,
+    "std_A": 0.06981932189333767,
+    "min_A": 1.407780225650583,
+    "max_A": 1.849244413628141,
+    "frac_below_1p8": 0.995004995004995,
+    "frac_below_2p5": 1.0
+  },
+  "min_d_OH_stats": {
+    "mean_A": 2.585836893516025,
+    "std_A": 0.1746685289963422,
+    "min_A": 1.8675478825075882,
+    "max_A": 3.062509607511042,
+    "frac_below_1p2_OH_bond": 0.0,
+    "frac_below_1p5_H_bond": 0.0,
+    "frac_above_2p5_far": 0.6993006993006993,
+    "n_frames_with_d_OH_below_1p2": 0
+  },
+  "cv_completeness_verdict": "BARRIER_REAL",
+  "correlations": {
+    "pearson_r_CV_vs_dOH": 0.2965578232943583,
+    "pearson_r_dFeH_vs_dOH": -0.10817989998379363,
+    "interpretation": "If |r| < ~0.5, CV decouples from d_OH \u2192 orthogonal water-binding coord active \u2192 CV INCOMPLETE"
+  },
+  "cv_recomputed_check": {
+    "first_frame_cv_recomputed": 1.1596450611635691,
+    "first_frame_cv_from_COLVAR_file": 1.59807,
+    "matches": false
+  }
+}

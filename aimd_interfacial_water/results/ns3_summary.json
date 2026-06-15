@@ -1,0 +1,166 @@
+{
+  "json": "dft-neb\\u_gate\\us_preflight_s136.json",
+  "sigma_target_eV": 0.1,
+  "estimator": "umbrella_integration",
+  "by_mlip": {
+    "mace": {
+      "n_trust_windows": 13,
+      "fits": {
+        "M0": {
+          "k": 0,
+          "chi2": 1616.03211957347,
+          "lnL": -841.5933825137926,
+          "BIC": 1683.1867650275851,
+          "AIC": 1683.1867650275851,
+          "AICc": 1683.1867650275851,
+          "theta": []
+        },
+        "M1": {
+          "k": 3,
+          "chi2": 888.2053657746412,
+          "lnL": -477.68000561437816,
+          "BIC": 963.0548593011409,
+          "AIC": 961.3600112287563,
+          "AICc": 964.026677895423,
+          "theta": [
+            69.62004186720986,
+            -345.93922742795263,
+            412.88807113748527
+          ]
+        },
+        "M2": {
+          "k": 5,
+          "chi2": 177.15790723824577,
+          "lnL": -122.15627634618042,
+          "BIC": 257.1372994796685,
+          "AIC": 254.31255269236084,
+          "AICc": 262.8839812637894,
+          "theta": [
+            -185.58259668742292,
+            2131.951846833038,
+            -8858.467175644008,
+            15720.588610257157,
+            -9983.407470939957
+          ]
+        }
+      },
+      "reduced_chi2": {
+        "M0": 124.31016304411308,
+        "M1": 88.82053657746413,
+        "M2": 22.14473840478072
+      },
+      "dBIC_M0_minus_M1": 720.1319057264442,
+      "dBIC_M1_minus_M2": 705.9175598214724,
+      "selected_model": "M2",
+      "bic_best": "M2",
+      "aicc_best": "M2",
+      "criteria_agree": true,
+      "crb_M1": {
+        "dF_point_eV": 0.11456971368572384,
+        "dF_mc_mean_eV": 0.11496549230387951,
+        "dF_mc_std_eV": 0.017040392771754703,
+        "P_no_barrier": 0.0,
+        "n_mc": 20000
+      },
+      "crb_M2": {
+        "dF_point_eV": 1.4556544564385858,
+        "dF_mc_mean_eV": 1.4757617798325893,
+        "dF_mc_std_eV": 0.1610197289306635,
+        "P_no_barrier": 0.0,
+        "n_mc": 20000
+      },
+      "barrier_polynomial_selected_eV": 1.4556544564385858,
+      "sigma_barrier_poly_CRB_eV": 0.1610197289306635,
+      "barrier_trustworthy_eV": 0.6740768800829148,
+      "sigma_barrier_trustworthy_eV": 0.13030405885565666,
+      "P_no_barrier_selected": 0.0,
+      "json_pmf_barrier_eV": 0.6740768800829148,
+      "json_pmf_sigma_eV": 0.13030405885565666,
+      "fisher_sigma_dF_eV": 0.13030405885565666,
+      "verdict": "BARRIER_IDENTIFIABLE",
+      "plan_multiplier_for_sigma0.1": 1.6979147754258435,
+      "plan_note": "x window-length (fixed windows) OR x n-windows in barrier zone (fixed t). CRB ~ 1/t ~ 1/N. sigma scales as 1/sqrt(t). Multiplier computed from the JSON trapezoid sigma_dF (NOT the polynomial CRB, which is ill-conditioned for the cubic over the wide 1.5-3.6 A range).",
+      "barrier_height_caveat": "Polynomial-integrated barrier (M1/M2) is NOT a reliable height: reduced chi2 >> 1 means the low-order polynomial mis-specifies the oscillating mean-force landscape; spurious edge-extrema inflate dF (esp. CHGNet M1 CRB blow-up). Trustworthy barrier height = JSON trapezoid PMF (mace 0.67, chgnet 0.30 eV). MDL/BIC answers ONLY the SHAPE/identifiability question (flat vs structured), which is robust."
+    },
+    "chgnet": {
+      "n_trust_windows": 14,
+      "fits": {
+        "M0": {
+          "k": 0,
+          "chi2": 2651.6366531252906,
+          "lnL": -1354.0575586238072,
+          "BIC": 2708.1151172476143,
+          "AIC": 2708.1151172476143,
+          "AICc": 2708.1151172476143,
+          "theta": []
+        },
+        "M1": {
+          "k": 3,
+          "chi2": 1347.6610744246354,
+          "lnL": -702.0697692734794,
+          "BIC": 1412.0567105358045,
+          "AIC": 1410.1395385469589,
+          "AICc": 1412.539538546959,
+          "theta": [
+            -4.475097962614328,
+            11.52385008373227,
+            21.47002008820628
+          ]
+        },
+        "M2": {
+          "k": 5,
+          "chi2": 185.83536484827064,
+          "lnL": -121.15691448529708,
+          "BIC": 255.50911561867045,
+          "AIC": 252.31382897059416,
+          "AICc": 259.81382897059416,
+          "theta": [
+            -131.95112106150728,
+            1412.71227178592,
+            -5490.315942089834,
+            9150.854488496527,
+            -5485.293875271241
+          ]
+        }
+      },
+      "reduced_chi2": {
+        "M0": 189.4026180803779,
+        "M1": 122.51464312951231,
+        "M2": 20.64837387203007
+      },
+      "dBIC_M0_minus_M1": 1296.0584067118098,
+      "dBIC_M1_minus_M2": 1156.5475949171341,
+      "selected_model": "M2",
+      "bic_best": "M2",
+      "aicc_best": "M2",
+      "criteria_agree": true,
+      "crb_M1": {
+        "dF_point_eV": 1.0143129786486391,
+        "dF_mc_mean_eV": 601.7978249691996,
+        "dF_mc_std_eV": 67012.89462450934,
+        "P_no_barrier": 0.0142,
+        "n_mc": 20000
+      },
+      "crb_M2": {
+        "dF_point_eV": 0.6040260529169739,
+        "dF_mc_mean_eV": 0.6148619860189641,
+        "dF_mc_std_eV": 0.06716742470368257,
+        "P_no_barrier": 0.0,
+        "n_mc": 20000
+      },
+      "barrier_polynomial_selected_eV": 0.6040260529169739,
+      "sigma_barrier_poly_CRB_eV": 0.06716742470368257,
+      "barrier_trustworthy_eV": 0.2979588033955191,
+      "sigma_barrier_trustworthy_eV": 0.010863294382179188,
+      "P_no_barrier_selected": 0.0,
+      "json_pmf_barrier_eV": 0.2979588033955191,
+      "json_pmf_sigma_eV": 0.010863294382179188,
+      "fisher_sigma_dF_eV": 0.010863294382179188,
+      "verdict": "BARRIER_IDENTIFIABLE",
+      "plan_multiplier_for_sigma0.1": 0.01180111648338859,
+      "plan_note": "x window-length (fixed windows) OR x n-windows in barrier zone (fixed t). CRB ~ 1/t ~ 1/N. sigma scales as 1/sqrt(t). Multiplier computed from the JSON trapezoid sigma_dF (NOT the polynomial CRB, which is ill-conditioned for the cubic over the wide 1.5-3.6 A range).",
+      "barrier_height_caveat": "Polynomial-integrated barrier (M1/M2) is NOT a reliable height: reduced chi2 >> 1 means the low-order polynomial mis-specifies the oscillating mean-force landscape; spurious edge-extrema inflate dF (esp. CHGNet M1 CRB blow-up). Trustworthy barrier height = JSON trapezoid PMF (mace 0.67, chgnet 0.30 eV). MDL/BIC answers ONLY the SHAPE/identifiability question (flat vs structured), which is robust."
+    }
+  },
+  "dpi_caveat": "MACE and CHGNet co-trained on MP/PBE -> errors correlated; per-MLIP MDL reported separately. Agreement in model choice != validation (shared corpus). Final truth on PMF shape = DFT US only."
+}

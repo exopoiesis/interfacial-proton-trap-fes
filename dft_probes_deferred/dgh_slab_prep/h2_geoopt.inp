@@ -1,0 +1,78 @@
+# DRAFT (s169) -- DeltaG_H* reference: H2 molecule in 13 A box, GEO_OPT.
+# Isolated molecule: POISSON PERIODIC NONE + Martyna-Tuckerman (box >= 2x density extent; 13 A ok for H2).
+# nspin=1 singlet (avoid triplet trap). NO smearing (gapped molecule). Same CUTOFF/XC for cancellation. PENDING /test.
+&GLOBAL
+  PROJECT h2
+  RUN_TYPE GEO_OPT
+  PRINT_LEVEL LOW
+  PREFERRED_DIAG_LIBRARY SCALAPACK
+&END GLOBAL
+
+&FORCE_EVAL
+  METHOD Quickstep
+  &DFT
+    BASIS_SET_FILE_NAME BASIS_MOLOPT
+    POTENTIAL_FILE_NAME GTH_POTENTIALS
+    CHARGE 0
+    &QS
+      EPS_DEFAULT 1.0E-12
+    &END QS
+    &MGRID
+      CUTOFF 600
+      REL_CUTOFF 60
+      NGRIDS 4
+    &END MGRID
+    &XC
+      &XC_FUNCTIONAL PBE
+      &END XC_FUNCTIONAL
+      &VDW_POTENTIAL
+        POTENTIAL_TYPE PAIR_POTENTIAL
+        &PAIR_POTENTIAL
+          TYPE DFTD3(BJ)
+          REFERENCE_FUNCTIONAL PBE
+        &END PAIR_POTENTIAL
+      &END VDW_POTENTIAL
+    &END XC
+    &SCF
+      SCF_GUESS ATOMIC
+      MAX_SCF 200
+      EPS_SCF 1.0E-6
+      &DIAGONALIZATION
+        ALGORITHM STANDARD
+      &END DIAGONALIZATION
+      &MIXING
+        METHOD BROYDEN_MIXING
+        ALPHA 0.4
+        NBROYDEN 8
+      &END MIXING
+    &END SCF
+    &POISSON
+      PERIODIC NONE
+      POISSON_SOLVER MT
+    &END POISSON
+  &END DFT
+  &SUBSYS
+    &CELL
+      A 13.000 0.000 0.000
+      B 0.000 13.000 0.000
+      C 0.000 0.000 13.000
+      PERIODIC NONE
+    &END CELL
+    &TOPOLOGY
+      COORD_FILE_NAME h2_box.xyz
+      COORD_FILE_FORMAT XYZ
+    &END TOPOLOGY
+    &KIND H
+      BASIS_SET DZVP-MOLOPT-SR-GTH
+      POTENTIAL GTH-PBE-q1
+    &END KIND
+  &END SUBSYS
+&END FORCE_EVAL
+
+&MOTION
+  &GEO_OPT
+    OPTIMIZER BFGS
+    MAX_ITER 100
+    MAX_FORCE 4.5E-4
+  &END GEO_OPT
+&END MOTION

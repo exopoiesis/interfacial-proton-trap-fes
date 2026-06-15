@@ -1,0 +1,71 @@
+{
+  "n_total": 11,
+  "n_success": 9,
+  "n_failed": 2,
+  "output_file": "/workspace/results/sulfide_train.xyz",
+  "results": [
+    {
+      "config_type": "pentlandite_bulk_rattle_0.20_06",
+      "energy": -175.84209310391125,
+      "max_force": 7.540994961134278,
+      "n_atoms": 44,
+      "time_s": 3592.925092935562
+    },
+    {
+      "config_type": "pentlandite_bulk_strain_-5pct",
+      "energy": -176.86315965487506,
+      "max_force": 4.20840500008556,
+      "n_atoms": 44,
+      "time_s": 344.4087197780609
+    },
+    {
+      "config_type": "pentlandite_H_vacancy_path_2",
+      "energy": -170.80003110285259,
+      "max_force": 25.46637146027105,
+      "n_atoms": 44,
+      "time_s": 3719.9946744441986
+    },
+    {
+      "config_type": "pentlandite_Fe5Ni7_bulk_rattle_0.05_02",
+      "energy": -178.3609481092509,
+      "max_force": 3.3995179781995377,
+      "n_atoms": 44,
+      "time_s": 3200.3846940994263
+    },
+    {
+      "config_type": "pentlandite_Fe5Ni7_bulk_strain_+2pct",
+      "energy": -176.55265162006367,
+      "max_force": 2.8240167381564785,
+      "n_atoms": 44,
+      "time_s": 216.2373752593994
+    },
+    {
+      "config_type": "pentlandite_Fe5Ni7_bulk_strain_-3pct",
+      "energy": -179.1463102065561,
+      "max_force": 3.7014530491900834,
+      "n_atoms": 44,
+      "time_s": 197.97085309028625
+    },
+    {
+      "config_type": "pentlandite_Fe3Ni9_bulk_rattle_0.05_02",
+      "energy": -174.95348754441918,
+      "max_force": 3.629599175225725,
+      "n_atoms": 44,
+      "time_s": 3175.160090446472
+    },
+    {
+      "config_type": "pentlandite_Fe3Ni9_bulk_strain_+2pct",
+      "energy": -173.35551426072013,
+      "max_force": 3.0613163761813897,
+      "n_atoms": 44,
+      "time_s": 538.13294506073
+    },
+    {
+      "config_type": "pentlandite_Fe3Ni9_bulk_strain_-3pct",
+      "energy": -174.97082565890466,
+      "max_force": 3.9797695872199723,
+      "n_atoms": 44,
+      "time_s": 354.5171973705292
+    }
+  ]
+}

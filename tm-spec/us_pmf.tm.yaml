@@ -1,0 +1,228 @@
+# Pilot TM-Spec artefact #3: US PMF, mack 3×3×1 + 12 H2O + H+
+# PASS, paper-quotable.
+# Status: [DRAFT v0.2 — numbers from a prior campaign log]
+#
+# *** NEW kind: USCalculation ***
+# A separate kind for enhanced sampling (CV definition,
+# windows, WHAM analysis don't fit clean into NEBCalculation schema).
+
+spec: tm-spec/0.2
+kind: USCalculation                          # NEW kind, introduced via this pilot
+id: tm.mack_3x3x1.h_proton.us_pmf.2026-05-06
+# NOTE (Paper #2 mapping): this computation is reported in Paper #2 "KineticTrap" §3.3 (confined-system MLIP umbrella-sampling PMF (kinetic-trap bracket)).
+# Any 'paper #1' references in the notes below are pre-split provenance (the kinetic-trap work was moved from the MLIPvsDFT paper into this one).
+schema_url: https://exopoiesis.space/tm-spec/0.2.json   # [HYPOTHESIS] published
+
+reconciliation: "Dated v1 provenance snapshot; values reconciled to the final manuscript on repo assembly. Where v1 differs (composition, DFT metad gamma/wall/LB, magnetic/U labels), the manuscript (KineticTrap) is authoritative."
+
+# ── 1. STRUCTURE (hybrid: solid + explicit water + proton) ──
+structure:
+  composition:
+    solid:    Fe18S18                         # 3×3×1 mack supercell
+    aqueous:  "12 H2O + 1 H+"                 # explicit waters + 1 excess proton
+  prototype: AB_tP4_129_a_c                   # AFLOW: mackinawite
+  space_group: { number: 129, symbol: P4/nmm }
+  cell:
+    a: 11.022  Å                              # 3×3 supercell of 3.674 Å unit
+    c: 6.5     Å                              # 1 layer + water interlayer
+    pbc: [true, true, true]
+  supercell: [3, 3, 1]
+  ref: structures/mack_3x3x1_h2o12_h1.extxyz
+
+# ── 2. DEFECTS (Kröger-Vink) ─────────────────────────────
+defects:
+  reactions:
+    - "nil → H_aq^+(in_water_layer) + e'(in_solid)"
+  charge_balance: |
+    +1 H_aq^+  +  -1 e' (delocalized in mack)  →  neutral cell
+  population:
+    H_excess: { count: 1, conc: 1, location: aqueous_layer }
+
+# ── 3. MAGNETIC STATE ────────────────────────────────────
+magnetic:
+  state: NM                                    # DFT reference (§2.2) is closed-shell RKS, non-magnetic
+  collinear: false
+  propagation_vector: [0, 0, 0]
+  magmoms_uB: {}
+  surrogate_warning: |
+    The DFT reference (WT-MetaD, §2.2) is treated as closed-shell RKS (non-magnetic).
+    For the MLIP umbrella sampling here, magmoms are NOT enforced — magnitude-only
+    magmom training (CHGNet) or implicit (MACE-MP-0).
+
+# ── 4. ENVIRONMENT ───────────────────────────────────────
+environment:
+  phase: aqueous_at_solid_interface           # 12 H2O explicit between mack layers
+  T: 300 K                                    # NVT-langevin
+  P: explicit_water_at_density_1.0
+  pH: implied_~0                              # 1 H+ in 12 H2O = high local concentration
+  redox: null                                  # MLIP forward dynamics, no electrochemistry
+  composition_molal: {}                       # explicit, not bulk_aqueous
+  database: null                              # explicit, not PHREEQC
+
+# ── 5. REACTION NETWORK (target process) ─────────────────
+reactions:
+  - id: R_chemi_desorption
+    label: "Fe-chemisorption ↔ aqueous H+"
+    rule:  "(H–Fe)_Fe^× + H2O ⇌ H_aq^+ + Fe_Fe^×"
+    rate:  "k_off ~ ν · exp(−ΔF#/kT)"
+    Ea_eV: 0.32 to 0.80                       # MLIP+DFT bracket (this work)
+
+# ── 6. CALCULATION (MLIP, two backends compared) ─────────
+calculation:
+  method: MLIP                                # foundation_model
+  backends:
+    - name: MACE-MP-0
+      variant: medium
+      foundation: true
+      fine_tuned: false
+      version: "MACE-MP-0 medium (version unpinned in env; see requirements)"
+    - name: CHGNet
+      variant: v0.3.0
+      foundation: true
+      fine_tuned: false
+  level: { type: ML_potential }               # no XC/basis/k_points — MLIP-native
+  ensemble: NVT-langevin
+  thermostat:
+    kind: Langevin
+    T_K: 300
+    friction_ps_inv: 1.0
+  timestep_fs: 0.5
+  code:
+    framework: ASE 3.23
+    container: gpu-host/mace-canonical, gpu-host/chgnet-canonical
+    note: |
+      MACE+CHGNet share a workspace volume on the host (RTX 4070 12 GB).
+      Sequential deploy required (parallel → OOM).
+
+# ── 7. CV DEFINITION (US-specific, new section) ──────────
+cv_definition:
+  name: d_FeH_softmin
+  type: smooth_min_distance
+  variables: "d(Fe_i, H+) for i in 1..18"   # symbolic; explicit list at runtime
+  formula: |
+    softmin(d_FeH; β=10) = -1/β · log(Σ_i exp(-β·d_FeH_i))
+  approximates: "min distance from excess proton to any Fe in supercell"
+  units: Å
+  beta: 10.0
+  python_impl: scripts/run_mlip_us_native.py
+  validated_by: |
+    FD test (test_restraint_consistency.py): max |grad_analytic − grad_FD| < 1e-8 ✓
+
+# ── 8. SAMPLING PROTOCOL (US-specific, new section) ──────
+sampling:
+  kind: umbrella_sampling                     # vs metadynamics, replica_exchange, etc.
+  windows:
+    n: 18
+    centers_A: [1.50, 1.65, 1.80, 1.95, 2.10, 2.25, 2.40, 2.55, 2.70, 2.85, 3.00, 3.15, 3.30, 3.45, 3.60, 3.75, 3.90, 4.00]
+    spring_kJ_per_mol_A2: 1000
+  per_window:
+    n_steps: 18000
+    timestep_fs: 0.5
+    duration_ps: 9
+    equilibration_steps: included_in_total   # no separate equilibration (foundation MLIP)
+  total_simulation_ps: 162                    # 18 × 9 ps
+  walltime_total_h:
+    MACE: 4.05
+    CHGNet: 5.08
+    sequential_total: 9.13
+
+# ── 9. PMF ANALYSIS (US-specific, new section) ───────────
+pmf_analysis:
+  method: WHAM
+  algorithm: Kumar1992
+  iterations: 2000
+  convergence_tolerance_target: 1.0e-7
+  convergence_tolerance_achieved: 3.5e-4      # not at target, but PMF features stable
+  reliability_range_A: [1.5, 3.5]             # edge artifact >3.5 (PBC/geometric reach)
+  edge_artifact_note: |
+    Windows beyond physical reach: system mean stuck around 3.5-3.7 Å,
+    WHAM extrapolates incorrectly (rises to 227 kJ/mol = 2.35 eV).
+    Report PMF only in physically reachable range.
+
+# ── 10. RESULTS ──────────────────────────────────────────
+results:
+  PMF:
+    MACE-MP-0:
+      Fe-chemi_min:    { d_A: 1.62, F_kJ_per_mol: 0,    F_eV: 0.00 }
+      saddle:          { d_A: 2.23, F_kJ_per_mol: 77,   F_eV: 0.80 }
+      plateau_F_eV:    [0.67, 0.78]
+    CHGNet-v0.3.0:
+      Fe-chemi_min:    { d_A: 1.55, F_kJ_per_mol: 0,    F_eV: 0.00 }
+      saddle:          { d_A: 2.41, F_kJ_per_mol: 31,   F_eV: 0.32 }
+      plateau_F_eV:    [0.30, 0.36]
+  cross_validation:
+    abs_diff_saddle_eV:  0.48                 # |MACE − CHGNet|, factor ~2.5
+    abs_diff_plateau_eV: 0.36
+    DFT_metad_LB_eV:     0.32                 # manuscript canonical DFT basin LB (§3.2); v2 basin LB 0.383
+    consistent_with_DFT: true                 # both MLIPs bracket the DFT LB
+    note: |
+      DFT LB updated v1 0.40 -> final >=0.32 eV (§3.2; v2 basin LB 0.383, manuscript canonical >=0.32).
+      The DFT CV differs from the MLIP smooth-min(d_FeH) CV, so its placement is a qualitative
+      consistency check, not a strict bracket member (§3.3, consilium s144).
+  paper_bracket:
+    delta_F_kinetic_trap_eV: [0.32, 0.80]     # defensible bracket
+    interpretation: |
+      Two-regime narrative confirmed quantitatively (this paper, KineticTrap §3.3):
+      3×3×1 mack + H+ → kinetic trap >> 5 kT_room (0.13 eV at 300 K).
+      MACE saddle 0.80 eV and CHGNet 0.32 eV bracket the detachment free energy.
+      The DFT basin LB (>=0.32 eV, manuscript canonical; v2 0.383) lies at the bottom
+      of this bracket — a qualitative consistency check, not a strict bracket member.
+  status: PASS
+  paper_quotable: true
+  validated_by: [chemist@opus, physicist@opus, consilium_v2_2026-05-06]
+  conditional_DFT_US:
+    triggered: true                           # |MACE-CHGNet|=0.48 > 0.2 threshold
+    options:
+      A: "Accept bracket for this paper (KineticTrap §3.3; no extra compute, $0)"
+      B: "Strategic 6-window DFT US ($100-150, 5 days A100)"
+      C: "Full 18-window DFT US ($300-500, 7 days × 3 A100)"
+    recommendation: "A (this paper, KineticTrap §3.3); B/C deferred to follow-up work"
+
+# ── 11. SANITY GATES ─────────────────────────────────────
+sanity:
+  - { id: G01_FeS_bond,           rule: "min(Fe–S) > 2.00 Å",                              observed: ">2.0 (MLIP-native)",     pass: true }
+  - { id: G02_AFM_not_collapsed,  rule: "[N/A for MLIP — magmom not enforced]",            pass: skip }
+  - { id: G10_cv_validated,       rule: "FD test |grad_analytic − grad_FD| < 1e-6",        observed: "<1e-8",                  pass: true }
+  - { id: G11_window_centers,     rule: "windows span [Fe-chemi, bulk_aqueous]",           observed: "[1.5, 4.0] Å",           pass: true }
+  - { id: G12_temperature_drift,  rule: "T_mean within ±10% of target",                    observed: "330 K vs 300 target",    pass: warn }
+  - { id: G13_wham_convergence,   rule: "max|Δf| < 1e-7",                                  observed: "3.5e-4",                 pass: warn, note: "PMF features stable" }
+  - { id: G14_edge_artifact_flag, rule: "PMF reported only in physically reachable range", observed: "[1.5, 3.5] Å only",      pass: true }
+  - { id: G15_dual_backend,       rule: "≥2 MLIP backends compared",                       observed: "MACE + CHGNet",          pass: true }
+  - { id: G16_dft_consistency,    rule: "MLIP bracket consistent with DFT LB",                observed: "DFT LB >=0.32 within [0.32, 0.80]", pass: true }
+
+# ── 12. PROVENANCE ───────────────────────────────────────
+provenance:
+  date: 2026-05-06
+  author: igor@exopoiesis.space
+  parents:
+    - tm.mack_3x3x1.h_proton.metad_v1.2026-04-30   # DFT lower bound (confined-system WT-MetaD)
+    - tm.mlip_preflight.mack_3x3x1@2026-05-06 # 5 ps NVT pre-flight (96.6%/99.8% Fe-chemi)
+  literature:
+    - Kumar1992                                # WHAM
+  compute:
+    host: gpu-host
+    gpu: RTX 4070 12 GB
+    cost_usd: 0.00                             # free local
+    walltime_h: 9.13
+  hash:
+    inputs:  sha256:placeholder_to_be_computed
+    outputs: sha256:placeholder_to_be_computed
+
+# ── CROSS-REFERENCES (Third Matter paper family) ──────────────────────────
+# Added on assembly of the Paper #2 data repository (interfacial-proton-trap-fes).
+cross_ref:
+  paper:
+    name: KineticTrap
+    title: "Confinement-Stabilized Interfacial Hydrogen Trap and Proton Retention in a Pentlandite-Mackinawite Bilayer Membrane"
+    section: "§3.3"
+    repo: https://github.com/exopoiesis/interfacial-proton-trap-fes
+    doi: "Zenodo DOI on acceptance"
+  related:
+    - name: MLIPvsDFT
+      relation: companion
+      repo: https://github.com/exopoiesis/mlip-vs-dft-iron-sulfides
+      note: "foundation-MLIP failure-mode taxonomy for iron-sulfide defect kinetics"
+    - name: tm-spec
+      relation: schema
+      url: https://exopoiesis.space/tm-spec
+      note: "the machine-readable specification standard this file conforms to"

@@ -1,0 +1,107 @@
+# DeltaG_H* reference: clean mackinawite (001) slab Fe32S32, GEO_OPT. (s169, consilium-adjudicated)
+# nspin=1 NONMAGNETIC + FERMI smear -- consistent w/ manuscript 2.2 (closed-shell RKS, Dzade) + carrier_B.
+# B3 fix: EXTRAPOLATION USE_PREV_P (NOT ASPC -- F-055 SCF limit-cycle on GEO_OPT of Fe-S metal).
+# B1: POISSON XYZ + SURFACE_DIPOLE_CORRECTION valid (18 A vacuum; CP2K manual: no PERIODIC XY requirement).
+# EPS_SCF 1e-6 for meV S-vs-Fe DeltaG_H* distinction. &FM SCALAPACK (F-053/057). Full-relax (symmetric slab; cancels in difference).
+&GLOBAL
+  PROJECT slab_clean
+  RUN_TYPE GEO_OPT
+  PRINT_LEVEL LOW
+  PREFERRED_DIAG_LIBRARY SCALAPACK
+  &FM
+    TYPE_OF_MATRIX_MULTIPLICATION SCALAPACK
+  &END FM
+&END GLOBAL
+
+&FORCE_EVAL
+  METHOD Quickstep
+  &DFT
+    BASIS_SET_FILE_NAME BASIS_MOLOPT
+    POTENTIAL_FILE_NAME GTH_POTENTIALS
+    CHARGE 0
+    SURFACE_DIPOLE_CORRECTION .TRUE.
+    SURF_DIP_DIR Z
+    &QS
+      EPS_DEFAULT 1.0E-12
+      EXTRAPOLATION USE_PREV_P
+    &END QS
+    &MGRID
+      CUTOFF 600
+      REL_CUTOFF 60
+      NGRIDS 4
+    &END MGRID
+    &XC
+      &XC_FUNCTIONAL PBE
+      &END XC_FUNCTIONAL
+      &VDW_POTENTIAL
+        POTENTIAL_TYPE PAIR_POTENTIAL
+        &PAIR_POTENTIAL
+          TYPE DFTD3(BJ)
+          REFERENCE_FUNCTIONAL PBE
+        &END PAIR_POTENTIAL
+      &END VDW_POTENTIAL
+    &END XC
+    &SCF
+      SCF_GUESS ATOMIC
+      MAX_SCF 300
+      EPS_SCF 1.0E-6
+      ADDED_MOS 120
+      &DIAGONALIZATION
+        ALGORITHM STANDARD
+      &END DIAGONALIZATION
+      &MIXING
+        METHOD BROYDEN_MIXING
+        ALPHA 0.1
+        BETA 1.5
+        NBROYDEN 12
+      &END MIXING
+      &SMEAR
+        METHOD FERMI_DIRAC
+        ELECTRONIC_TEMPERATURE [K] 500
+      &END SMEAR
+    &END SCF
+    &POISSON
+      PERIODIC XYZ
+    &END POISSON
+  &END DFT
+  &SUBSYS
+    &CELL
+      A  7.348  0.000  0.000
+      B  0.000  7.348  0.000
+      C  0.000  0.000 35.418
+      PERIODIC XYZ
+    &END CELL
+    &TOPOLOGY
+      COORD_FILE_NAME slab_clean.xyz
+      COORD_FILE_FORMAT XYZ
+    &END TOPOLOGY
+    &KIND Fe
+      BASIS_SET DZVP-MOLOPT-SR-GTH
+      POTENTIAL GTH-PBE-q16
+    &END KIND
+    &KIND S
+      BASIS_SET DZVP-MOLOPT-SR-GTH
+      POTENTIAL GTH-PBE-q6
+    &END KIND
+    &KIND H
+      BASIS_SET DZVP-MOLOPT-SR-GTH
+      POTENTIAL GTH-PBE-q1
+    &END KIND
+  &END SUBSYS
+&END FORCE_EVAL
+
+&MOTION
+  &GEO_OPT
+    OPTIMIZER BFGS
+    MAX_ITER 200
+    MAX_FORCE 4.5E-4
+  &END GEO_OPT
+  &PRINT
+    &RESTART
+      &EACH
+        GEO_OPT 10
+      &END EACH
+      BACKUP_COPIES 1
+    &END RESTART
+  &END PRINT
+&END MOTION

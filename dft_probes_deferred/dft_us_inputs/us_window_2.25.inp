@@ -1,0 +1,163 @@
+#
+# DFT umbrella-sampling window @ d_FeH = 2.25 A (KineticTrap mackinawite Fe-H trap)
+# DRAFT s167 2026-06-11 -- PENDING /test (opus) + consilium on CV-match & K-units.
+# Backbone from W2 grotthuss_metadyn.inp (s121) with CUTOFF 320->600 (s164 convergence).
+# System: 3x3x1 mackinawite Fe18S18 + 12 H2O + 1 excess H = 73 atoms, charge +1, nspin=1 (RKS PM surrogate).
+# CV = DISTANCE(excess-H atom 38, chemisorption Fe 13) -- matches MLIP smooth-min(d_FeH) in the trap region.
+# Restraint: apples-to-apples with MLIP US (kappa=1000 kJ/mol/A^2, V=0.5*kappa*d^2).
+#   CP2K RESTRAINT energy = K*(X-TARGET)^2 -- NO 1/2 factor (verified CP2K manual, consilium s167).
+#   => to match MLIP physical stiffness: K_CP2K = 0.5*kappa = 500 kJ/mol/A^2 = 140.0 kJ/mol/Bohr^2
+#   (Bohr-based: CP2K colvar distance is internal Bohr; 500*0.28003=140.0). Set `K [kjmol] 140.0`.
+#   ## /test ITEM #1: smoke sigma(xi) = sqrt(kT/(2*K)) ~ 0.0499 A (NOTE: /(2K) because no 1/2 in E).
+#      If smoke sigma ~0.035 A -> K is 2x too stiff (old 280.1 bug); if ~0.07 -> 2x too soft.
+# To make the other windows: copy this file, change TARGET [angstrom] to 1.90 / 2.40, and PROJECT name.
+# Windows >2.6 A: add an upper WALL at 3.0 A (thin-cell honest target d_FeH<=3.0).
+#
+&GLOBAL
+  PROJECT us_w_2p25
+  RUN_TYPE MD
+  PRINT_LEVEL LOW
+  WALLTIME -1
+  PREFERRED_DIAG_LIBRARY SCALAPACK
+  &FM
+    TYPE_OF_MATRIX_MULTIPLICATION SCALAPACK
+  &END FM
+&END GLOBAL
+
+&FORCE_EVAL
+  METHOD Quickstep
+  &DFT
+    BASIS_SET_FILE_NAME BASIS_MOLOPT
+    POTENTIAL_FILE_NAME GTH_POTENTIALS
+    CHARGE 1
+    &QS
+      EPS_DEFAULT 1.0E-12
+      EXTRAPOLATION ASPC
+      EXTRAPOLATION_ORDER 3
+    &END QS
+    &MGRID
+      CUTOFF 600
+      REL_CUTOFF 60
+      NGRIDS 4
+    &END MGRID
+    &XC
+      &XC_FUNCTIONAL PBE
+      &END XC_FUNCTIONAL
+      &VDW_POTENTIAL
+        POTENTIAL_TYPE PAIR_POTENTIAL
+        &PAIR_POTENTIAL
+          TYPE DFTD3(BJ)
+          REFERENCE_FUNCTIONAL PBE
+        &END PAIR_POTENTIAL
+      &END VDW_POTENTIAL
+    &END XC
+    &SCF
+      SCF_GUESS ATOMIC
+      MAX_SCF 300
+      EPS_SCF 1.0E-5
+      ADDED_MOS 64
+      &DIAGONALIZATION
+        ALGORITHM STANDARD
+      &END DIAGONALIZATION
+      &MIXING
+        METHOD BROYDEN_MIXING
+        ALPHA 0.2
+        NBROYDEN 8
+      &END MIXING
+      &SMEAR
+        METHOD FERMI_DIRAC
+        ELECTRONIC_TEMPERATURE [K] 500
+      &END SMEAR
+      &OUTER_SCF
+        EPS_SCF 1.0E-5
+        MAX_SCF 10
+      &END OUTER_SCF
+    &END SCF
+  &END DFT
+
+  &SUBSYS
+    &CELL
+      A  11.022  0.000  0.000
+      B   0.000 11.022  0.000
+      C   0.000  0.000  6.500
+      PERIODIC XYZ
+    &END CELL
+    &TOPOLOGY
+      COORD_FILE_NAME w2_frame0.xyz
+      COORD_FILE_FORMAT XYZ
+    &END TOPOLOGY
+    &COLVAR
+      &DISTANCE
+        ATOMS 38 13
+      &END DISTANCE
+    &END COLVAR
+    &KIND Fe
+      BASIS_SET DZVP-MOLOPT-SR-GTH
+      POTENTIAL GTH-PBE-q16
+    &END KIND
+    &KIND S
+      BASIS_SET DZVP-MOLOPT-SR-GTH
+      POTENTIAL GTH-PBE-q6
+    &END KIND
+    &KIND O
+      BASIS_SET DZVP-MOLOPT-SR-GTH
+      POTENTIAL GTH-PBE-q6
+    &END KIND
+    &KIND H
+      BASIS_SET DZVP-MOLOPT-SR-GTH
+      POTENTIAL GTH-PBE-q1
+    &END KIND
+  &END SUBSYS
+&END FORCE_EVAL
+
+&MOTION
+  &MD
+    ENSEMBLE NVT
+    STEPS 7000
+    TIMESTEP [fs] 0.5
+    TEMPERATURE [K] 300.0
+    &THERMOSTAT
+      TYPE NOSE
+      REGION GLOBAL
+      &NOSE
+        LENGTH 3
+        TIMECON [fs] 500.0
+        MTS 2
+      &END NOSE
+    &END THERMOSTAT
+  &END MD
+
+  &CONSTRAINT
+    &COLLECTIVE
+      COLVAR 1
+      INTERMOLECULAR T
+      TARGET [angstrom] 2.25
+      &RESTRAINT
+        K [kjmol] 140.0
+      &END RESTRAINT
+    &END COLLECTIVE
+  &END CONSTRAINT
+
+  &PRINT
+    &TRAJECTORY
+      &EACH
+        MD 5
+      &END EACH
+      FORMAT XYZ
+    &END TRAJECTORY
+    &RESTART
+      &EACH
+        MD 50
+      &END EACH
+      BACKUP_COPIES 1
+    &END RESTART
+  &END PRINT
+&END MOTION
+
+# COLVAR value is printed by the &CONSTRAINT machinery to PROJECT-1.restraint / .LagrangeMultLog;
+# the carrier-decisive observables (d(38,13) + nearest d_SH + nearest d_OH of atom 38) are
+# post-processed from the printed trajectory. (No hills / no bias-deposition here -- this is a
+# restrained-MD umbrella window, not metadynamics.)
+# NOTE: GPW (not GAPW) is the VALIDATED project backbone -- GTH pseudopotentials are GPW-designed
+# (CP2K_SHARED_BACKBONE.md line 10, s164 cross-plane). The lint C-4 GAPW WARN is a known accepted
+# deviation; do NOT switch to GAPW (breaks comparability with the validated cross-plane backbone).
