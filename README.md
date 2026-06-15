@@ -1,6 +1,7 @@
 # Confinement-Stabilized Interfacial Hydrogen Trap in a Pentlandite–Mackinawite Bilayer Membrane
 
 ![tests](https://github.com/exopoiesis/interfacial-proton-trap-fes/actions/workflows/ci.yml/badge.svg)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.20702373.svg)](https://doi.org/10.5281/zenodo.20702373)
 
 Data and code supporting the manuscript:
 
@@ -44,7 +45,7 @@ The manuscript and its Supporting Information are published separately (preprint
 
 ## Reproducibility notes (honest scope)
 
-- **Raw trajectories are not in git.** The 145-atom thick-film AIMD trajectory, the confined-system WT-MetaD position/velocity trajectories, and the MLIP umbrella-sampling production trajectories (multi-GB) will be deposited on **Zenodo with an archival DOI on acceptance**. This repository contains the **scripts, inputs, processed/collective-variable data, free-energy surfaces, and analysis** needed to reproduce every reported number from those.
+- **Raw trajectories are not in git.** This repository (archived at **Zenodo DOI [10.5281/zenodo.20702373](https://doi.org/10.5281/zenodo.20702373)**) contains the **scripts, inputs, processed/collective-variable data, free-energy surfaces, and analysis** needed to reproduce every reported number. The raw multi-GB trajectories themselves (145-atom thick-film AIMD; confined-system WT-MetaD position/velocity; MLIP umbrella-sampling production) are **available from the author on request** — they exceed the git/Zenodo archive.
 - **Reproduce the headline bracket from the bundled data:** `python mlip_umbrella_sampling/reproduce_bracket.py` runs WHAM on the included per-window `colvar.dat` and prints MACE ≈ 0.80 eV and CHGNet ≈ 0.32–0.40 eV — the §3.3 bracket — CPU-only, no GPU/DFT/MLIP (this is exercised by the test suite). The full MLIP umbrella-sampling protocol is also included: the production MD driver with the native minimum-distance restraint (`run_mlip_us_native.py`, finite-difference-validated — see `test_restraint_consistency.py`), the window generator (`generate_windows.py`), the system builder, `wham_native.py`/`wham_analysis.py`, and the fuller revision UQ + 2-D carrier reanalysis (`revision_uq_2d.py`; set its data path). A prepared (deferred) DFT umbrella-sampling input template is included for completeness.
 - **Figure scripts** for `fig_w1_localization`, `fig_w2_pmf_bracket` and `fig5_transport_stability` are not archived (one-off); the rendered PDF/PNG are included. `fig_basin_portrait.py`, `fig6_energy_balance.py` and `generate_all.py` are included.
 
@@ -90,6 +91,7 @@ This work was carried out with **Claude (Anthropic)** as a computational and ana
                   Retention in a Pentlandite--Mackinawite Bilayer Membrane},
   year         = {2026},
   howpublished = {\url{https://github.com/exopoiesis/interfacial-proton-trap-fes}},
-  note         = {Data and code repository; Zenodo DOI on acceptance}
+  doi          = {10.5281/zenodo.20702373},
+  note         = {Data and code repository, archived on Zenodo}
 }
 ```

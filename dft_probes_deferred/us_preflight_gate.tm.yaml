@@ -71,7 +71,7 @@ cross_ref:
     title: "Confinement-Stabilized Interfacial Hydrogen Trap and Proton Retention in a Pentlandite-Mackinawite Bilayer Membrane"
     section: "§3.3 (DFT umbrella sampling deferred; carrier-topology split)"
     repo: https://github.com/exopoiesis/interfacial-proton-trap-fes
-    doi: "Zenodo DOI on acceptance"
+    doi: "10.5281/zenodo.20702373"
   related:
     - name: prodromos
       relation: gate_engine
