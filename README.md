@@ -23,7 +23,7 @@ The factor-≈ 2.5 MACE–CHGNet disagreement is **statistically real** (CIs ≪
 
 Complementary design results: a DFT CI-NEB **pentlandite** proton-migration barrier of **0.39 eV (CP2K) / 0.44 eV (ABACUS)** ⇒ µs-scale proton residence and an electron-to-proton conductivity selectivity ≈ 10⁷ (proton-blocking inner layer); an electrochemical energy balance giving a **+61 % margin** for ΔpH-driven CO₂-to-formate reduction at ΔpH = 6; and a minimal transport-stability model whose **bistable** steady state has its fixed-point and absorbing-set structure **machine-checked in Lean 4**.
 
-> **Note on relationship to earlier work.** This supersedes the preliminary MACE-MP-0-only study (repo `sulfide-proton-barriers`), whose pentlandite barrier (1.43 eV) relied on foundation-MLIP NEB that we have since shown is unreliable for these iron-sulfide proton paths. The present barriers are computed with **DFT** (CP2K / ABACUS); foundation MLIPs are used here only in the controlled apples-to-apples benchmark.
+> **Note on methodology.** An earlier, preliminary exploration of these systems used foundation-MLIP NEB alone (e.g. a pentlandite barrier of ~1.43 eV from MACE-MP-0), which we have since shown is unreliable for these iron-sulfide proton paths. **All barriers here are computed with DFT** (CP2K / ABACUS); foundation MLIPs appear only in the controlled, apples-to-apples benchmark.
 
 ## Repository map (directory ↔ manuscript section)
 
