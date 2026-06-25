@@ -13,7 +13,7 @@ SPEC_FILES = sorted(REPO.glob("tm-spec/*.tm.yaml")) + [
 
 
 def test_specs_exist():
-    assert len(SPEC_FILES) == 6, f"expected 6 specs, found {len(SPEC_FILES)}"
+    assert len(SPEC_FILES) == 7, f"expected 7 specs, found {len(SPEC_FILES)}"
 
 
 @pytest.mark.parametrize("path", SPEC_FILES, ids=lambda p: p.name)
