@@ -7,8 +7,9 @@ spec: tm-spec/0.2
 kind: NEBCalculation
 id: tm.pentlandite_vfe.h_proton.neb_dft.2026-05
 # NOTE (Paper #2 mapping): reported in Paper #2 "KineticTrap" §3.6 (inner-layer proton blocker).
-# Distinct from the MLIPvsDFT (Paper #1) pentlandite entry, which is a foundation-MLIP NEB
-# (MACE-MP-0, which collapses the proton into a spurious Fe-hydride well); this is direct DFT.
+# This is direct DFT. Foundation MLIPs cannot reproduce this S-H...S barrier: they relax the proton
+# into the global Fe-hydride sink rather than the metastable S-bound state, even under the exact CP2K
+# frozen mask (see tm.pentlandite_vfe.h_proton.mlip_collapse.2026-06) -> the barrier is DFT-only.
 schema_url: https://exopoiesis.space/tm-spec/0.2.json
 
 structure:
@@ -111,7 +112,7 @@ cross_ref:
     - name: MLIPvsDFT
       relation: companion
       repo: https://github.com/exopoiesis/mlip-vs-dft-iron-sulfides
-      note: "foundation-MLIP failure-mode taxonomy: MACE/CHGNet collapse this S-H...S path into a spurious Fe-hydride well"
+      note: "foundation-MLIP failure-mode taxonomy; foundation MLIPs relax this S-H...S path into the global Fe-hydride sink (correct thermodynamics, lost metastable channel) - see tm.pentlandite_vfe.h_proton.mlip_collapse.2026-06"
     - name: tm-spec
       relation: schema
       url: https://exopoiesis.space/tm-spec

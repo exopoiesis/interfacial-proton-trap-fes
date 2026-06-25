@@ -1,0 +1,77 @@
+{
+  "model": "mace-omat",
+  "model_type": "conservative",
+  "system": "pentlandite V_Fe H-landscape",
+  "donor_E_eV": -852.531413203033,
+  "donor_S": 98,
+  "donor_host": {
+    "host": "S",
+    "d_nn_A": 1.5486565250160753,
+    "s_h_preserved": true
+  },
+  "vacancy_void_clearance_A": 2.204020992537261,
+  "cage_S": [
+    33,
+    62,
+    48,
+    98,
+    127
+  ],
+  "sites": [
+    {
+      "placed_on_S": 33,
+      "final_host": "Fe",
+      "d_nn_A": 1.6112516050498231,
+      "s_h_preserved": false,
+      "E_eV": -852.9587213909927,
+      "dE_vs_donor_meV": -427.3081879596248,
+      "converged": true,
+      "min_dist_A": 1.611251605049825
+    },
+    {
+      "placed_on_S": 62,
+      "final_host": "Fe",
+      "d_nn_A": 1.600745655108144,
+      "s_h_preserved": false,
+      "E_eV": -853.0910354112345,
+      "dE_vs_donor_meV": -559.6222082015174,
+      "converged": true,
+      "min_dist_A": 1.6007456551081447
+    },
+    {
+      "placed_on_S": 48,
+      "final_host": "Fe",
+      "d_nn_A": 1.719042468190268,
+      "s_h_preserved": false,
+      "E_eV": -853.2495711473684,
+      "dE_vs_donor_meV": -718.1579443354167,
+      "converged": true,
+      "min_dist_A": 1.7190424681902667
+    },
+    {
+      "placed_on_S": 98,
+      "final_host": "S",
+      "d_nn_A": 1.3956317434053795,
+      "s_h_preserved": true,
+      "E_eV": -852.511222515531,
+      "dE_vs_donor_meV": 20.190687502008586,
+      "converged": true,
+      "min_dist_A": 1.3956317434053802
+    },
+    {
+      "placed_on_S": 127,
+      "final_host": "Fe",
+      "d_nn_A": 1.6039890831058512,
+      "s_h_preserved": false,
+      "E_eV": -853.0316133419115,
+      "dE_vs_donor_meV": -500.2001388784265,
+      "converged": true,
+      "min_dist_A": 1.6039890831058512
+    }
+  ],
+  "n_s_bound": 1,
+  "n_fe_collapsed": 4,
+  "paper2_fe_collapse": "confirmed",
+  "cp2k_ref_meV": 385,
+  "abacus_ref_meV": 442
+}

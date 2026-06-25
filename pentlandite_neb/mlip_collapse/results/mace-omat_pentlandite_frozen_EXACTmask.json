@@ -1,0 +1,32 @@
+{
+  "model": "mace-omat",
+  "model_type": "conservative",
+  "system": "pentlandite V_Fe S-H<->S-H EXACT CP2K frozen mask",
+  "mask_source": "D:/home/ignat/project-third-matter/dft-neb/ph-diagnostic/pent_selective_harvest_2026-06-06/geom_analysis.json",
+  "mask_note": "EXACT CP2K mobile_indices (28) / frozen (108), atom-by-atom",
+  "n_mobile": 28,
+  "n_frozen": 108,
+  "mobile_comp": {
+    "Fe": 13,
+    "S": 14,
+    "H": 1
+  },
+  "donor_S": 98,
+  "acceptor_S": 48,
+  "S_S_hop_A": 3.393,
+  "donor_host": {
+    "host": "S",
+    "d_nn_A": 1.5486565250160753,
+    "s_h_preserved": true
+  },
+  "acceptor_host": {
+    "host": "Fe",
+    "d_nn_A": 1.7038421862268878,
+    "s_h_preserved": false
+  },
+  "acceptor_collapsed_to_Fe": true,
+  "decisive_finding": "Under the exact CP2K mobile mask the MLIP acceptor collapses to Fe-hydride while CP2K holds it S-bound (0.385 eV) -> collapse is a property of the potential, not the constraint.",
+  "cp2k_ref_meV": 385,
+  "abacus_ref_meV": 442,
+  "neb": null
+}

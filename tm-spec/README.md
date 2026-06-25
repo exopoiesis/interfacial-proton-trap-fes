@@ -15,8 +15,9 @@ provenance (a `parents` DAG) and results. The format is the open **TM-Spec** sta
 | `us_pmf.tm.yaml` | `tm.mack_3x3x1.h_proton.us_pmf` | §3.3 | Confined-system MLIP umbrella-sampling PMF (kinetic-trap bracket [0.32, 0.80] eV) |
 | `mlip_benchmark.tm.yaml` | `tm.mack_3x3x1.h_proton.mlip_bench_us` | §3.3 | Apples-to-apples MACE-vs-CHGNet benchmark on the detachment PMF |
 | `pentlandite_neb.tm.yaml` | `tm.pentlandite_vfe.h_proton.neb_dft` | §3.6 | Inner-layer pentlandite S–H···S proton-migration barrier (direct DFT, CP2K + ABACUS) |
+| `pentlandite_mlip_collapse.tm.yaml` | `tm.pentlandite_vfe.h_proton.mlip_collapse` | §3.6 / §4.3 | Why that barrier is DFT-only: foundation MLIPs relax the proton into the global Fe-hydride sink even under the exact CP2K frozen mask (potential, not constraint) |
 
-A sixth, **anti-example** spec lives in `../dft_probes_deferred/us_preflight_gate.tm.yaml`
+A seventh, **anti-example** spec lives in `../dft_probes_deferred/us_preflight_gate.tm.yaml`
 (`kind: USPreflightGate`): it records the `$0` prodromos preflight gate that decided the full
 direct-DFT umbrella-sampling PMF was **deferred** (§3.3) and surfaced the MACE-vs-CHGNet
 carrier-topology split — a decision record cross-linked to the prodromos gate engine, kept for

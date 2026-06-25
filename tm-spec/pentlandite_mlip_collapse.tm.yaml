@@ -1,0 +1,121 @@
+# TM-Spec — pentlandite V_Fe + H: foundation-MLIP S-H...S channel collapse test.
+# Establishes that the §3.6 pentlandite barrier is DFT-only: foundation MLIPs relax the proton
+# into the global Fe-hydride sink rather than the metastable S-bound state, even under the exact
+# CP2K frozen mask. Backs Paper #2 (KineticTrap) §3.6/§4.3 and SI_pentlandite_mlip_collapse.
+# Authored on assembly of the data; numbers from pentlandite_neb/mlip_collapse/results/.
+
+spec: tm-spec/0.2
+kind: MLIPRelaxation
+id: tm.pentlandite_vfe.h_proton.mlip_collapse.2026-06
+schema_url: https://exopoiesis.space/tm-spec/0.2.json
+# Companion to tm.pentlandite_vfe.h_proton.neb_dft.2026-05 (the DFT barrier this test explains
+# cannot be reproduced by a foundation MLIP).
+
+structure:
+  formula: "Fe71S64H (pure-Fe pentlandite endmember, one Fe vacancy V_Fe + 1 H)"
+  prototype: "pentlandite, Fm-3m"
+  space_group: { number: 225 }
+  defects:
+    - { type: vacancy, site: Fe, count: 1, note: "V_Fe; proton hops between the two S flanking the vacancy" }
+  carrier: "interstitial H (probed as S-bound vs Fe-hydride)"
+  cells_used:
+    - { label: full_cell, n_atoms: 136, note: "donor endpoint = DFT-relaxed (H on S98); acceptor S = S48 (CP2K hop partner)" }
+  pbc: [true, true, true]
+
+magnetic:
+  state: spin-blind
+  collinear: false
+  note: >
+    Foundation MLIPs carry no explicit spin degrees of freedom; the test is therefore spin-free,
+    matched to the RKS paramagnetic surrogate used for the CP2K reference. Spin is not the variable
+    under study here (the comparison is potential vs potential under an identical frozen constraint).
+  surrogate_warning: "spin-blind potentials; consistent with the RKS reference, not a spin-resolved result"
+
+calculation:
+  method: MLIP
+  level:
+    models:
+      - { name: MACE-MP-0, weights: "medium (MPtrj)", force_head: conservative }
+      - { name: MACE-omat-0, weights: "medium-omat-0 (OMat24)", force_head: conservative }
+    dtype: float64
+    excluded:
+      - { name: eqV2-OMat24, force_head: non-conservative, reason: "NEB ill-posed (energy-force RMS ~731 meV/A on greigite); OCPCalculator float32/64 dtype halt" }
+      - { name: CHGNet, reason: "used for the mackinawite SURFACE trap (mlip_umbrella_sampling/), not run for this pentlandite bulk cubane hop" }
+  code:
+    name: ASE
+    libraries: "mace-torch 0.3.15, ASE 3.27, Python 3.13"
+  approximations:
+    - dft_screen_sign_only: "the AFM+U DFT site-energy screen (Fe-hydride lowest) is used only for its SIGN; its absolute ordering is magnetically ill-defined (single-point, free-magnetization)"
+    - mlip_depths_non_quantitative: "MLIP Fe-hydride basin depths are model- and site-dependent and not quoted as values (only host S/Fe and the sign are used)"
+
+workflow:
+  kind: relaxation-enumeration + frozen-mask-endpoint-test
+  steps:
+    - multi_endpoint_enumeration:
+        rule: "place H on each sulfur of the vacancy cage (1.42 A toward vacancy), full 136-atom relax (BFGS fmax 0.03), record final H host"
+        script: pentlandite_neb/mlip_collapse/scripts/pent_multiendpoint.py
+    - exact_mask_frozen_test:
+        rule: "freeze the EXACT CP2K mobile set (28 mobile / 108 frozen, from geom_analysis.json, atom-for-atom vs CP2K &FIXED_ATOMS); relax donor (H on S98) and acceptor (H on S48); record host"
+        mask: { n_mobile: 28, n_frozen: 108, composition: "Fe13 S14 H1", r_mob_A: 4.0, donor_S: 98, acceptor_S: 48 }
+        script: pentlandite_neb/mlip_collapse/scripts/pent_frozen_exact.py
+  determinism: "conservative potential + BFGS -> deterministic; a single relaxation is conclusive (outcome is binary S-bound vs Fe-bound)"
+
+results:
+  multi_endpoint:
+    MACE-omat-0: { s_bound_acceptors: "0 of 4", note: "all cage acceptors incl. S48 collapse to Fe-hydride; only donor S98 stays S-bound" }
+    MACE-MP-0:   { s_bound_acceptors: "1 of 4 (S33)", note: "S48 (CP2K hop partner) collapses to Fe; NEB S98<->S33 does not converge - path drops through Fe-hydride" }
+  exact_mask:
+    MACE-omat-0:
+      donor_host:    { element: S,  d_A: 1.55 }
+      acceptor_host: { element: Fe, d_A: 1.70 }
+      cp2k_same_mask: { acceptor_host: S, barrier_eV: 0.385 }
+      conclusion: "identical atom-for-atom frozen constraint; only the potential differs -> collapse is a property of the MLIP potential-energy surface, not of the frozen-framework approximation"
+  interpretation: |
+    The functional S-H...S transfer is a metastable, S-bound channel separated from the global
+    Fe-hydride sink by a barrier the frozen lattice preserves in DFT (d_HFe ~ 2.8 A along the path).
+    Foundation MLIPs do not retain this channel - they relax the proton into the Fe-hydride sink even
+    under the exact CP2K mask - so the pentlandite barrier is necessarily a DFT result. The Fe-hydride
+    thermodynamics (its being the global minimum) is captured correctly in sign by the MLIPs; the
+    failure is the kinetic/metastable channel, on the multi-state cubane V_Fe landscape.
+  status: PASS
+  paper_quotable: true            # qualitative claim (DFT-only barrier); no MLIP barrier value quoted
+
+sanity:
+  - { id: G_donor_S_bound,    rule: "donor endpoint stays S-bound after relax",                observed: "S @ 1.55 A (exact mask)",            pass: true }
+  - { id: G_acceptor_collapse, rule: "CP2K acceptor S48 collapses to Fe for both MLIPs",        observed: "Fe @ 1.70-1.78 A",                   pass: true }
+  - { id: G_exact_mask,       rule: "exact CP2K mask reproduced atom-for-atom (28/108)",        observed: "matches &FIXED_ATOMS input",         pass: true }
+  - { id: G_potential_not_constraint, rule: "same mask: DFT S-bound, MLIP Fe -> difference is the potential", observed: "CP2K S-bound 0.385 eV vs MLIP Fe@1.70", pass: true }
+  - { id: G_no_quant_depth,   rule: "MLIP basin depths not quoted (non-quantitative); sign only", observed: "host S/Fe reported, depths flagged",  pass: true }
+
+provenance:
+  date: "2026-06-25"
+  author: igor@exopoiesis.space
+  parents:
+    - "tm.pentlandite_vfe.h_proton.neb_dft.2026-05 (the DFT barrier explained)"
+    - "run.mlip_multiendpoint_pent.2026-06-25"
+    - "run.mlip_frozen_exactmask_pent.2026-06-25"
+  compute:
+    host: local (CPU)
+    note: "ASE relaxations with foundation-MLIP calculators; deterministic, minutes per relaxation"
+  hash:
+    inputs:  sha256:placeholder_to_be_computed
+    outputs: sha256:placeholder_to_be_computed
+
+# ── CROSS-REFERENCES (Third Matter paper family) ──────────────────────────
+cross_ref:
+  paper:
+    name: KineticTrap
+    title: "Confinement-Stabilized Interfacial Hydrogen Trap and Proton Retention in a Pentlandite-Mackinawite Bilayer Membrane"
+    section: "§3.6 / §4.3"
+    si: "SI_pentlandite_mlip_collapse_2026-06-25.md"
+    repo: https://github.com/exopoiesis/interfacial-proton-trap-fes
+    doi: "10.5281/zenodo.20702373"
+  related:
+    - name: MLIPvsDFT
+      relation: companion
+      repo: https://github.com/exopoiesis/mlip-vs-dft-iron-sulfides
+      note: "foundation-MLIP failure-mode taxonomy; the cross-mineral MLIP-vs-DFT barrier benchmark"
+    - name: tm-spec
+      relation: schema
+      url: https://exopoiesis.space/tm-spec
+      note: "the machine-readable specification standard this file conforms to"
